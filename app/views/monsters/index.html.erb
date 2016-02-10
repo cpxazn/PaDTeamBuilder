@@ -1,0 +1,20 @@
+<h1>Listing monsters</h1>
+
+Name
+
+<br>
+<input style="width:598px;" class="typeahead" type="text" placeholder="Monster Name">
+<br>
+<table>
+	<tr>
+		<% count=0 %>
+		<% @monsters.each do |monster| %>
+			<td><%= link_to image_tag("http://padherder.com" + monster["image60_href"]	, :border => 0), monster_path(monster["id"]) %></td>
+			<% count = count + 1 %>
+			<% if count % 15 == 0 %>
+				</tr><tr>
+			<% end %>
+		<% end %>
+	</tr>
+</table>
+<%= link_to 'New Monster', new_monster_path %>

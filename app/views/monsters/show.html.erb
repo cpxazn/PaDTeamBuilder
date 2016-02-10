@@ -1,0 +1,8 @@
+<p id="notice"><%= notice %></p>
+
+<p><strong><%= @monster["name"] %></strong></p>
+<p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
+
+
+<%= link_to 'Edit', edit_monster_path(@monster) %> |
+<%= link_to 'Back', monsters_path %>
