@@ -21,9 +21,18 @@ class VotesController < ApplicationController
   end
 
   def create
-    @vote = Vote.new(vote_params)
-    @vote.save
-    respond_with(@vote)
+    puts params.inspect
+	monster = Monster.where(name: params[:monster_name])
+	if monster.all.count == 1
+		monster = monster.first
+		vote = Vote.new(score:1,leader_id: params[:leader_id], sub_id: monster.id, user_id: 1)
+		vote.save
+	end
+
+	#uts params[:monster_name]
+	
+	redirect_to monster_path(params[:leader_id])
+    #respond_with(@vote)
   end
 
   def update

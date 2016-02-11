@@ -2,7 +2,22 @@
 
 <p><strong><%= @monster["name"] %></strong></p>
 <p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
-
-
+<p>Suggested Subs</p>
+<% @subs.each do |s| %>
+	<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, :border => 0), monster_path(s["id"]) %>
+<% end %>
+<p>Suggested Leaders</p>
+<% @leaders.each do |l| %>
+	<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0), monster_path(l["id"]) %>
+<% end %>
+<p>Suggest</p>
+<%= form_for :vote, url: {controller: "votes", action: "create", params: {leader_id: @monster["id"]}} do |f| %>
+	<div class="field">
+		<p><input style="width:598px;" name="monster_name" id="monster_field" class="typeahead" type="text" placeholder="Monster Name"></p>
+	</div>
+	<div class="actions">
+		<%= f.submit %>
+	</div>
+<% end %>
 <%= link_to 'Edit', edit_monster_path(@monster) %> |
 <%= link_to 'Back', monsters_path %>

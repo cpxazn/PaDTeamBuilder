@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   resources :votes
 
   resources :monsters
-  get 'monsters/json/typeahead/:name' => 'monsters#typeahead_json'
+  get 'monsters/json/typeahead' => 'monsters#typeahead_json'
+  get 'monsters/json/id' => 'monsters#idlookup_json'
 
   devise_for :users
   
