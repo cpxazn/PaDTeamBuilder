@@ -38,7 +38,7 @@
 			<div class="panel-heading">Make a Suggestion</div>
 			<div class="panel-body">
 				<% if user_signed_in? %>
-					<img id="lookup" src=""/>
+					<p><img id="lookup" src=""/></p>
 					<%= form_for :vote, url: {controller: "votes", action: "create", params: {current_id: @monster["id"]}} do |f| %>
 						<div>
 							<p><input name="monster_name" id="monster_field" class="lookup typeahead form-control" type="text" placeholder="Monster Name"></p>

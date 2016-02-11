@@ -47,8 +47,10 @@ class VotesController < ApplicationController
 				end
 			end
 		else
-			flash.now[:alert] = 'Error: ' + params[:monster_name] + ' is not a valid monster name'
+			flash.now[:alert] = 'Error: ' + leader_id + ' is not a valid monster id'
 		end
+	else
+		flash.now[:alert] = 'Error: ' + params[:monster_name] + ' is not a valid monster name'
 	end
 	redirect_to monster_path(current), notice: flash[:notice], alert: flash[:alert]
     #respond_with(@vote)

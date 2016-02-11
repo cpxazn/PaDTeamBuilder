@@ -108,6 +108,7 @@ class MonstersController < ApplicationController
 			temp = Hash.new
 			temp["name"] = m["name"]
 			temp["id"] = m["id"]
+			temp["img_url"] = m["image60_href"]
 			result.push(temp)
 		end
 	end

@@ -31,8 +31,9 @@ $(document).ready(function(){
 				window.location.href = "/monsters/" + datum.id;  
 	});
 	
-	$('.typeahead.lookup]').bind('typeahead:selected', function(obj, datum, name) {      
-				//$("#img.lookup").attr( "src":"http://padherder.com" );
-				alert(datum);
+	$('.typeahead.lookup').bind('typeahead:selected', function(obj, datum, name) {    
+				console.log(datum);
+				$('img#lookup').attr( {"src":"http://padherder.com" + datum.img_url} );
+				
 	});
 }); 
