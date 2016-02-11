@@ -10,6 +10,37 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap
+ *= require bootstrap.css.map
+ *= require bootstrap-theme
+ *= require bootstrap-theme.css.map
  *= require_tree .
  *= require_self
  */
+ 
+div.left {
+	float: left;
+}
+
+div.right {
+	float: right;
+}
+
+div.clear {
+	clear:both;
+}
+
+html {
+	overflow-y: scroll;
+}
+body {
+	padding-top: 5rem;
+
+}
+.starter-template {
+	padding: 2rem 1.5rem;
+	width: 1150px;
+}
+
+.center { margin: auto; }
+.text-align-center { text-align: center; }

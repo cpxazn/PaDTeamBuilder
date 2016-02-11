@@ -1,23 +1,56 @@
-<p id="notice"><%= notice %></p>
+<div class="jumbotron">
+	<h2><%= @monster["name"] %></h2>
+	<p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
+</div>
 
-<p><strong><%= @monster["name"] %></strong></p>
-<p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
-<p>Suggested Subs</p>
-<% @subs.each do |s| %>
-	<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, :border => 0), monster_path(s["id"]) %>
-<% end %>
-<p>Suggested Leaders</p>
-<% @leaders.each do |l| %>
-	<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0), monster_path(l["id"]) %>
-<% end %>
-<p>Suggest</p>
-<%= form_for :vote, url: {controller: "votes", action: "create", params: {leader_id: @monster["id"]}} do |f| %>
-	<div class="field">
-		<p><input style="width:598px;" name="monster_name" id="monster_field" class="typeahead" type="text" placeholder="Monster Name"></p>
+<div class="monster_container">
+	<div class="monster_list left">
+		<div class="panel panel-default">
+			<div class="panel-heading">Suggested Subs</div>
+			<div class="panel-body">
+				<% if @subs != nil %>
+					<% @subs.each do |s| %>
+						<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, :border => 0), monster_path(s["id"]) %>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
 	</div>
-	<div class="actions">
-		<%= f.submit %>
+
+
+	<div class="monster_list right">
+		<div class="panel panel-default">
+			<div class="panel-heading">Suggested Leaders</div>
+			<div class="panel-body">
+				<% if @leaders != nil %>
+					<% @leaders.each do |l| %>
+						<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0), monster_path(l["id"]) %>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
 	</div>
-<% end %>
-<%= link_to 'Edit', edit_monster_path(@monster) %> |
-<%= link_to 'Back', monsters_path %>
+
+
+
+	<div class="monster_list clear left">
+		<div class="panel panel-default">
+			<div class="panel-heading">Make a Suggestion</div>
+			<div class="panel-body">
+				<% if user_signed_in? %>
+					<%= form_for :vote, url: {controller: "votes", action: "create", params: {current_id: @monster["id"]}} do |f| %>
+						<div>
+							<p><input name="monster_name" id="monster_field" class="typeahead form-control" type="text" placeholder="Monster Name"></p>
+						</div>
+						<div class="actions">
+							<%= f.submit "Sub" %>
+							<%= f.submit "Leader" %>
+						</div>
+					<% end %>
+				<% else %>
+					<p>You must be logged in to make a suggestion</p>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

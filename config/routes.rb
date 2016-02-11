@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
-  resources :votes
+	
+	resources :votes
 
-  resources :monsters
-  get 'monsters/json/typeahead' => 'monsters#typeahead_json'
-  get 'monsters/json/id' => 'monsters#idlookup_json'
+	resources :monsters do
+		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json' , on: :collection 
+		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection 
+		get 'populate' ,  controller: 'monsters', action: 'populate' , on: :collection 
+	end
 
-  devise_for :users
+	devise_for :users
+	
+	root 'monsters#index'
   
   get '/monjson', :to => redirect('/monsters.json')
   # The priority is based upon order of creation: first created -> highest priority.

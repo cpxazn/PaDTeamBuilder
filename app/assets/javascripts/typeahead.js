@@ -11,7 +11,7 @@ $(document).ready(function(){
 	
 	engine.initialize();
 
-    $('#monster_field.typeahead').typeahead(
+    $('.typeahead').typeahead(
 		{hint: false, highlight: true, minLength: 1}
 		,
 		{
@@ -27,7 +27,7 @@ $(document).ready(function(){
 		}	
 	);
 	
-	$('#monster_field.typeahead.main').bind('typeahead:selected', function(obj, datum, name) {      
+	$('.typeahead.main').bind('typeahead:selected', function(obj, datum, name) {      
 				window.location.href = "/monsters/" + datum.id;  
 	});
 }); 

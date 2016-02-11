@@ -1,20 +1,33 @@
-<h1>Listing monsters</h1>
+<div class="center text-align-center">
+	<h1>Search Monsters</h1>
+</div>
 
-Name
+<form>
+	<div class="body-search large_monster_input center ">
+		<p><input id="monster_field" class="typeahead main form-control center" type="text" placeholder="Monster Name"></p>
+	</div>
+</form>
 
-<br>
-<input style="width:598px;" id="monster_field" class="typeahead main" type="text" placeholder="Monster Name">
-<br>
-<table>
-	<tr>
-		<% count=0 %>
-		<% @monsters.each do |monster| %>
-			<td><%= link_to image_tag("http://padherder.com" + monster["image60_href"]	, :border => 0), monster_path(monster["id"]) %></td>
-			<% count = count + 1 %>
-			<% if count % 15 == 0 %>
-				</tr><tr>
+<div>
+	<table class="center">
+		<tr>
+			<% count=0 %>
+			<% @monsters.each do |monster| %>
+				<td><%= link_to image_tag("http://padherder.com" + monster["image60_href"]	, :border => 0,  :title => monster["id"].to_s + ". " + monster["name"]),	 monster_path(monster["id"]) %></td>
+				<% count = count + 1 %>
+				<% if count % 15 == 0 %>
+					</tr><tr>
+				<% end %>
 			<% end %>
-		<% end %>
-	</tr>
-</table>
-<%= link_to 'New Monster', new_monster_path %>
+		</tr>
+	</table>
+</div>
+
+<div>
+	<nav>
+		<ul class="pagination">
+			<li><%= link_to "<<",	 monsters_path(page: if @page == 0 then 0 else @page - 1 end) %></li>
+			<li><%= link_to ">>",	 monsters_path(page: @page == 0 ? 2 : @page + 1) %></li>
+		</ul>
+	</nav>
+</div>

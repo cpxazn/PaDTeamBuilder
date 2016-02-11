@@ -6,7 +6,15 @@ class MonstersController < ApplicationController
   respond_to :html
 
   def index
-	@monsters = Rails.cache.fetch("monster").take(90)
+	@page = params[:page].to_i
+	if @page.is_a? Numeric and @page != nil and @page > 0
+		starting = (@page - 1) * 90
+	else
+		starting = 0
+		@page = 0
+	end
+	ending = starting + 89
+	@monsters = Rails.cache.fetch("monster")[starting..ending]
     respond_with(@monsters)
   end
 
@@ -18,25 +26,30 @@ class MonstersController < ApplicationController
 			break
 		end
 	end
-	@subs = Array.new
-	@subs_list = Monster.find(@monster["id"]).subs
-	@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
+	if @monster != nil
+		@subs = Array.new
+		@leaders = Array.new
+		
+		if Monster.where(id: @monster["id"]).count > 0
+			@subs_list = Monster.find(@monster["id"]).subs
+			@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
+			@subs_list.each do |s|
+				sub = idlookup(s[:id])
+				if sub != nil
+					@subs.push(sub)
+				end
+			end
 
-	
-	@subs_list.each do |s|
-		@subs.push(idlookup(s[:id]))
+			@leaders_list = Monster.find(@monster["id"]).leaders
+			@leaders_list = @leaders_list.sort_by { | x | x[:score] }.reverse
+			@leaders_list.each do |l|
+				leader = idlookup(l[:id])
+				if leader != nil
+					@leaders.push(leader)
+				end
+			end
+		end
 	end
-
-	
-	@leaders = Array.new
-	@leaders_list = Monster.find(@monster["id"]).leaders
-	@leaders_list = @leaders_list.sort_by { | x | x[:score] }.reverse
-	
-	@leaders_list.each do |l|
-		@leaders.push(idlookup(l[:id]))
-	end
-	
-	#puts 'LEADERCOUNT:'+ @leaders.count.to_s
 	
     respond_with(@monster)
   end
