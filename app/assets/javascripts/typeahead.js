@@ -30,4 +30,9 @@ $(document).ready(function(){
 	$('.typeahead.main').bind('typeahead:selected', function(obj, datum, name) {      
 				window.location.href = "/monsters/" + datum.id;  
 	});
+	
+	$('.typeahead.lookup]').bind('typeahead:selected', function(obj, datum, name) {      
+				//$("#img.lookup").attr( "src":"http://padherder.com" );
+				alert(datum);
+	});
 }); 
