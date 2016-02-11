@@ -66,10 +66,10 @@ class MonstersController < ApplicationController
   	#request_uri = 'C:\Sites\PadTeamBuilder\public\monsters.json'
 	request_query = ''
 	url = "#{request_uri}#{request_query}"
-	
-	#Rails.cache.fetch("monster", expires_in: 12.hours) do
+
+	Rails.cache.fetch("monster", expires_in: 12.hours) do
 		JSON.parse(open(url).read)
-	#end
+	end
   end
   
   private
