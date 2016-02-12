@@ -5,7 +5,3 @@ To Do List
 4. Add admin users to edit/remove comments
 5. Integrate with Pad herder to view what subs are available
 6. Automatic smart team construction
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
