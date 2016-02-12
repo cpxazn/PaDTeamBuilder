@@ -1,27 +1,10 @@
-== README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To Do List
+1. Enable voting for suggested monsters
+2. Monster with low scores should be hidden
+3. Users should be able to leave comments when voting
+4. Add admin users to edit/remove comments
+5. Integrate with Pad herder to view what subs are available
+6. Automatic smart team construction
 
 
 Please feel free to use a different markup language if you do not plan to run
