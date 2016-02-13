@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	//Form validation
-	$('#Sub.btn').click(
+	$('#Sub.btn, #Leader.btn').click(
 		function() {
 			
 			if($('input.vote').val() == '') {
@@ -14,5 +14,7 @@ $(document).ready(function(){
 			
 		}
 	)
+	
+
 	
 }); 

@@ -1,0 +1,6 @@
+$modal = $('.modal'),
+$modalBody = $('.modal .modal-body'),
+$modalHeading = $('.modal .modal-title');
+$modalHeading.html("<%= @vote.id %>");
+$modalBody.html("<%= escape_javascript(render @vote) %>");
+$modal.modal();

@@ -1,0 +1,12 @@
+<p>
+	<%= link_to image_tag("http://padherder.com" + @leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %>
+	<%= link_to image_tag("http://padherder.com" + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>
+</p>
+
+<p>Statistics</p>
+
+<% Rails.application.config.vote_display_params.each do |m| %>
+	<p>From <%= m %> months ago: <%= @leader.fetch_score(@sub.id, m)  %> average with <%= @leader.fetch_vote_count(@sub.id, m) %> votes</p>
+<% end %>
+
+<p>All time: <%= @leader.fetch_score_all(@sub.id) %> average with <%= @leader.fetch_vote_count_all(@sub.id) %> votes</p>	

@@ -3,8 +3,34 @@ class Monster < ActiveRecord::Base
 	has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
 	
 	def score(intSub)
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at > ?", self.id, intSub, Rails.application.config.vote_display_default.months.ago)
-		return vote.sum(:score) / vote.count
+		return fetch_score(intSub, Rails.application.config.vote_display_default)
+	end
+	def vote_count(intSub)
+		return vote_count(intSub, Rails.application.config.vote_display_default)
+	end
+	
+	def fetch_score(intSub, m)
+		vote = Vote.where("leader_id = ? and sub_id = ? and created_at > ?", self.id, intSub, m.months.ago)
+		return vote.count > 0 ? (vote.sum(:score) / vote.count) : 0
+	end
+	def fetch_vote_count(intSub, m)
+		return Vote.where("leader_id = ? and sub_id = ? and created_at > ?", self.id, intSub, m.months.ago).count
+	end
+	
+	def fetch_score_between(intSub, m, m2)
+		vote = Vote.where("leader_id = ? and sub_id = ? and created_at < ? and created_at > ?", self.id, intSub, m.months.ago, m2.months.ago)
+		return vote.count > 0 ? (vote.sum(:score) / vote.count) : 0
+	end
+	def fetch_vote_count_between(intSub, m, m2)
+		return Vote.where("leader_id = ? and sub_id = ? and created_at < ? and created_at > ?", self.id, intSub, m.months.ago, m2.months.ago).count
+	end
+	
+	def fetch_score_all(intSub)
+		vote = Vote.where(leader_id: self.id, sub_id: intSub)
+		return vote.count > 0 ? (vote.sum(:score) / vote.count) : 0
+	end
+	def fetch_vote_count_all(intSub)
+		return Vote.where(leader_id: self.id, sub_id: intSub).count	
 	end
 	
 	def subs

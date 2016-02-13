@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
 		end			
   end
   
+  
+  
   def fetch_monster_by_name(name)
 		if Monster.where(name: name).count > 0
 			return Monster.where(name: name).first

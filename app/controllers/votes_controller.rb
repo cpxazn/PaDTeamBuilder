@@ -10,7 +10,7 @@ class VotesController < ApplicationController
   end
 
   def show
-    respond_with(@vote)
+
   end
 
   def new

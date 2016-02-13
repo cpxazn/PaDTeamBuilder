@@ -54,6 +54,19 @@ class MonstersController < ApplicationController
     respond_with(@monster)
   end
 
+  def detail
+    @sub = fetch_monster_by_id(params["sub_id"])
+	@sub_details = idlookup(@sub.id)
+	@leader = fetch_monster_by_id(params["leader_id"])
+	@leader_details = idlookup(@leader.id)
+	if @sub != nil and @leader != nil
+		respond_to do |format|
+			format.html
+			format.js
+		end
+	end
+  end
+  
   def new
     @monster = Monster.new
     respond_with(@monster)

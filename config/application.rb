@@ -21,5 +21,6 @@ module PadTeamBuilder
     # config.i18n.default_locale = :de
 	config.vote_new_user_interval = 1
 	config.vote_display_default = 3
+	config.vote_display_params = [1,3,6,9,12,24,36]
   end
 end

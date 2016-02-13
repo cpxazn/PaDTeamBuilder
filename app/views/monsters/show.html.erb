@@ -3,6 +3,10 @@
 	<p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
 </div>
 
+
+  
+
+
 <div class="monster_container">
 	<div class="monster_list left">
 		<div class="panel panel-default">
@@ -16,7 +20,7 @@
 										<strong><%= Monster.find(@monster["id"]).score(s["id"]) %></strong>
 									</div>
 									<div class="panel-body">
-										<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), monster_path(s["id"]) %>
+										<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), detail_monsters_path(leader_id: @monster["id"], sub_id: s["id"]), remote:true %>
 									</div>
 									<% if user_signed_in? %>
 										<div class="dropdown">
@@ -54,7 +58,7 @@
 								<strong><%= Monster.find(l["id"]).score(@monster["id"]) %></strong>
 							</div>
 							<div class="panel-body">
-								<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), monster_path(l["id"]) %>
+								<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster["id"]), remote:true %>
 							</div>
 							<% if user_signed_in? %>
 								<div class="dropdown">
@@ -114,3 +118,20 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="vote_details" tabindex="-1" role="dialog" aria-labelledby="vote_details" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h4 class="modal-title"></h4>
+	</div>
+	<div class="modal-body">
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

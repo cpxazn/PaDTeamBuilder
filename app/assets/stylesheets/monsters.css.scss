@@ -1,4 +1,17 @@
 
+//Prevent page from shifting left when opening modal
+.modal-open[style] {
+	padding-right: 0px !important;
+}
+
+//Modal size
+@media screen and (min-width: 768px) {
+	
+	#vote_details .modal-dialog  {width:1200px;}
+
+}
+
+//Include scrollbars to monster containers
 .monster_container.panel-body {
   overflow-y: auto;
   max-height:555px;

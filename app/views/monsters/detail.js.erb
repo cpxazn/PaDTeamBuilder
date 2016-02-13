@@ -1,0 +1,6 @@
+$modal = $('.modal'),
+$modalBody = $('.modal .modal-body'),
+$modalHeading = $('.modal .modal-title');
+$modalHeading.html("<%= @leader.name %>");
+$modalBody.html("<%= escape_javascript(render detail_monsters_path(@leader_id, @sub_id)) %>");
+$modal.modal();

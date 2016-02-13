@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json' , on: :collection 
 		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection 
 		get 'populate' ,  controller: 'monsters', action: 'populate' , on: :collection 
+		get 'detail' , controller: 'monsters', action: 'detail' , on: :collection 
 	end
 
 	devise_for :users
