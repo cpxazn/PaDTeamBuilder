@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require jquery.turbolinks
 //= require typeahead.bundle.min
+//= require highcharts
 // require turbolinks
 //= require_tree .

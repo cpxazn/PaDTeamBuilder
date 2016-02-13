@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
 	resources :monsters do
 		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json' , on: :collection 
-		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection 
+		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection
+		get 'json/graph/monthly' ,  controller: 'monsters', action: 'graph_monthly_json' , on: :collection 
+		get 'json/graph/since' ,  controller: 'monsters', action: 'graph_since_json' , on: :collection 
+		get 'json/graph/weighted' ,  controller: 'monsters', action: 'graph_weighted_json' , on: :collection 
 		get 'populate' ,  controller: 'monsters', action: 'populate' , on: :collection 
 		get 'detail' , controller: 'monsters', action: 'detail' , on: :collection 
 	end

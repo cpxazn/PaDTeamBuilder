@@ -2,6 +2,7 @@ class MonstersController < ApplicationController
   require 'open-uri'
   before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :cache_monsters, only: [:index, :json, :show, :populate]
+  before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json ]
 
   respond_to :html
 
@@ -55,10 +56,6 @@ class MonstersController < ApplicationController
   end
 
   def detail
-    @sub = fetch_monster_by_id(params["sub_id"])
-	@sub_details = idlookup(@sub.id)
-	@leader = fetch_monster_by_id(params["leader_id"])
-	@leader_details = idlookup(@leader.id)
 	if @sub != nil and @leader != nil
 		respond_to do |format|
 			format.html
@@ -112,6 +109,7 @@ class MonstersController < ApplicationController
 	end
   end
   
+  
   def typeahead_json
 	monster = monster_name_json_params
 	monsters = Rails.cache.fetch("monster")
@@ -128,6 +126,35 @@ class MonstersController < ApplicationController
 	
 	render :json => result
   end
+  
+  #Graphs
+  def graph_monthly_json
+	data = Array.new
+	if @sub != nil and @leader != nil
+		for i in (Rails.application.config.vote_display_max).downto(0)
+			tmp = Array.new
+			j = i + 1
+			tmp.push(j.month.ago.strftime("%Y-%m-1"))
+			tmp.push(@leader.fetch_score_by_month(@sub.id, i))
+			data.push(tmp)
+		end
+	end
+	render :json => data
+  end
+ 
+  def graph_since_json
+	data = Array.new
+	if @sub != nil and @leader != nil
+		for i in (Rails.application.config.vote_display_max).downto(0)
+			tmp = Array.new
+			j = i + 1
+			tmp.push(j.month.ago.strftime("%Y-%m-1"))
+			tmp.push(@leader.fetch_score_ago_beg(@sub.id, i))
+			data.push(tmp)
+		end
+	end
+	render :json => data
+  end
 
   def populate
 		monsters = Rails.cache.fetch("monster")
@@ -140,6 +167,7 @@ class MonstersController < ApplicationController
 		redirect_to monsters_path
   end
   
+  #Caching
   def cache_monsters
 	request_uri = 'https://www.padherder.com/api/monsters/'
   	#request_uri = 'C:\Sites\PadTeamBuilder\public\monsters.json'
@@ -152,6 +180,12 @@ class MonstersController < ApplicationController
   end
   
   private
+    def fetch_both
+		@sub = fetch_monster_by_id(params["sub_id"])
+		@sub_details = idlookup(@sub.id)
+		@leader = fetch_monster_by_id(params["leader_id"])
+		@leader_details = idlookup(@leader.id)
+	end
     def set_monster
 		@monster = Monster.find(params[:id])
     end
