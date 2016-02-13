@@ -3,7 +3,8 @@ class Monster < ActiveRecord::Base
 	has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
 	
 	def score(intSub)
-		Vote.where(leader_id: self.id, sub_id: intSub).sum(:score)
+		vote = Vote.where("leader_id = ? and sub_id = ? and created_at > ?", self.id, intSub, Rails.application.config.vote_display_default.months.ago)
+		return vote.sum(:score) / vote.count
 	end
 	
 	def subs

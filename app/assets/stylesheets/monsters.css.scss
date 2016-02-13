@@ -1,20 +1,74 @@
+
+.monster_container.panel-body {
+  overflow-y: auto;
+  max-height:555px;
+  padding-bottom:150px;
+}
+
+//Remove padding from select div under suggestions
+div.vote.select { 
+	padding-left: 0px;
+}
+//Change main vote select dropdown height to 34 to match the buttons
+select.vote {
+	height: 33.5px;
+}
+
+//Smaller heading on the individual monster scores
+.monster.panel-heading {
+	padding: 4px 4px;
+}
+
+//Left and right margins and inline block for each suggested monster
+.panel-default.monster {
+	margin-left: 2px;
+	margin-right: 2px;
+	display:inline-block;
+}
+
+//Width of the main vote dropdown
+select.vote {
+	width: 20%;
+}
+
+//Size of the suggested sub and leader divs
 div.monster_list {
 	width: 49.5%;
 }
 
+//Container that has the suggest sub and leaders, and make a suggestions
 div.monster_container {
 	width: 100%;
 }
 
+.dropdown {  overflow: visible !important;	}
+//Size of the individual monster vote
+.vote.dropdown-menu {
+
+  min-width: 100% !important;
+  width: 100% !important; 
+}
+.btn{
+ width: 100% !important;
+}
+
+//Smaller monster search box
 .small_monster_input {
 	width: 400px;
 }
+//Larger monster search box
 .large_monster_input {
 	width: 598px;
 }
 
+//Always expand typeahead text box to max of div width
 input.typeahead 	{ 
 	width: 100% !important; 
+}
+
+//Size of div for search text field in index
+.body-search {
+	width:600px;
 }
 
 .tt-query {
@@ -60,6 +114,3 @@ input.typeahead 	{
   margin: 0;
 }
 
-.body-search {
-	width:600px;
-}

@@ -20,37 +20,57 @@ class VotesController < ApplicationController
 
   def edit
   end
+  
 
   def create
-    puts params.inspect
-	monster = Monster.where(name: params[:monster_name])
+	puts params.inspect
+	monster_id = params[:monster_id]
+	monster_name = params[:monster_name]
+	monster = fetch_monster_by_one(monster_id, monster_name)
 	current = params[:current_id]
 	option = params[:commit]
-	if monster.all.count == 1
-		if option == "Sub"
-			sub_id = monster.first.id
-			leader_id = current
-		elsif option == "Leader"
-			sub_id = current
-			leader_id = monster.first.id
-		end
-		
-		if Monster.where(id: leader_id).count == 1
-			vote = Vote.new(score:1,leader_id: leader_id, sub_id: sub_id, user_id: current_user.id)
-			if vote.save
-				flash.now[:notice] = 'Vote Submitted'
+	rating = params[:rating]
+	puts 'option:' + option
+	if rating.to_s 	=~ /[1-5]/
+		if monster != nil
+			if (option =~ /^Sub/)
+				sub_id = monster.id
+				leader_id = current
+				puts option
+				puts 'leaderid:' + leader_id.to_s
+				puts 'subid:' + sub_id.to_s
+			elsif (option =~ /^Leader/)
+				sub_id = current
+				leader_id = monster.id
+				puts option
+				puts 'leaderid:' + leader_id.to_s
+				puts 'subid:' + sub_id.to_s
 			else
-				if current_user.votes.where(sub_id: sub_id, leader_id: leader_id).count > 0
-					flash.now[:alert] = 'Error: You have already voted for this monster'
+				redirect_to monster_path(current)
+			end
+			
+			if Monster.where(id: leader_id).count == 1 and Monster.where(id: sub_id).count == 1
+				if user_voted_default_month(leader_id, sub_id)
+					vote = fetch_user_vote_by_default_month(leader_id, sub_id)
+					if vote.update(score: rating.to_i)
+						flash.now[:notice] = 'Vote Updated'
+					else
+						flash.now[:alert] = 'Error: Could not save vote!'
+					end
 				else
-					flash.now[:alert] = 'Error: Could not save vote!'
+					vote = Vote.new(score:rating.to_i,leader_id: leader_id, sub_id: sub_id, user_id: current_user.id)
+					if vote.save
+						flash.now[:notice] = 'Vote Submitted'
+					else
+						flash.now[:alert] = 'Error: Could not save vote!'
+					end
 				end
+			else
+				flash.now[:alert] = 'Error: ' + leader_id.to_s + ' is not a valid monster id'
 			end
 		else
-			flash.now[:alert] = 'Error: ' + leader_id + ' is not a valid monster id'
+			flash.now[:alert] = 'Error: ' + params[:monster_name] + ' is not a valid monster name'
 		end
-	else
-		flash.now[:alert] = 'Error: ' + params[:monster_name] + ' is not a valid monster name'
 	end
 	redirect_to monster_path(current), notice: flash[:notice], alert: flash[:alert]
     #respond_with(@vote)

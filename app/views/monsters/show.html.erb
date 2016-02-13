@@ -7,12 +7,37 @@
 	<div class="monster_list left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Subs</div>
-			<div class="panel-body">
-				<% if @subs != nil %>
-					<% @subs.each do |s| %>
-						<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, :border => 0), monster_path(s["id"]) %>
-					<% end %>
-				<% end %>
+				<div class="monster_container panel-body">
+					<div>
+						<% if @subs != nil %>
+							<% @subs.each do |s| %>
+								<div class="panel panel-default monster">
+									<div class="center-text panel-heading monster">
+										<strong><%= Monster.find(@monster["id"]).score(s["id"]) %></strong>
+									</div>
+									<div class="panel-body">
+										<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), monster_path(s["id"]) %>
+									</div>
+									<% if user_signed_in? %>
+										<div class="dropdown">
+											<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+												<% if user_voted_default_month(@monster["id"],s["id"]) %><%= fetch_user_vote_by_default_month(@monster["id"],s["id"]).score %><% else %>Vote<% end %>
+												<span class="caret"></span>
+											</button>
+											<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
+												<li><%= link_to "1", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 1, commit: "Sub"}, method: "post" %></li>
+												<li><%= link_to "2", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 2, commit: "Sub"}, method: "post" %></li>
+												<li><%= link_to "3", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 3, commit: "Sub"}, method: "post" %></li>
+												<li><%= link_to "4", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 4, commit: "Sub"}, method: "post" %></li>
+												<li><%= link_to "5", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 5, commit: "Sub"}, method: "post" %></li>
+											</ul>
+										</div>
+									<% end %>
+								</div>
+							<% end %>
+						<% end %>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -21,10 +46,32 @@
 	<div class="monster_list right">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Leaders</div>
-			<div class="panel-body">
+			<div class="monster_container panel-body">
 				<% if @leaders != nil %>
 					<% @leaders.each do |l| %>
-						<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0), monster_path(l["id"]) %>
+						<div class="panel panel-default monster">
+							<div class="center-text panel-heading monster">
+								<strong><%= Monster.find(l["id"]).score(@monster["id"]) %></strong>
+							</div>
+							<div class="panel-body">
+								<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), monster_path(l["id"]) %>
+							</div>
+							<% if user_signed_in? %>
+								<div class="dropdown">
+									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+										<% if user_voted_default_month(l["id"],@monster["id"]) %><%= fetch_user_vote_by_default_month(l["id"],@monster["id"]).score %><% else %>Vote<% end %>
+										<span class="caret"></span>
+									</button>
+									<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
+										<li><%= link_to "1", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 1, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "2", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 2, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "3", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 3, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "4", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 4, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "5", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 5, commit: "Leader"}, method: "post" %></li>
+									</ul>
+								</div>
+							<% end %>
+						</div>
 					<% end %>
 				<% end %>
 			</div>
@@ -33,19 +80,31 @@
 
 
 
-	<div class="monster_list clear left">
+	<div class="monster_list left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Make a Suggestion</div>
 			<div class="panel-body">
 				<% if user_signed_in? %>
 					<p><img id="lookup" src=""/></p>
-					<%= form_for :vote, url: {controller: "votes", action: "create", params: {current_id: @monster["id"]}} do |f| %>
+					<%= form_for :vote, html: {class: "form-horizontal"}, url: {controller: "votes", action: "create", params: {current_id: @monster["id"]}} do |f| %>
 						<div>
-							<p><input name="monster_name" id="monster_field" class="lookup typeahead form-control" type="text" placeholder="Monster Name"></p>
+							<p><input name="monster_name" id="monster_field" class="vote lookup typeahead form-control" type="text" placeholder="Monster Name"></p>
 						</div>
-						<div class="actions">
-							<%= f.submit "Sub" %>
-							<%= f.submit "Leader" %>
+						<div class="vote select col-xs-3 ">
+							<select name="rating" class="vote btn btn-default">
+								<option>Rating</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+							</select>
+						</div>
+						<div class="vote col-xs-3">
+								<%= f.submit "Sub", id:"Sub", class: "btn btn-default" %>
+						</div>
+						<div class="vote col-xs-3">
+								<%= f.submit "Leader", id:"Leader", class: "btn btn-default"  %>
 						</div>
 					<% end %>
 				<% else %>

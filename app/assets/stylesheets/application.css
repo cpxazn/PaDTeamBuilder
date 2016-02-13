@@ -20,10 +20,12 @@
  
 div.left {
 	float: left;
+	clear: left;
 }
 
 div.right {
 	float: right;
+	clear: right;
 }
 
 div.clear {
@@ -43,4 +45,12 @@ body {
 }
 
 .center { margin: auto; }
-.text-align-center { text-align: center; }
+.center-text { text-align: center; }
+
+.center-image {
+	display: block;
+	margin: 0 auto;
+}
+
+div.border{border-width:1px !important; border-style:solid !important;}
+//div{border-width:1px !important; border-style:solid !important;}
