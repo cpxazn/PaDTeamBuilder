@@ -1,4 +1,8 @@
+.modal-body {
+	overflow-y: auto;
+	max-height: 750px;
 
+}
 //Prevent page from shifting left when opening modal
 .modal-open[style] {
 	padding-right: 0px !important;
@@ -38,6 +42,8 @@ select.vote {
 	margin-right: 2px;
 	display:inline-block;
 }
+
+div.page-tab { padding-top: 10px;}
 
 //Width of the main vote dropdown
 select.vote {

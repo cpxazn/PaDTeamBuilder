@@ -3,6 +3,34 @@
 $modal = $('.modal'),
 $modalBody = $('.modal .modal-body'),
 $modalHeading = $('.modal .modal-title');
-$modalHeading.html("<%= @leader.name %>");
-$modalBody.html("<%= escape_javascript(render detail_monsters_path(@leader_id, @sub_id)) %>");
+$modalHeading.html('<%= link_to image_tag("http://padherder.com" + @leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %><%= link_to image_tag("http://padherder.com" + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>');
+$modalBody.html("<%= escape_javascript(render detail_monsters_path()) %>");
 $modal.modal();
+
+$(document).ready(function(){
+	$('.nav-tabs li#comments').click(
+		function() {
+			$('div.page-tab').hide();
+			$('.nav-tabs li').removeClass("active");
+			$('.nav-tabs li#comments').addClass("active");
+			$('div#comments.page-tab').show();
+			
+		}
+	)
+	$('.nav-tabs li#statistics').click(
+		function() {
+			$('div.page-tab').hide();
+			$('.nav-tabs li').removeClass("active");
+			$('.nav-tabs li#statistics').addClass("active");
+			$('div#statistics.page-tab').show();
+		}
+	)
+	$('.nav-tabs li#history').click(
+		function() {
+			$('div.page-tab').hide();
+			$('.nav-tabs li').removeClass("active");
+			$('.nav-tabs li#history').addClass("active");
+			$('div#history.page-tab').show();
+		}
+	)
+}); 

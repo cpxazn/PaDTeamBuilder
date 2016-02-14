@@ -1,13 +1,20 @@
-<p>
-	<%= link_to image_tag("http://padherder.com" + @leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %>
-	<%= link_to image_tag("http://padherder.com" + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>
-</p>
-
-<p>Statistics</p>
 <script>
-	chart1(<%= @leader.id %>,<%= @sub.id %>);
-
+	chart1(<%= @leader.id %>,<%= @sub.id %>,[['since','Avg Since'],['monthly','Avg Per Month']],'#chart1','Ratings',1,5);
+	chart1(<%= @leader.id %>,<%= @sub.id %>,[['count','Ratings']],'#chart2','Ratings Count',null,null);
 </script>
 
-
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<ul class="nav nav-tabs">
+  <li id="statistics" role="presentation" class="active"><a href="#">Statistics</a></li>
+  <li id="comments" role="presentation"><a href="#">Comments</a></li>
+  <li id="history" role="presentation"><a href="#">History</a></li>
+</ul>
+<div id="statistics" class="page-tab">
+	<div id="chart1" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+	<div id="chart2" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+</div>
+<div id="comments" class="page-tab">
+	
+</div>
+<div id="history" class="page-tab">
+	
+</div>

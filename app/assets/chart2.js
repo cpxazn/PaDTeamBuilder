@@ -1,49 +1,36 @@
-function chart1(l,s,urls,id,title,tick,maxy) {		
+function chart1(l,s,u) {		
 	parameters = '?leader_id=' + l + '&sub_id=' + s;
-	//urls = ['/monsters/json/graph/since' + parameters,'/monsters/json/graph/monthly' + parameters];
+	urls = ['/monsters/json/graph/since' + parameters,
+			'/monsters/json/graph/monthly' + parameters];
 	
 	var jxhr = [];
 	var result = [];
-	var arrSeries = [];
-
-	//console.log(urls);
 	$.each(urls, function (i, url) {
-		
-		url[0] = '/monsters/json/graph/' + url[0] + parameters
-		//console.log(url[0]);
 		jxhr.push(
-			$.getJSON(url[0], function (json) {
+			$.getJSON(url, function (json) {
 				result.push(json);
-				//console.log(result);
+				console.log(json);
 			})
 		);
 
 	});
 
 	$.when.apply($, jxhr).done(function() {
-		
 		for (i = 0; i < result.length; i++) { 
 			for (j = 0; j < result[i].length; j++) {
 				var strDate = result[i][j][0] + '';
 				var arrDate = strDate.split("-");
-				//console.log(arrDate[0] + "-" + arrDate[1] + "-" + arrDate[2]);
+				console.log(arrDate[0] + "-" + arrDate[1] + "-" + arrDate[2]);
 				result[i][j][0] = Date.UTC(arrDate[0],arrDate[1],arrDate[2]);
 			}
 		}
 		
-		//console.log(urls);
-		$.each(urls, function( index, value ) { 
-			arrSeries.push({type: 'line', name: value[1], data: result[index]})
-		});
-		
-		//console.log(arrSeries);
-		
-        $(id).highcharts({
+        $('#container').highcharts({
             chart: {
                 zoomType: 'x'
             },
             title: {
-                text: title
+                text: 'Ratings'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -53,10 +40,8 @@ function chart1(l,s,urls,id,title,tick,maxy) {
                 type: 'datetime'
             },
             yAxis: {
-				max: maxy,
-				tickInterval: tick,
                 title: {
-                    text: title
+                    text: 'Rating'
                 }
             },
             legend: {
@@ -88,7 +73,20 @@ function chart1(l,s,urls,id,title,tick,maxy) {
                     threshold: null
                 }
             },
-            series: arrSeries
+
+            series: [
+			{
+                type: 'line',
+                name: 'Avg Since',
+                data: result[0]
+            }
+			,
+			{
+                type: 'line',
+                name: 'Avg Per Month',
+                data: result[1]
+            }
+			]
         });
 	});
 }

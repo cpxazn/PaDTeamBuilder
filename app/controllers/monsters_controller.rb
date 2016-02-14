@@ -2,7 +2,7 @@ class MonstersController < ApplicationController
   require 'open-uri'
   before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :cache_monsters, only: [:index, :json, :show, :populate]
-  before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json ]
+  before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json ]
 
   respond_to :html
 
@@ -128,6 +128,19 @@ class MonstersController < ApplicationController
   end
   
   #Graphs
+  def graph_count_json
+	data = Array.new
+	if @sub != nil and @leader != nil
+			for i in (Rails.application.config.vote_display_max).downto(0)
+			tmp = Array.new
+			j = i + 1
+			tmp.push(j.month.ago.strftime("%Y-%m-1"))
+			tmp.push(@leader.fetch_vote_count_by_month(@sub.id, i))
+			data.push(tmp)
+		end
+	end
+	render :json => data
+  end
   def graph_monthly_json
 	data = Array.new
 	if @sub != nil and @leader != nil
