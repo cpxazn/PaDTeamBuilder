@@ -1,5 +1,5 @@
 To Do List
-1. Enable voting for suggested monsters
+1. Implement weighted average
 2. Monster with low scores should be hidden
 3. Users should be able to leave comments when voting
 4. Add admin users to edit/remove comments
