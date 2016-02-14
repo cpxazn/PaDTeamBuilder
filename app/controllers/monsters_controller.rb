@@ -130,41 +130,50 @@ class MonstersController < ApplicationController
   #Graphs
   def graph_count_json
 	data = Array.new
+	data.push("Ratings")
 	if @sub != nil and @leader != nil
-			for i in (Rails.application.config.vote_display_max).downto(0)
+		tmp2 = Array.new
+		for i in (Rails.application.config.vote_display_max).downto(0)
 			tmp = Array.new
 			j = i + 1
 			tmp.push(j.month.ago.strftime("%Y-%m-1"))
 			tmp.push(@leader.fetch_vote_count_by_month(@sub.id, i))
-			data.push(tmp)
+			tmp2.push(tmp)
 		end
+		data.push(tmp2);
 	end
 	render :json => data
   end
   def graph_monthly_json
 	data = Array.new
+	data.push("Avg By Month")
 	if @sub != nil and @leader != nil
+		tmp2 = Array.new
 		for i in (Rails.application.config.vote_display_max).downto(0)
 			tmp = Array.new
 			j = i + 1
 			tmp.push(j.month.ago.strftime("%Y-%m-1"))
 			tmp.push(@leader.fetch_score_by_month(@sub.id, i))
-			data.push(tmp)
+			tmp2.push(tmp)
 		end
+		data.push(tmp2);
 	end
 	render :json => data
   end
  
   def graph_since_json
 	data = Array.new
+	data.push("Avg Since");
 	if @sub != nil and @leader != nil
+		tmp2 = Array.new
 		for i in (Rails.application.config.vote_display_max).downto(0)
 			tmp = Array.new
 			j = i + 1
 			tmp.push(j.month.ago.strftime("%Y-%m-1"))
 			tmp.push(@leader.fetch_score_ago_beg(@sub.id, i))
-			data.push(tmp)
+			tmp2.push(tmp)
 		end
+		data.push(tmp2);
 	end
 	render :json => data
   end

@@ -5,39 +5,36 @@ function chart1(l,s,urls,id,title,tick,maxy) {
 	var jxhr = [];
 	var result = [];
 	var arrSeries = [];
-
+	var labels = [];
 	//console.log(urls);
-	$.each(urls, function (i, url) {
-		
-		url[0] = '/monsters/json/graph/' + url[0] + parameters
+	$.each(urls, function (i, url) {	
+		url = '/monsters/json/graph/' + url + parameters
 		//console.log(url[0]);
 		jxhr.push(
-			$.getJSON(url[0], function (json) {
+			$.getJSON(url, function (json) {
 				result.push(json);
 				//console.log(result);
 			})
 		);
 
 	});
-
+	
 	$.when.apply($, jxhr).done(function() {
 		
+		//console.log(result);
 		for (i = 0; i < result.length; i++) { 
-			for (j = 0; j < result[i].length; j++) {
-				var strDate = result[i][j][0] + '';
+			for (j = 0; j < result[i][1].length; j++) {
+				var strDate = result[i][1][j][0] + '';
 				var arrDate = strDate.split("-");
 				//console.log(arrDate[0] + "-" + arrDate[1] + "-" + arrDate[2]);
-				result[i][j][0] = Date.UTC(arrDate[0],arrDate[1],arrDate[2]);
+				result[i][1][j][0] = Date.UTC(arrDate[0],arrDate[1],arrDate[2]);
 			}
 		}
-		
-		//console.log(urls);
-		$.each(urls, function( index, value ) { 
-			arrSeries.push({type: 'line', name: value[1], data: result[index]})
+
+		$.each(result, function( index, value ) { 
+			arrSeries.push({type: 'line', name: value[0], data: value[1]})
 		});
-		
 		//console.log(arrSeries);
-		
         $(id).highcharts({
             chart: {
                 zoomType: 'x'
