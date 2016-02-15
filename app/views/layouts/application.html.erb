@@ -31,8 +31,10 @@
 
 			<div class="collapse navbar-collapse" id="navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="#"><span class="sr-only">(current)</span></a></li>
-					<li><a href="#"></a></li>
+					<li><%= link_to "Home", monsters_path %></li>
+					<% if user_signed_in? %>
+						<li><%= link_to "My Votes", votes_path %></li>
+					<% end %>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<% if user_signed_in? %>

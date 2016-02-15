@@ -1,11 +1,22 @@
 class VotesController < ApplicationController
   before_action :set_vote, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: [:create, :index]
   
   respond_to :html
 
   def index
-    @votes = Vote.all
+  	@page = params[:page].to_i
+	if @page.is_a? Numeric and @page != nil and @page > 0
+		starting = (@page - 1) * Rails.application.config.vote_list_max
+	else
+		starting = 0
+		@page = 0
+	end
+	ending = starting + Rails.application.config.vote_list_max - 1
+	@count = current_user.votes.count
+    @votes = current_user.votes.order(created_at: :desc)[starting..ending]
+	if @votes == nil then raise ActionController::RoutingError.new('Not Found') end
+	current_user.votes[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
     respond_with(@votes)
   end
 

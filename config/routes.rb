@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 	
-	resources :votes
+	resources :votes, except: [:edit, :update, :destroy, :show, :new]
 
-	resources :monsters do
+	resources :monsters, except: [:destroy, :new, :create, :update, :edit] do
+	
 		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json' , on: :collection 
 		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection
 		get 'json/graph/monthly' ,  controller: 'monsters', action: 'graph_monthly_json' , on: :collection 
@@ -11,13 +12,13 @@ Rails.application.routes.draw do
 		get 'json/graph/count', controller: 'monsters', action: 'graph_count_json' , on: :collection 
 		get 'populate' ,  controller: 'monsters', action: 'populate' , on: :collection 
 		get 'detail' , controller: 'monsters', action: 'detail' , on: :collection 
+		
 	end
 
 	devise_for :users
 	
 	root 'monsters#index'
-  
-  get '/monjson', :to => redirect('/monsters.json')
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

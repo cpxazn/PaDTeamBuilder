@@ -1,7 +1,7 @@
 class MonstersController < ApplicationController
   require 'open-uri'
   before_action :set_monster, only: [:edit, :update, :destroy]
-  before_action :cache_monsters, only: [:index, :json, :show, :populate]
+  before_action :cache_data, only: [:index, :json, :show, :populate]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json ]
 
   respond_to :html
@@ -9,29 +9,38 @@ class MonstersController < ApplicationController
   def index
 	@page = params[:page].to_i
 	if @page.is_a? Numeric and @page != nil and @page > 0
-		starting = (@page - 1) * 90
+		starting = (@page - 1) * Rails.application.config.monster_list_max
 	else
 		starting = 0
 		@page = 0
 	end
-	ending = starting + 89
+	ending = starting + Rails.application.config.monster_list_max - 1
 	@monsters = Rails.cache.fetch("monster")[starting..ending]
+	if @monsters == nil then raise ActionController::RoutingError.new('Not Found') end
+	Rails.cache.fetch("monster")[starting + Rails.application.config.monster_list_max..ending + Rails.application.config.monster_list_max] == nil ? @more = 0 : @more = 1
     respond_with(@monsters)
   end
 
   def show
-	monsters = Rails.cache.fetch("monster")
-	monsters.each do |m|
-		if m["id"].to_s == params[:id].to_s
-			@monster = m
-			break
-		end
-	end
+	@monster = fetch_monster_by_id_json(params[:id])
 	if @monster != nil
 		@subs = Array.new
 		@leaders = Array.new
 		
-		if Monster.where(id: @monster["id"]).count > 0
+		#If this monster doesn't exist in our database
+		if Monster.where(id: @monster["id"]).count == 0
+					#Create using id and name from JSON
+					@monster_db = Monster.create(id: @monster["id"], name: @monster["name"])
+		else
+					@monster_db = Monster.where(id: @monster["id"]).first
+		end
+		
+		#Check to make sure this monster exists in the database
+		if @monster_db != nil
+			if @monster_db.name != @monster["name"] then 
+				@monster_db.name = @monster["name"]
+				@monster_db.save
+			end
 			@subs_list = Monster.find(@monster["id"]).subs
 			@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
 			@subs_list.each do |s|
@@ -49,7 +58,15 @@ class MonstersController < ApplicationController
 					@leaders.push(leader)
 				end
 			end
+			
+			@active_skill = fetch_active_skill_by_id_json(@monster["id"])
+			@leader_skill = fetch_leader_skill_by_id_json(@monster["id"])
+			@awakenings = fetch_awakenings_by_id_json(@monster["id"])
+		else
+			raise ActionController::RoutingError.new('Not Found')
 		end
+	else
+		raise ActionController::RoutingError.new('Not Found')
 	end
 	
     respond_with(@monster)
@@ -57,6 +74,10 @@ class MonstersController < ApplicationController
 
   def detail
 	if @sub != nil and @leader != nil
+		@score = @leader.score(@sub.id);
+		@votes = @leader.vote_count(@sub.id);
+		@score_all = @leader.fetch_score_all(@sub.id);
+		@votes_all = @leader.fetch_vote_count_all(@sub.id);
 		respond_to do |format|
 			format.html
 			format.js
@@ -190,13 +211,36 @@ class MonstersController < ApplicationController
   end
   
   #Caching
-  def cache_monsters
+  def cache_data
 	request_uri = 'https://www.padherder.com/api/monsters/'
-  	#request_uri = 'C:\Sites\PadTeamBuilder\public\monsters.json'
 	request_query = ''
 	url = "#{request_uri}#{request_query}"
 
 	Rails.cache.fetch("monster", expires_in: 12.hours) do
+		JSON.parse(open(url).read)
+	end
+	
+	request_uri = 'https://www.padherder.com/api/active_skills/'
+	request_query = ''
+	url = "#{request_uri}#{request_query}"
+
+	Rails.cache.fetch("active_skills", expires_in: 12.hours) do
+		JSON.parse(open(url).read)
+	end
+	
+	request_uri = 'https://www.padherder.com/api/leader_skills/'
+	request_query = ''
+	url = "#{request_uri}#{request_query}"
+
+	Rails.cache.fetch("leader_skills", expires_in: 12.hours) do
+		JSON.parse(open(url).read)
+	end
+	
+	request_uri = 'https://www.padherder.com/api/awakenings/'
+	request_query = ''
+	url = "#{request_uri}#{request_query}"
+
+	Rails.cache.fetch("awakenings", expires_in: 12.hours) do
 		JSON.parse(open(url).read)
 	end
   end

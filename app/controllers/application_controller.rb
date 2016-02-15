@@ -1,7 +1,79 @@
 class ApplicationController < ActionController::Base
-	helper_method :user_voted_default_month, :fetch_user_vote_by_default_month
-
-  protect_from_forgery with: :exception
+	helper_method :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
+	before_filter :configure_permitted_parameters, if: :devise_controller?
+	protect_from_forgery with: :exception
+  
+  #Determines coloring based on the score
+  def rating_style(rating)
+	if rating >= 4
+		return "success"
+	elsif rating >= 3
+		return "info"
+	elsif rating >= 2
+		return "warning"
+	elsif rating >= 1
+		return "danger"
+	elsif rating = 0
+		return "default"
+	end
+  end
+  
+  def fetch_awakenings_by_id_json(id)
+	awakening_ids = fetch_monster_by_id_json(id)["awoken_skills"]
+	awakenings = Rails.cache.fetch("awakenings")
+	results = Array.new
+	awakening_ids.each do |i|
+		awakenings.each do |j|
+			if i == j["id"]
+				tmp = j.dup
+				tmp["url"] = Rails.application.config.img_path_awakenings + i.to_s + ".png"
+				results.push(tmp)
+				break
+			end
+		end
+	end
+	return results
+  end
+  
+  #Leader Skills from JSON
+  def fetch_leader_skill_by_id_json(id)
+	leader_skill_name = fetch_monster_by_id_json(id)["leader_skill"]
+	leader_skills = Rails.cache.fetch("leader_skills")
+	leader_skills.each do |l|
+		if l["name"].to_s == leader_skill_name.to_s
+			return l
+			break
+		end
+	end
+  end
+  
+  #Active Skills from JSON
+  def fetch_active_skill_by_id_json(id)
+	active_skill_name = fetch_monster_by_id_json(id)["active_skill"]
+	active_skills = Rails.cache.fetch("active_skills")
+	active_skills.each do |s|
+		if s["name"].to_s == active_skill_name.to_s
+			return s
+			break
+		end
+	end
+	return nil
+  end
+  
+  #Monster from JSON
+  def fetch_monster_by_id_json(id)
+  	monsters = Rails.cache.fetch("monster")
+	monsters.each do |m|
+		if m["id"].to_s == id.to_s
+			return m
+			break
+		end
+	end
+	return nil
+  end
+  
+  
+ #Monster from DB
   def fetch_monster_by_id(id)
 		if Monster.where(id: id).count > 0
 			return Monster.find(id)
@@ -9,9 +81,6 @@ class ApplicationController < ActionController::Base
 			return nil
 		end			
   end
-  
-  
-  
   def fetch_monster_by_name(name)
 		if Monster.where(name: name).count > 0
 			return Monster.where(name: name).first
@@ -19,7 +88,7 @@ class ApplicationController < ActionController::Base
 			return nil
 		end
   end
-  
+  #Monster from DB using either id or name depending on which one has value
   def fetch_monster_by_one(id,name)
     id = id.to_i
 	if is_number?(id) and id > 0 and id < 10000000
@@ -31,6 +100,7 @@ class ApplicationController < ActionController::Base
 	end
   end
   
+  #Return true/false if user has voted
   def user_voted_default_month(l,s)
 	return user_voted_month(l,s,Rails.application.config.vote_new_user_interval)
   end
@@ -38,7 +108,7 @@ class ApplicationController < ActionController::Base
   def user_voted_month(l,s,m)
 	return current_user.votes.where("leader_id = ? and sub_id = ? and created_at > ?", l,s, m.month.ago).count > 0
   end
-  
+  #Gets vote for the current user for the monster
   def fetch_user_vote_by_default_month(l,s)
 	return fetch_user_vote_by_month(l,s,Rails.application.config.vote_new_user_interval)
   end
@@ -46,7 +116,14 @@ class ApplicationController < ActionController::Base
 	return current_user.votes.where("leader_id = ? and sub_id = ? and created_at > ?", l,s, m.month.ago).order(created_at: :desc).first
   end
   
+  #Generic functions
   def is_number? string
 	true if Float(string) rescue false
   end
+  
+	protected
+
+	def configure_permitted_parameters
+		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :padherder) }
+	end
 end

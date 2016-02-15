@@ -1,6 +1,30 @@
-<div class="jumbotron">
-	<h2><%= @monster["name"] %></h2>
-	<p><%= image_tag("http://padherder.com" + @monster["image60_href"]	, :border => 0) %></p>
+<div class="jumbotron monster">
+	<div class="header header-name">
+		<h2><%= image_tag(Rails.application.config.img_path_monsters + @monster["image60_href"]	, :border => 0, :title => @monster["id"].to_s + ". " + @monster["name"]) %><%= " " + @monster["name"] %></h2>
+	</div>
+	<div class="header header-details">
+		<div class="panel panel-default">
+			<div class="panel-heading">AS: <%= @active_skill["name"] %> (<%= @active_skill["max_cooldown"] %> to <%= @active_skill["min_cooldown"] %> turns)</div>
+			<div class="panel-body"><%= @active_skill["effect"] %></div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">LS: <%= @leader_skill["name"] %></div>
+			<div class="panel-body"><%= @leader_skill["effect"] %></div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Awoken Skills</div>
+			<div class="panel-body">
+				<% @awakenings.each do |a| %>
+					<%= image_tag(a["url"], :border => 0, title: (a["name"] + "&#13;" + a["desc"]).html_safe) %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<div class="right btn-group btn-group-sm" role="group" aria-label="...">
+		<button type="button" class="btn btn-default monster-hide" aria-label="Left Align">
+			Details
+		</button>
+	</div>
 </div>
 
 <div class="monster_container">
@@ -11,12 +35,13 @@
 					<div>
 						<% if @subs != nil %>
 							<% @subs.each do |s| %>
-								<div class="panel panel-default monster">
+								<% score = Monster.find(@monster["id"]).score(s["id"]) %>
+								<div class="panel panel-<%= rating_style(score) %> monster">
 									<div class="center-text panel-heading monster">
-										<strong><%= Monster.find(@monster["id"]).score(s["id"]) %></strong>
+										<strong><%= score %></strong>
 									</div>
 									<div class="panel-body">
-										<%= link_to image_tag("http://padherder.com" + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), detail_monsters_path(leader_id: @monster["id"], sub_id: s["id"]), remote:true %>
+										<%= link_to image_tag(Rails.application.config.img_path_monsters + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), detail_monsters_path(leader_id: @monster["id"], sub_id: s["id"]), remote:true %>
 									</div>
 									<% if user_signed_in? %>
 										<div class="dropdown">
@@ -42,45 +67,7 @@
 		</div>
 	</div>
 
-
 	<div class="monster_list right">
-		<div class="panel panel-default">
-			<div class="panel-heading">Suggested Leaders</div>
-			<div class="monster_container panel-body">
-				<% if @leaders != nil %>
-					<% @leaders.each do |l| %>
-						<div class="panel panel-default monster">
-							<div class="center-text panel-heading monster">
-								<strong><%= Monster.find(l["id"]).score(@monster["id"]) %></strong>
-							</div>
-							<div class="panel-body">
-								<%= link_to image_tag("http://padherder.com" + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster["id"]), remote:true %>
-							</div>
-							<% if user_signed_in? %>
-								<div class="dropdown">
-									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-										<% if user_voted_default_month(l["id"],@monster["id"]) %><%= fetch_user_vote_by_default_month(l["id"],@monster["id"]).score %><% else %>Vote<% end %>
-										<span class="caret"></span>
-									</button>
-									<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
-										<li><%= link_to "1", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 1, commit: "Leader"}, method: "post" %></li>
-										<li><%= link_to "2", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 2, commit: "Leader"}, method: "post" %></li>
-										<li><%= link_to "3", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 3, commit: "Leader"}, method: "post" %></li>
-										<li><%= link_to "4", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 4, commit: "Leader"}, method: "post" %></li>
-										<li><%= link_to "5", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 5, commit: "Leader"}, method: "post" %></li>
-									</ul>
-								</div>
-							<% end %>
-						</div>
-					<% end %>
-				<% end %>
-			</div>
-		</div>
-	</div>
-
-
-
-	<div class="monster_list left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Make a Suggestion</div>
 			<div class="panel-body">
@@ -109,6 +96,69 @@
 					<% end %>
 				<% else %>
 					<p>You must be logged in to make a suggestion</p>
+				<% end %>
+			</div>
+		</div>
+	</div>
+
+	<div class="monster_list right">
+		<div class="panel panel-default">
+			<div class="panel-heading">Voting Guidelines</div>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+						  <th>You may submit a new vote once a month</th>
+						  <th></th>
+						</tr>
+					</thead>
+					<thead>
+						<tr>
+						  <th>Rating</th>
+						  <th>Description</th>
+						</tr>
+					</thead>
+					<tr><td>5</td><td>Optimal Sub</td></tr>
+					<tr><td>4</td><td>Good Sub</td></tr>
+					<tr><td>3</td><td>Viable Sub</td></tr>
+					<tr><td>2</td><td>Not Recommended</td></tr>
+					<tr><td>1</td><td>No Synergy</td></tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div class="monster_list left">
+		<div class="panel panel-default">
+			<div class="panel-heading">Suggested Leaders</div>
+			<div class="monster_container panel-body">
+				<% if @leaders != nil %>
+					<% @leaders.each do |l| %>
+						<% score = Monster.find(l["id"]).score(@monster["id"]) %>
+						<div class="panel panel-<%= rating_style(score) %> monster">
+							<div class="center-text panel-heading monster">
+								<strong><%= score %></strong>
+							</div>
+							<div class="panel-body">
+								<%= link_to image_tag(Rails.application.config.img_path_monsters + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster["id"]), remote:true %>
+							</div>
+							<% if user_signed_in? %>
+								<div class="dropdown">
+									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+										<% if user_voted_default_month(l["id"],@monster["id"]) %><%= fetch_user_vote_by_default_month(l["id"],@monster["id"]).score %><% else %>Vote<% end %>
+										<span class="caret"></span>
+									</button>
+									<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
+										<li><%= link_to "1", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 1, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "2", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 2, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "3", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 3, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "4", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 4, commit: "Leader"}, method: "post" %></li>
+										<li><%= link_to "5", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 5, commit: "Leader"}, method: "post" %></li>
+									</ul>
+								</div>
+							<% end %>
+						</div>
+					<% end %>
 				<% end %>
 			</div>
 		</div>

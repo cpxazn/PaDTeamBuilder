@@ -1,3 +1,20 @@
+
+
+//Monster Header
+.header-details > .panel {
+	width: 48%;
+	display: inline-block;
+	vertical-align: top;
+}
+.jumbotron .header-details {
+	padding-top: 15px;
+}
+.jumbotron.monster .btn.monster-hide {
+	display: none;
+}
+
+
+//Modal scrollbar and height
 .modal-body {
 	overflow-y: auto;
 	max-height: 750px;
@@ -37,12 +54,21 @@ select.vote {
 }
 
 //Left and right margins and inline block for each suggested monster
-.panel-default.monster {
+.panel.monster {
 	margin-left: 2px;
 	margin-right: 2px;
 	display:inline-block;
+	vertical-align:top;
 }
 
+.panel.details {
+	height: 150px;
+
+}
+
+
+//Details tab paddings
+ul.nav-tabs { padding-top: 10px;}
 div.page-tab { padding-top: 10px;}
 
 //Width of the main vote dropdown

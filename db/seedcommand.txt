@@ -1,0 +1,1 @@
+rake export:seeds_format > db/seeds.rb

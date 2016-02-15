@@ -1,18 +1,16 @@
-
-
 $modal = $('.modal'),
 $modalBody = $('.modal .modal-body'),
 $modalHeading = $('.modal .modal-title');
-$modalHeading.html('<%= link_to image_tag("http://padherder.com" + @leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %><%= link_to image_tag("http://padherder.com" + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>');
-$modalBody.html("<%= escape_javascript(render detail_monsters_path()) %>");
+$modalHeading.html('Details');
+$modalBody.html("<%= escape_javascript(render detail_monsters_path(leader_id: @leader_id, sub_id: @sub_id)) %>");
 $modal.modal();
 
 $(document).ready(function(){
 	$('ul.nav-tabs').show();
 	$('div#comments.page-tab').hide();
 	$('div#history.page-tab').hide();
-
-	$('.nav-tabs li#statistics').click(
+	
+		$('.nav-tabs li#statistics').click(
 		function() {
 			$('div.page-tab').hide();
 			$('.nav-tabs li').removeClass("active");
@@ -38,4 +36,6 @@ $(document).ready(function(){
 			$('div#history.page-tab').show();
 		}
 	)
+
 }); 
+

@@ -1,9 +1,45 @@
+<div class="center">
+	<div class="panel panel-default monster details">
+		<div class="center-text panel-heading monster">
+			<strong>Leader</strong>
+		</div>
+		<div class="panel-body">
+			<%= link_to image_tag(Rails.application.config.img_path_monsters + @leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %>
+		</div>
+	</div>
+	<div class="panel panel-default monster details">
+		<div class="center-text panel-heading monster">
+			<strong>Sub</strong>
+		</div>
+		<div class="panel-body">
+			<%= link_to image_tag(Rails.application.config.img_path_monsters + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>
+		</div>
+	</div>
+	<div style="width:240px;" class="panel panel-default monster details">
+		<div class="center-text panel-heading monster">
+			<strong>Details</strong>
+		</div>
+		<div class="panel-body">
+			<table width=100% height=100%>
+			<tr>
+				<td><span class="badge">Current</span></td>
+				<td><span class="label label-<%= rating_style(@score) %>"><%= @score %> out of 5</span><span class="label label-primary"><%= @votes %> votes</span></td>
+			</tr>
+			<tr>
+				<td><span class="badge">All Time</span></td>
+				<td><span class="label label-<%= rating_style(@score_all) %>"><%= @score_all %> out of 5</span><span class="label label-primary"><%= @votes_all %> votes</span></td>
+			</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
 <script>
 	chart1(<%= @leader.id %>,<%= @sub.id %>,['since','monthly'],'#chart1','Ratings',1,5);
 	chart1(<%= @leader.id %>,<%= @sub.id %>,['count'],'#chart2','Ratings Count',null,null);
 </script>
 
-<ul style="display: none;" class="nav nav-tabs">
+<ul class="nav nav-tabs">
   <li id="statistics" role="presentation" class="active"><a href="#">Statistics</a></li>
   <li id="comments" role="presentation"><a href="#">Comments</a></li>
   <li style="display: none;" id="history" role="presentation"><a href="#">History</a></li>
@@ -13,8 +49,8 @@
 	<div id="chart2" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
 </div>
 <div id="comments" class="page-tab">
-	Comments
+	Comments to be implemented
 </div>
-<div style="display: none;" id="history" class="page-tab">
+<div id="history" class="page-tab">
 	History
 </div>
