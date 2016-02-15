@@ -35,7 +35,7 @@
 </div>
 
 <script>
-	chart1(<%= @leader.id %>,<%= @sub.id %>,['since','monthly'],'#chart1','Ratings',1,5);
+	chart1(<%= @leader.id %>,<%= @sub.id %>,['since','monthly','weighted'],'#chart1','Ratings',1,5);
 	chart1(<%= @leader.id %>,<%= @sub.id %>,['count'],'#chart2','Ratings Count',null,null);
 </script>
 

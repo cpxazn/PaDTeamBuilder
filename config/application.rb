@@ -21,8 +21,9 @@ module PadTeamBuilder
     # config.i18n.default_locale = :de
 	config.vote_new_user_interval = 1 #Number of months in between before voting again
 	config.vote_display_default = 3 #Number of months prior to include in score
-	#config.vote_display_params = [1,3,6,9,12,24,36] #Not being used
-	config.vote_display_max = 24
+	config.vote_weighted_avg = [[0,4,0.5],[4,6,0.2],[6,8,0.15],[8,10,0.08],[10,12,0.04],[12,0,0.03]] #Not being used
+	config.vote_display_max = 24 #Max months to display in graphs
+	config.vote_display_eom = true #Set to true to pull data from eof instead of current date
 	config.vote_list_max = 15 #Max number of votes to list in index
 	config.monster_list_max = 90 #Max number of monsters to list in index
 	config.img_path_awakenings = "/static/img/awakenings/" #Path to awakening .png

@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1>User Activity</h1>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+	  <th>User</th>
+      <th>Leader</th>
+      <th>Sub</th>
+      <th>Score</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+
+  <tbody>
+	<% if @votes != nil %>
+		<% @votes.each do |vote| %>
+		  <tr>
+			<td><%= censor_email(vote.user.email) %></td>
+			<td><%= link_to vote.leader.name, vote.leader %></td>
+			<td><%= link_to vote.sub.name, vote.sub	 %></td>
+			<td><%= vote.score %></td>
+			<td><%= vote.created_at %></td>
+		  </tr>
+		<% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<div>
+	<nav>
+		<ul class="pagination">
+			<% if @page == 1 or @page == 0 %>
+				<li class="disabled"><%= link_to "<<", "#" %></li>
+			<% else %>
+				<li><%= link_to "<<",	 votes_path(page: if @page == 0 then 0 else @page - 1 end) %></li>
+			<% end %>
+			<% if @more == 1 %>
+				<li><%= link_to ">>",	 votes_path(page: @page == 0 ? 2 : @page + 1) %></li>
+			<% else %>
+				<li class="disabled"><%= link_to ">>", "#" %></li>
+			<% end %>
+		</ul>
+	</nav>
+</div>

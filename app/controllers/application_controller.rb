@@ -1,8 +1,27 @@
 class ApplicationController < ActionController::Base
-	helper_method :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
+	helper_method :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
   
+  def render_404
+	  respond_to do |format|
+		format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+		format.xml  { head :not_found }
+		format.any  { head :not_found }
+	  end
+	  return
+  end
+  
+  def censor_email(email)
+	e = email[0..0]
+	for i in 1..email.index("@")-1
+		e = e + "*"
+	end
+	for i in email.index("@")..email.length
+		e = e + email[i..i]
+	end
+	return e
+  end
   #Determines coloring based on the score
   def rating_style(rating)
 	if rating >= 4
@@ -17,7 +36,7 @@ class ApplicationController < ActionController::Base
 		return "default"
 	end
   end
-  
+  #Awoken Skills from JSON
   def fetch_awakenings_by_id_json(id)
 	awakening_ids = fetch_monster_by_id_json(id)["awoken_skills"]
 	awakenings = Rails.cache.fetch("awakenings")
@@ -71,21 +90,42 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
-  
+  def fetch_monster_by_name_json(name)
+  	monsters = Rails.cache.fetch("monster")
+	monsters.each do |m|
+		if m["name"].to_s == name.to_s
+			return m
+			break
+		end
+	end
+	return nil
+  end
+ 
+  def create_monster(id, name)
+	if id == nil and name == nil then return nil end
+	if name == nil and id != nil then 
+		name = fetch_monster_by_id_json(id)["name"] 
+		if name == nil then return nil end
+	elsif id == nil and name != nil
+		id = fetch_monster_by_name_json(name)["id"]
+		if id == nil then return nil end
+	end
+    return Monster.create(id: id, name: name)
+  end
   
  #Monster from DB
   def fetch_monster_by_id(id)
-		if Monster.where(id: id).count > 0
+		if Monster.where(id: id).count == 1
 			return Monster.find(id)
 		else
-			return nil
+			return create_monster(id, nil)
 		end			
   end
   def fetch_monster_by_name(name)
 		if Monster.where(name: name).count > 0
 			return Monster.where(name: name).first
 		else
-			return nil
+			return create_monster(nil, name)
 		end
   end
   #Monster from DB using either id or name depending on which one has value

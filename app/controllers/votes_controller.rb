@@ -15,9 +15,24 @@ class VotesController < ApplicationController
 	ending = starting + Rails.application.config.vote_list_max - 1
 	@count = current_user.votes.count
     @votes = current_user.votes.order(created_at: :desc)[starting..ending]
-	if @votes == nil then raise ActionController::RoutingError.new('Not Found') end
+	#if @votes == nil then render_404; return; end
 	current_user.votes[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
-    respond_with(@votes)
+    #respond_with(@votes)
+  end
+  
+  def statistics
+	@page = params[:page].to_i
+	if @page.is_a? Numeric and @page != nil and @page > 0
+		starting = (@page - 1) * Rails.application.config.vote_list_max
+	else
+		starting = 0
+		@page = 0
+	end
+	ending = starting + Rails.application.config.vote_list_max - 1
+    @votes = Vote.order(created_at: :desc)[starting..ending]
+	#if @votes == nil then render_404; return; end
+	Vote.all[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
+    #respond_with(@votes)
   end
 
   def show
@@ -34,28 +49,20 @@ class VotesController < ApplicationController
   
 
   def create
-	puts params.inspect
 	monster_id = params[:monster_id]
 	monster_name = params[:monster_name]
 	monster = fetch_monster_by_one(monster_id, monster_name)
 	current = params[:current_id]
 	option = params[:commit]
 	rating = params[:rating]
-	puts 'option:' + option
 	if rating.to_s 	=~ /[1-5]/
 		if monster != nil
 			if (option =~ /^Sub/)
 				sub_id = monster.id
 				leader_id = current
-				puts option
-				puts 'leaderid:' + leader_id.to_s
-				puts 'subid:' + sub_id.to_s
 			elsif (option =~ /^Leader/)
 				sub_id = current
 				leader_id = monster.id
-				puts option
-				puts 'leaderid:' + leader_id.to_s
-				puts 'subid:' + sub_id.to_s
 			else
 				redirect_to monster_path(current)
 			end

@@ -8,12 +8,12 @@ function chart1(l,s,urls,id,title,tick,maxy) {
 	var labels = [];
 	//console.log(urls);
 	$.each(urls, function (i, url) {	
-		url = '/monsters/json/graph/' + url + parameters
+		url = '/monsters/json/graph' + parameters + '&graph=' + url
 		//console.log(url[0]);
 		jxhr.push(
 			$.getJSON(url, function (json) {
 				result.push(json);
-				//console.log(result);
+				console.log(json);
 			})
 		);
 
@@ -32,6 +32,7 @@ function chart1(l,s,urls,id,title,tick,maxy) {
 		}
 
 		$.each(result, function( index, value ) { 
+			//console.log(value);
 			arrSeries.push({type: 'line', name: value[0], data: value[1]})
 		});
 		//console.log(arrSeries);
