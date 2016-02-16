@@ -37,8 +37,6 @@ div.clear {
 html {
 	overflow-y: scroll;
 }
-html, body { height: 100%; margin: 0; }
-
 
 .center { margin: auto; }
 .center-text { text-align: center; }
@@ -49,4 +47,3 @@ html, body { height: 100%; margin: 0; }
 }
 
 div.border{border-width:1px !important; border-style:solid !important;}
-//div{border-width:1px !important; border-style:solid !important;}
