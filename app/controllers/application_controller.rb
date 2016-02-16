@@ -1,7 +1,11 @@
 class ApplicationController < ActionController::Base
-	helper_method :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
+	helper_method :hash_not_nil, :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
+  
+  def hash_not_nil(hash, key)
+	return hash != nil ? hash[key].to_s : ""
+  end
   
   def render_404
 	  respond_to do |format|
@@ -64,6 +68,7 @@ class ApplicationController < ActionController::Base
 			break
 		end
 	end
+	return nil
   end
   
   #Active Skills from JSON

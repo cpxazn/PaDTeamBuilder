@@ -1,5 +1,12 @@
 
 
+//Details page div height
+.panel.details {
+	height: 122px;
+
+}
+
+
 //Monster Header
 .header-details > .panel {
 	width: 48%;
@@ -61,15 +68,11 @@ select.vote {
 	vertical-align:top;
 }
 
-.panel.details {
-	height: 150px;
-
-}
-
 
 //Details tab paddings
 ul.nav-tabs { padding-top: 10px;}
 div.page-tab { padding-top: 10px;}
+.monster.detail.summary { width:240px; }
 
 //Width of the main vote dropdown
 select.vote {
@@ -159,3 +162,4 @@ input.typeahead 	{
   margin: 0;
 }
 
+	

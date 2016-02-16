@@ -5,8 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="PaD Team Builder – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta name="keywords" content="" />
-  <meta name="robots" content="INDEX,FOLLOW" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width; initial-scale=0.5; maximum-scale=1.0;" />
   <meta property="og:description" content="PaD Team Builder – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta property="og:site_name" content="PaD Team Builder" />
   <meta property="og:url" content="http://cpx.asuscomm.com:3000/" />
@@ -15,7 +14,7 @@
   <meta name="twitter:url" content="http://cpx.asuscomm.com:3000/" />
   <meta name="twitter:title" content="PaD Team Builder" />
   <meta name="twitter:card" content="summary" />
-  <title>PadTeamBuilder</title>
+  <title>PADTeamBuilder</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -23,12 +22,11 @@
 
 
 <body>
-	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+	<nav class="navbar navbar-fixed-top navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
-			  <a class="navbar-brand" href="/">PaD Team Builder</a>
+				<a class="navbar-brand" href="/">PaD Team Builder</a>
 			</div>
-
 			<div class="collapse navbar-collapse" id="navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><%= link_to "Home", monsters_path %></li>
@@ -55,17 +53,23 @@
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->
 	</nav>
-    <div class="container">
-		<div class="starter-template center">
-			<% if notice %>
-				<div class="alert alert-info" role="alert"><%= notice %></div>
-			<% end %>
-			<% if alert %>
-				<div class="alert alert-danger" role="alert"><%= alert %></div>
-			<% end %>
-			<%= yield %>
+	<div class="container">
+		<div class="content center">
+					<% if notice %>
+						<div class="alert alert-info" role="alert"><%= notice %></div>
+					<% end %>
+					<% if alert %>
+						<div class="alert alert-danger" role="alert"><%= alert %></div>
+					<% end %>
+					<%= yield %>
 		</div>
-    </div><!-- /.container -->
+		
 
+    </div><!-- /.container -->
 </body>
+		<div class="navbar navbar-fixed-bottom custom-footer navbar-inverse">
+			<ul class="navbar navbar-nav navbar-right">
+				<p class="navbar-text">All Puzzle and Dragons images are registered trademarks or trademarks of <a href="http://www.gunghoonline.com/games/puzzle-dragons/">GungHo Online Entertainment, Inc</a></p>
+			</ul>
+		</div>
 </html>

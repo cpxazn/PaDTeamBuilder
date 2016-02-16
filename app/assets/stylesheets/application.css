@@ -17,7 +17,9 @@
  *= require_tree .
  *= require_self
  */
- 
+.content {overflow: hidden; padding-bottom: 100px; width: 1150px;}
+body { padding-top: 70px;}
+
 div.left {
 	float: left;
 	clear: left;
@@ -35,14 +37,8 @@ div.clear {
 html {
 	overflow-y: scroll;
 }
-body {
-	padding-top: 5rem;
+html, body { height: 100%; margin: 0; }
 
-}
-.starter-template {
-	padding: 2rem 1.5rem;
-	width: 1150px;
-}
 
 .center { margin: auto; }
 .center-text { text-align: center; }

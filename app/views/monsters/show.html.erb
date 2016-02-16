@@ -4,18 +4,18 @@
 	</div>
 	<div class="header header-details">
 		<div class="panel panel-default">
-			<div class="panel-heading">AS: <%= @active_skill["name"] %> (<%= @active_skill["max_cooldown"] %> to <%= @active_skill["min_cooldown"] %> turns)</div>
-			<div class="panel-body"><%= @active_skill["effect"] %></div>
+			<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> (<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)</div>
+			<div class="panel-body"><%= hash_not_nil(@active_skill,"effect") %></div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">LS: <%= @leader_skill["name"] %></div>
-			<div class="panel-body"><%= @leader_skill["effect"] %></div>
+			<div class="panel-heading">LS: <%= hash_not_nil(@leader_skill,"name") %></div>
+			<div class="panel-body"><%= hash_not_nil(@leader_skill,"effect") %></div>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Awoken Skills</div>
 			<div class="panel-body">
 				<% @awakenings.each do |a| %>
-					<%= image_tag(a["url"], :border => 0, title: (a["name"] + "&#13;" + a["desc"]).html_safe) %>
+					<%= image_tag(hash_not_nil(a,"url"), :border => 0, title: (hash_not_nil(a,"name") + "&#13;" + hash_not_nil(a,"desc")).html_safe) %>
 				<% end %>
 			</div>
 		</div>

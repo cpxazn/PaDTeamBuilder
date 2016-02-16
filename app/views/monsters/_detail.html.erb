@@ -1,4 +1,4 @@
-<div class="center">
+<div>
 	<div class="panel panel-default monster details">
 		<div class="center-text panel-heading monster">
 			<strong>Leader</strong>
@@ -15,7 +15,7 @@
 			<%= link_to image_tag(Rails.application.config.img_path_monsters + @sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>
 		</div>
 	</div>
-	<div style="width:240px;" class="panel panel-default monster details">
+	<div class="panel panel-default monster details summary">
 		<div class="center-text panel-heading monster">
 			<strong>Details</strong>
 		</div>
