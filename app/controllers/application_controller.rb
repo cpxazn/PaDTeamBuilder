@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-	helper_method :hash_not_nil, :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
+	helper_method :hash_not_nil, :censor_username, :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
 	after_filter :store_location
@@ -27,6 +27,14 @@ class ApplicationController < ActionController::Base
 	  return
   end
   
+  def censor_username(username)
+	u = username[0..0]
+	for i in 1..username.length
+		u = u + "*"
+	end
+	return u
+	
+  end
   def censor_email(email)
 	e = email[0..0]
 	for i in 1..email.index("@")-1
@@ -181,7 +189,9 @@ class ApplicationController < ActionController::Base
 	protected
 
 	def configure_permitted_parameters
-		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :padherder) }
+		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me, :padherder) }
+		devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
+		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password, :padherder) }
 	end
 	
 	

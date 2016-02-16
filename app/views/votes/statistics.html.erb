@@ -17,7 +17,7 @@
 	<% if @votes != nil %>
 		<% @votes.each do |vote| %>
 		  <tr>
-			<td><%= censor_email(vote.user.email) %></td>
+			<td><%= censor_username(vote.user.username) %></td>
 			<td><%= link_to vote.leader.name, vote.leader %></td>
 			<td><%= link_to vote.sub.name, vote.sub	 %></td>
 			<td><%= vote.score %></td>
