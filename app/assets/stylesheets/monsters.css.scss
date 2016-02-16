@@ -6,11 +6,11 @@
 
 }
 
-
 //Monster Header
+div.jumbotron.monster { overflow: hidden; }
 .header-details > .panel {
 	width: 48%;
-	display: inline-block;
+	//display: inline-block;
 	vertical-align: top;
 }
 .jumbotron .header-details {
