@@ -4,7 +4,7 @@
 	</div>
 	<div class="header header-details">
 		<div class="panel panel-default left">
-			<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> (<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)</div>
+			<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> <% if @active_skill != nil %>(<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)<% end %></div>
 			<div class="panel-body"><%= hash_not_nil(@active_skill,"effect") %></div>
 		</div>
 		<div class="panel panel-default right">
