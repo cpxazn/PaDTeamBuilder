@@ -77,7 +77,7 @@
 						<div>
 							<p><input name="monster_name" id="monster_field" class="vote lookup typeahead form-control" type="text" placeholder="Monster Name"></p>
 						</div>
-						<div class="vote select col-xs-3 ">
+						<div class="vote select col-xs-3">
 							<select name="rating" class="vote btn btn-default">
 								<option>Rating</option>
 								<option>1</option>
@@ -95,7 +95,7 @@
 						</div>
 					<% end %>
 				<% else %>
-					<p>You must be logged in to make a suggestion</p>
+					<p>You must be <%= link_to "logged in", new_user_session_path() %> to make a suggestion</p>
 				<% end %>
 			</div>
 		</div>

@@ -2,6 +2,17 @@ class ApplicationController < ActionController::Base
 	helper_method :hash_not_nil, :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
+	after_filter :store_location
+
+	
+	#Devise redirect back to last age
+	def store_location
+	  # store last url as long as it isn't a /users path
+	  session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/
+	end
+	def after_sign_in_path_for(resource)
+	  session[:previous_url] || root_path
+	end
   
   def hash_not_nil(hash, key)
 	return hash != nil ? hash[key].to_s : ""
@@ -172,4 +183,7 @@ class ApplicationController < ActionController::Base
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :padherder) }
 	end
+	
+	
+
 end

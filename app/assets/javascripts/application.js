@@ -17,3 +17,13 @@
 //= require highcharts
 // require turbolinks
 //= require_tree .
+
+$(document).ready(function(){
+
+	$('div.alert').click(
+		function() {
+			$(this).hide();
+		}
+	)
+
+}); 
