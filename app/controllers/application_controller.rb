@@ -109,10 +109,10 @@ class ApplicationController < ActionController::Base
   def create_monster(id, name)
 	if id == nil and name == nil then return nil end
 	if name == nil and id != nil then 
-		name = fetch_monster_by_id_json(id)["name"] 
+		name = hash_not_nil(fetch_monster_by_id_json(id),"name")
 		if name == nil then return nil end
 	elsif id == nil and name != nil
-		id = fetch_monster_by_name_json(name)["id"]
+		id = hash_not_nil(fetch_monster_by_name_json(name),"id")
 		if id == nil then return nil end
 	end
     return Monster.create(id: id, name: name)
@@ -130,7 +130,8 @@ class ApplicationController < ActionController::Base
 		if Monster.where(name: name).count > 0
 			return Monster.where(name: name).first
 		else
-			return create_monster(nil, name)
+			m = fetch_monster_by_name_json(name)
+			return m != nil ? create_monster(hash_not_nil(m,"id"), hash_not_nil(m,"name")) : nil
 		end
   end
   #Monster from DB using either id or name depending on which one has value
