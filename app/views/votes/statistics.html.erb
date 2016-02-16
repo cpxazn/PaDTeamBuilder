@@ -34,10 +34,10 @@
 			<% if @page == 1 or @page == 0 %>
 				<li class="disabled"><%= link_to "<<", "#" %></li>
 			<% else %>
-				<li><%= link_to "<<",	 statistics_votes_path(page: if @page == 0 then 0 else @page - 1 end) %></li>
+				<li><%= link_to "<<",	 votes_path(page: if @page == 0 then 0 else @page - 1 end) %></li>
 			<% end %>
 			<% if @more == 1 %>
-				<li><%= link_to ">>",	 statistics_votes_path(page: @page == 0 ? 2 : @page + 1) %></li>
+				<li><%= link_to ">>",	 votes_path(page: @page == 0 ? 2 : @page + 1) %></li>
 			<% else %>
 				<li class="disabled"><%= link_to ">>", "#" %></li>
 			<% end %>
