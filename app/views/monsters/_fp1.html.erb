@@ -1,0 +1,23 @@
+<table class="table table-striped">
+	<thead>
+		<tr colspan=3>
+			<th>Recent Activity</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr>
+			<th>Leader</th>
+			<th>Sub</th>
+			<th>Score</th>
+		</tr>
+	</thead>
+	<% Vote.order(:created_at)[0..9].each do |v| %>
+		<tbody>
+			<tr>
+				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(v.leader.id), :border => 0) , v.leader %></td>
+				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(v.sub.id), :border => 0) , v.sub	 %></td>
+				<td><%= v.score %></td>	
+			</tr>
+		</tbody>
+	<% end %>
+</table>

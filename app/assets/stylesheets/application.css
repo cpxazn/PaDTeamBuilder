@@ -17,18 +17,23 @@
  *= require_tree .
  *= require_self
  */
+ 
  div.loginbox { margin-top: 20px; }
 .content {overflow: hidden; padding-bottom: 300px; width: 1150px;}
 body { padding-top: 70px;}
 
 div.left {
 	float: left;
-	clear: left;
 }
-
+div.clear-left{
+	clear: left;	
+}
+div.clear-right{
+	clear: right;
+}
 div.right {
 	float: right;
-	clear: right;
+
 }
 
 div.clear {

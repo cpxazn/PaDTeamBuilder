@@ -1,5 +1,10 @@
 class ApplicationController < ActionController::Base
-	helper_method :hash_not_nil, :censor_username, :censor_email, :render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, :fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, :fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json
+	helper_method :hash_not_nil, :fetch_monster_url_by_id_json, :censor_username, :censor_email, 
+		:render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, 
+		:fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, 
+		:fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json,
+		:round?
+		
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
 	after_filter :store_location
@@ -47,13 +52,13 @@ class ApplicationController < ActionController::Base
   end
   #Determines coloring based on the score
   def rating_style(rating)
-	if rating >= 4
+	if rating >= 8
 		return "success"
-	elsif rating >= 3
+	elsif rating >= 6
 		return "info"
-	elsif rating >= 2
+	elsif rating >= 4
 		return "warning"
-	elsif rating >= 1
+	elsif rating >= 2
 		return "danger"
 	elsif rating = 0
 		return "default"
@@ -102,7 +107,10 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
-  
+  #Fetch Monster IMG URL from JSON
+  def fetch_monster_url_by_id_json(id)
+	return fetch_monster_by_id_json(id)["image60_href"]
+  end
   #Monster from JSON
   def fetch_monster_by_id_json(id)
   	monsters = Rails.cache.fetch("monster")
@@ -185,6 +193,9 @@ class ApplicationController < ActionController::Base
   def is_number? string
 	true if Float(string) rescue false
   end
+  def round? i
+	return i.to_i == i ? i.to_i : i
+  end
   
 	protected
 
@@ -193,7 +204,6 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
 		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password, :padherder) }
 	end
-	
 	
 
 end

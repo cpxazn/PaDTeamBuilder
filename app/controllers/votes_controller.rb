@@ -55,7 +55,8 @@ class VotesController < ApplicationController
 	current = params[:current_id]
 	option = params[:commit]
 	rating = params[:rating]
-	if rating.to_s 	=~ /[1-5]/
+	if is_number?(rating) and rating.to_i <= Rails.application.config.vote_rating_max and rating.to_i >= 0
+		rating = rating.to_i
 		if monster != nil
 			if (option =~ /^Sub/)
 				sub_id = monster.id
@@ -69,16 +70,26 @@ class VotesController < ApplicationController
 			
 			if Monster.where(id: leader_id).count == 1 and Monster.where(id: sub_id).count == 1
 				if user_voted_default_month(leader_id, sub_id)
-					vote = fetch_user_vote_by_default_month(leader_id, sub_id)
-					if vote.update(score: rating.to_i)
-						flash.now[:notice] = 'Vote Updated'
+					if rating > 0
+						vote = fetch_user_vote_by_default_month(leader_id, sub_id)
+						if vote.update(score: rating.to_i)
+							flash.now[:notice] = 'Vote Updated'
+						else
+							flash.now[:alert] = 'Error: Could not save vote!'
+						end
 					else
-						flash.now[:alert] = 'Error: Could not save vote!'
+						vote = fetch_user_vote_by_default_month(leader_id, sub_id)
+						vote.destroy
+						flash.now[:notice] = 'Vote Removed'
 					end
 				else
-					vote = Vote.new(score:rating.to_i,leader_id: leader_id, sub_id: sub_id, user_id: current_user.id)
-					if vote.save
-						flash.now[:notice] = 'Vote Submitted'
+					if rating > 0
+						vote = Vote.new(score:rating.to_i,leader_id: leader_id, sub_id: sub_id, user_id: current_user.id)
+						if vote.save
+							flash.now[:notice] = 'Vote Submitted'
+						else
+							flash.now[:alert] = 'Error: Could not save vote!'
+						end
 					else
 						flash.now[:alert] = 'Error: Could not save vote!'
 					end

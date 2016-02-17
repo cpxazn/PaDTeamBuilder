@@ -1,4 +1,8 @@
-
+.vote.dropdown-menu {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 100px;
+}
 
 //Details page div height
 .panel.details {
