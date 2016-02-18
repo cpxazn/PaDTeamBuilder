@@ -1,7 +1,31 @@
-table.front-page td.valign {
-	vertical-align:middle;
+
+//Hide buttons on default for javascript disabled users
+.btn.show-low.sub {
+	display: none;
 }
 
+//Front page
+table.front-page tr.center td,
+table.front-page tr.center th {
+	vertical-align:middle;
+	text-align: center;
+}
+div.front-page.wrapper {
+	overflow:hidden;
+	text-align:center;
+	
+}
+div.front-page.section {
+	margin: 20px;
+	display: inline-block;
+	vertical-align: top;
+
+}
+div.front-page.section table {
+	width: 100% !important;
+}
+
+//Scrollbar on modify vote
 .vote.dropdown-menu {
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -49,7 +73,7 @@ div.jumbotron.monster { overflow: hidden; }
 }
 
 //Include scrollbars to monster containers
-.monster_container.panel-body {
+.monster-container.panel-body {
   overflow-y: auto;
   max-height:555px;
   padding-bottom:150px;
@@ -94,7 +118,7 @@ div.monster_list {
 }
 
 //Container that has the suggest sub and leaders, and make a suggestions
-div.monster_container {
+div.monster-container {
 	width: 100%;
 }
 

@@ -1,22 +1,24 @@
 <table class="table table-striped front-page">
 	<thead>
-		<tr>
-			<th colspan=3>Recent Activity</th>
+		<tr class="center">
+			<th colspan=4>Recent Activity</th>
 		</tr>
 	</thead>
 	<thead>
-		<tr>
+		<tr class="center">
 			<th>Leader</th>
 			<th>Sub</th>
 			<th>Score</th>
+			<th>Date</th>
 		</tr>
 	</thead>
-	<% Vote.order(:created_at)[0..9].each do |v| %>
+	<% Vote.order(:created_at)[0..4].each do |v| %>
 		<tbody>
-			<tr>
+			<tr class="center">
 				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(v.leader.id), :border => 0) , v.leader %></td>
 				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(v.sub.id), :border => 0) , v.sub	 %></td>
-				<td class="valign"><%= v.score %></td>	
+				<td><%= v.score %></td>	
+				<td><%= v.created_at.localtime.strftime("%-m-%e-%Y %l:%M EST") %></td>
 			</tr>
 		</tbody>
 	<% end %>

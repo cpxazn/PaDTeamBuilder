@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
 		return "info"
 	elsif rating >= 4
 		return "warning"
-	elsif rating >= 2
+	elsif rating >= 1
 		return "danger"
 	elsif rating = 0
 		return "default"

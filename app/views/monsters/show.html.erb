@@ -31,12 +31,16 @@
 	<div class="monster_list left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Subs</div>
-				<div class="monster_container panel-body">
-					<div>
+				<div class="monster-container panel-body">
+					<div class="shown">
 						<% if @subs != nil %>
+							<% hiddenSubs = 0 %>
 							<% @subs.each do |s| %>
 								<% score = round?(Monster.find(@monster["id"]).score(s["id"])) %>
-								<div class="panel panel-<%= rating_style(score) %> monster">
+								<% if score < 3 and hiddenSubs == 0 %>
+									<% hiddenSubs = 1 %>
+								<% end %>
+								<div class="panel panel-<%= rating_style(score) %> monster <% if hiddenSubs == 1 %>low-score subs<% end %>">
 									<div class="center-text panel-heading monster">
 										<strong><%= score %></strong>
 									</div>
@@ -61,6 +65,9 @@
 							<% end %>
 						<% end %>
 					</div>
+					<% if hiddenSubs == 1 %>
+						<button type="button" class="btn btn-default show-low subs" aria-label="Left Align">Show Hidden</button>
+					<% end %>
 				</div>
 			</div>
 		</div>
@@ -127,33 +134,42 @@
 	<div class="monster_list clear-left left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Leaders</div>
-			<div class="monster_container panel-body">
-				<% if @leaders != nil %>
-					<% @leaders.each do |l| %>
-						<% score = round?(Monster.find(l["id"]).score(@monster["id"])) %>
-						<div class="panel panel-<%= rating_style(score) %> monster">
-							<div class="center-text panel-heading monster">
-								<strong><%= score %></strong>
-							</div>
-							<div class="panel-body">
-								<%= link_to image_tag(Rails.application.config.img_path_monsters + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster["id"]), remote:true %>
-							</div>
-							<% if user_signed_in? %>
-								<div class="dropdown">
-									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-										<% if user_voted_default_month(l["id"],@monster["id"]) %><%= fetch_user_vote_by_default_month(l["id"], @monster["id"]).score %><% else %>Vote<% end %>
-										<span class="caret"></span>
-									</button>
-									<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
-										<% for i in Rails.application.config.vote_rating_max.downto(1) %>
-											<li><%= link_to i.to_s, {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: i, commit: "Leader"}, method: "post" %></li>
-										<% end %>
-										<li><%= link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 0, commit: "Leader"}, method: "post" %></li>
-									</ul>
-								</div>
+			<div class="monster-container panel-body">
+				<div class="shown leaders">
+					<% if @leaders != nil %>
+						<% hiddenLeaders = 0 %>
+						<% @leaders.each do |l| %>
+							<% score = round?(Monster.find(l["id"]).score(@monster["id"])) %>
+							<% if score < 3 and hiddenLeaders == 0 %>
+								<% hiddenLeaders = 1 %>
 							<% end %>
-						</div>
+							<div class="panel panel-<%= rating_style(score) %> monster <% if hiddenLeaders == 1 %>low-score leaders<% end %>">
+								<div class="center-text panel-heading monster">
+									<strong><%= score %></strong>
+								</div>
+								<div class="panel-body">
+									<%= link_to image_tag(Rails.application.config.img_path_monsters + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster["id"]), remote:true %>
+								</div>
+								<% if user_signed_in? %>
+									<div class="dropdown">
+										<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<% if user_voted_default_month(l["id"],@monster["id"]) %><%= fetch_user_vote_by_default_month(l["id"], @monster["id"]).score %><% else %>Vote<% end %>
+											<span class="caret"></span>
+										</button>
+										<ul class="vote dropdown-menu" aria-labelledby="dropdownMenu">
+											<% for i in Rails.application.config.vote_rating_max.downto(1) %>
+												<li><%= link_to i.to_s, {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: i, commit: "Leader"}, method: "post" %></li>
+											<% end %>
+											<li><%= link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 0, commit: "Leader"}, method: "post" %></li>
+										</ul>
+									</div>
+								<% end %>
+							</div>
+						<% end %>
 					<% end %>
+				</div>
+				<% if hiddenLeaders == 1 %>
+					<button type="button" class="btn btn-default show-low leaders" aria-label="Left Align">Show Hidden</button>
 				<% end %>
 			</div>
 		</div>

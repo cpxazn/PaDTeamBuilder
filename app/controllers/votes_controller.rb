@@ -4,6 +4,8 @@ class VotesController < ApplicationController
   
   respond_to :html
 
+
+  
   def index
   	@page = params[:page].to_i
 	if @page.is_a? Numeric and @page != nil and @page > 0

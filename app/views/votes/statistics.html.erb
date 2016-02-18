@@ -17,11 +17,11 @@
 	<% if @votes != nil %>
 		<% @votes.each do |vote| %>
 		  <tr>
-			<td><%= censor_username(vote.user.username) %></td>
+			<td><%= vote.user.username %></td>
 			<td><%= link_to vote.leader.name, vote.leader %></td>
 			<td><%= link_to vote.sub.name, vote.sub	 %></td>
 			<td><%= vote.score %></td>
-			<td><%= vote.created_at %></td>
+			<td><%= vote.created_at.localtime.strftime("%-m-%e-%Y %l:%M EST") %></td>
 		  </tr>
 		<% end %>
     <% end %>
