@@ -51,12 +51,17 @@ class VotesController < ApplicationController
   
 
   def create
+
 	monster_id = params[:monster_id]
 	monster_name = params[:monster_name]
+	  puts "---------------------" + monster_id.to_s
+  puts "---------------------" + monster_name.to_s
 	monster = fetch_monster_by_one(monster_id, monster_name)
 	current = params[:current_id]
 	option = params[:commit]
 	rating = params[:rating]
+	if monster == nil then monster = create_monster(monster_id, monster_name) end
+	
 	if is_number?(rating) and rating.to_i <= Rails.application.config.vote_rating_max and rating.to_i >= 0
 		rating = rating.to_i
 		if monster != nil
@@ -100,7 +105,7 @@ class VotesController < ApplicationController
 				flash.now[:alert] = 'Error: ' + leader_id.to_s + ' is not a valid monster id'
 			end
 		else
-			flash.now[:alert] = 'Error: ' + params[:monster_name] + ' is not a valid monster name'
+			flash.now[:alert] = 'Error: Invalid monster name'
 		end
 	end
 	redirect_to monster_path(current), notice: flash[:notice], alert: flash[:alert]

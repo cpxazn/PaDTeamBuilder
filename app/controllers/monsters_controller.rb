@@ -6,6 +6,18 @@ class MonstersController < ApplicationController
 
   respond_to :html
 
+  def add_tag
+		@tag = params[:tag_name]
+		@monster_id = params[:monster_id]
+		if @tag.length > 0
+			@monster.tag_list.add(@tag)
+			@monster.save
+			@monster.reload
+		end
+		respond_to do |format|
+			format.js
+		end
+  end 
   #Uses @page to keep track of page number. Formulas are used to determine which monsters to display.
   #@monsters is the list of monsters to be displayed
   def index
@@ -22,7 +34,21 @@ class MonstersController < ApplicationController
 	Rails.cache.fetch("monster")[starting + Rails.application.config.monster_list_max..ending + Rails.application.config.monster_list_max] == nil ? @more = 0 : @more = 1
     respond_with(@monsters)
   end
+  def tags_json
+	name = params[:name]
+	results = Array.new
+	if name != nil
+		ActsAsTaggableOn::Tag.all.each do |t|
+			if t.name.downcase.include? name.downcase
+				results.push(t)
+			end
+		end
+	else
+		results = ActsAsTaggableOn::Tag.all
+	end
 
+	render :json => results
+  end
   #Shows a particular monster from JSON. Input parameter is params[:id]
   def show
 	@monster = fetch_monster_by_id_json(params[:id])
@@ -73,7 +99,6 @@ class MonstersController < ApplicationController
 	
     respond_with(@monster)
   end
-
   #Gets rating details, passes to modale or actual view
   def detail
 	if @sub != nil and @leader != nil
@@ -87,7 +112,6 @@ class MonstersController < ApplicationController
 		end
 	end
   end
-  
   #Unused
   def new
     @monster = Monster.new
@@ -106,7 +130,6 @@ class MonstersController < ApplicationController
     @monster.destroy
     respond_with(@monster)
   end
-
   #Returns json data
   def idlookup_json
   	monster = monster_id_json_params
@@ -118,7 +141,7 @@ class MonstersController < ApplicationController
 		end
 	end
   end
-  #Gets monster paramters for typeahead
+  #Gets monster parameters for typeahead
   def typeahead_json
 	monster = monster_name_json_params
 	monsters = Rails.cache.fetch("monster")
@@ -135,7 +158,6 @@ class MonstersController < ApplicationController
 	
 	render :json => result
   end
-  
   #Graphs
   def graph_json
 	if params["graph"] == nil
@@ -156,7 +178,6 @@ class MonstersController < ApplicationController
 		when "weighted"
 			data.push("Weighted Avg")
 	end
-
 	if data.length > 0
 		tmp2 = Array.new
 		for i in (Rails.application.config.vote_display_max).downto(0)
@@ -184,7 +205,6 @@ class MonstersController < ApplicationController
 	end
 	render :json => data
   end
-
   #Not used
   def populate
 		monsters = Rails.cache.fetch("monster")
@@ -196,7 +216,6 @@ class MonstersController < ApplicationController
 		#@monster = Monster.find(params[:id])
 		redirect_to monsters_path
   end
-  
   #Caching
   def cache_data
 	request_uri = 'https://www.padherder.com/api/monsters/'
@@ -252,7 +271,6 @@ class MonstersController < ApplicationController
 	def monster_name_json_params
 		params.require(:name)
 	end
-
     def monster_params
 		params.require(:monster).permit(:name)
     end
