@@ -37,7 +37,7 @@
 							<% hiddenSubs = 0 %>
 							<% @subs.each do |s| %>
 								<% score = round?(Monster.find(@monster["id"]).score(s["id"])) %>
-								<% if score < 3 and hiddenSubs == 0 %>
+								<% if score < Rails.application.config.vote_low_score and hiddenSubs == 0 %>
 									<% hiddenSubs = 1 %>
 								<% end %>
 								<div class="panel panel-<%= rating_style(score) %> monster <% if hiddenSubs == 1 %>low-score subs<% end %>">
@@ -57,7 +57,9 @@
 												<% for i in Rails.application.config.vote_rating_max.downto(1) %>
 													<li><%= link_to i.to_s, {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: i, commit: "Sub"}, method: "post" %></li>
 												<% end %>
-												<li><%=  link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 0, commit: "Sub"}, method: "post" %></li>
+												<% if user_voted_default_month(@monster["id"],s["id"]) %>
+													<li><%=  link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: s["id"], rating: 0, commit: "Sub"}, method: "post" %></li>
+												<% end %>
 											</ul>
 										</div>
 									<% end %>
@@ -140,7 +142,7 @@
 						<% hiddenLeaders = 0 %>
 						<% @leaders.each do |l| %>
 							<% score = round?(Monster.find(l["id"]).score(@monster["id"])) %>
-							<% if score < 3 and hiddenLeaders == 0 %>
+							<% if score < Rails.application.config.vote_low_score and hiddenLeaders == 0 %>
 								<% hiddenLeaders = 1 %>
 							<% end %>
 							<div class="panel panel-<%= rating_style(score) %> monster <% if hiddenLeaders == 1 %>low-score leaders<% end %>">
@@ -160,7 +162,9 @@
 											<% for i in Rails.application.config.vote_rating_max.downto(1) %>
 												<li><%= link_to i.to_s, {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: i, commit: "Leader"}, method: "post" %></li>
 											<% end %>
-											<li><%= link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 0, commit: "Leader"}, method: "post" %></li>
+											<% if user_voted_default_month(l["id"],@monster["id"]) %>
+												<li><%= link_to "-", {controller: "votes", action: "create", current_id: @monster["id"], monster_id: l["id"], rating: 0, commit: "Leader"}, method: "post" %></li>
+											<% end %>
 										</ul>
 									</div>
 								<% end %>

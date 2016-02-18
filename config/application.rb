@@ -26,6 +26,7 @@ module PadTeamBuilder
 	config.vote_display_eom = true #Set to true to pull data from eof instead of current date
 	config.vote_list_max = 15 #Max number of votes to list in index
 	config.vote_rating_max = 10 #Max number of votes to list in index
+	config.vote_low_score = 3 #Low score to be hidden in mosnter#show page
 	config.monster_list_max = 90 #Max number of monsters to list in index
 	config.img_path_awakenings = "/static/img/awakenings/" #Path to awakening .png
 	config.img_path_monsters = "http://padherder.com" #Path to APIs
