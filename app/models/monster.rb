@@ -2,6 +2,9 @@ class Monster < ActiveRecord::Base
 	has_many :votes, class_name: "Vote", foreign_key: "leader_id", dependent: :destroy
 	has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
 	
+	def self.top
+		where('votes_count > 0').order('votes_count DESC').limit(10)
+	end
 	#Uses default parameters to fetch data. Fetches all data up from specified month
 	def score(intSub)
 		return fetch_weighted_avg(intSub, 0)
