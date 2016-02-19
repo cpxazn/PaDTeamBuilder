@@ -47,7 +47,18 @@
 										<strong><%= score %></strong>
 									</div>
 									<div class="panel-body">
-										<%= link_to image_tag(Rails.application.config.img_path_monsters + s["image60_href"].to_s, class: "center-image", :border => 0, :title => s["id"].to_s + ". " + s["name"]), detail_monsters_path(leader_id: @monster_db.id, sub_id: s["id"]), remote:true %>
+										<%
+											title = s["id"].to_s + ". " + s["name"] + "&#13;Tags: "
+											fetch_monster_by_id(s["id"]).tag_list.each do |t|
+												title = title + t + ", "
+											end
+											title = title + "&#13;&#13;Pairing Specific Tags: "
+											@monster_db.tag_list_on("sub_" + s["id"].to_s).each do |t|
+												title = title + t + ", "
+											end
+											title = title.html_safe
+										%>
+										<%= link_to image_tag(Rails.application.config.img_path_monsters + s["image60_href"].to_s, class: "center-image", :border => 0, :title => title ), detail_monsters_path(leader_id: @monster_db.id, sub_id: s["id"]), remote:true %>
 									</div>
 									<% if user_signed_in? %>
 										<div class="dropdown">
@@ -152,10 +163,10 @@
 							</select></p>
 						</div>
 						<% if user_signed_in? %>
-							<div id="edit" class="tags col-xs-3">
+							<div id="edit" class="tags button-container col-xs-3">
 								<button type="button" id="edit-tags" class="btn btn-default tags" aria-label="Left Align">Edit</button>
 							</div>
-							<div id="update" class="tags col-xs-3">
+							<div id="update" class="tags button-container  col-xs-3">
 								<%= submit_tag "Update", id:"update-tags", class: "tags btn btn-default" %>
 							</div>
 						<% end %>
@@ -183,7 +194,14 @@
 									<strong><%= score %></strong>
 								</div>
 								<div class="panel-body">
-									<%= link_to image_tag(Rails.application.config.img_path_monsters + l["image60_href"].to_s, :border => 0, :title => l["id"].to_s + ". " + l["name"]), detail_monsters_path(leader_id: l["id"], sub_id: @monster_db.id), remote:true %>
+									<%
+										title = l["id"].to_s + ". " + l["name"] + "&#13;Tags: "
+										fetch_monster_by_id(l["id"]).tag_list.each do |t|
+											title = title + t + ", "
+										end
+										title = title.html_safe
+									%>
+									<%= link_to image_tag(Rails.application.config.img_path_monsters + l["image60_href"].to_s, :border => 0, :title => title), detail_monsters_path(leader_id: l["id"], sub_id: @monster_db.id), remote:true %>
 								</div>
 								<% if user_signed_in? %>
 									<div class="dropdown">

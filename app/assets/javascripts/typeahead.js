@@ -55,9 +55,9 @@ $(document).ready(function(){
 				//console.log(data);
 				return {
 					results: $.map(data, function (item) {
-						
 						return {
 							text: item.name,
+							id: item.name
 						}
 					})
 				};

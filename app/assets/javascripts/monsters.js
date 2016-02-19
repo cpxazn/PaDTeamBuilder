@@ -40,7 +40,7 @@ $(document).ready(function(){
 			if($(".btn.show-low.leaders").text() == 'Show Hidden') {$(".btn.show-low.leaders").html('Hide');} else {$(".btn.show-low.leaders").html('Show Hidden');}
 		}
 	);
-	
+
 	$('#edit-tags').click(
 		function() {
 			$('#update-tags').show();

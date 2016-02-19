@@ -6,14 +6,53 @@ class MonstersController < ApplicationController
   before_action :authenticate_user!, only: [:add_tag]
 
   respond_to :html
-
+  def add_pair_tag
+		new_tags = params[:tags]
+		leader_id = params[:monster_id]
+		sub_id = params[:sub_id]
+		sub = fetch_monster_by_id(sub_id)
+		leader = fetch_monster_by_id(leader_id)
+		context = "sub_" + sub_id.to_s
+		if new_tags == nil then new_tags = [] end
+		if leader != nil and sub != nil
+			old_tags = leader.tag_list_on(context).dup
+			if old_tags == nil then old_tags = [] end
+			old_tags.each do |old|
+				found = 0
+				new_tags.each do |new|
+					if old == new then 
+						found = 1 
+					end
+				end
+				if found == 0 then 
+					leader.tag_list_on(context).remove(old) 
+				end
+			end
+			old_tags = leader.tag_list_on(context).dup
+			new_tags.each do |new|
+				found = 0
+				old_tags.each do |old|
+					if new == old then found = 1 end
+				end
+				if found == 0 then 
+					leader.tag_list_on(context).add(new) 
+				end
+			end
+			leader.save
+			leader.reload
+			#tags = @leader.tag_list
+		end
+		respond_to do |format|
+			format.js
+		end
+  end
   def add_tag
 		new_tags = params[:tags]
 		monster_id = params[:monster_id]
 		monster = fetch_monster_by_id(monster_id)
 		if new_tags == nil then new_tags = [] end
 		if monster != nil
-			old_tags = monster.tag_list
+			old_tags = monster.tag_list.dup
 			if old_tags == nil then old_tags = [] end
 			old_tags.each do |old|
 				found = 0
@@ -24,7 +63,7 @@ class MonstersController < ApplicationController
 					monster.tag_list.remove(old) 
 				end
 			end
-			old_tags = monster.tag_list
+			old_tags = monster.tag_list.dup
 			new_tags.each do |new|
 				found = 0
 				old_tags.each do |old|

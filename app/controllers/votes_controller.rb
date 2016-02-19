@@ -18,7 +18,7 @@ class VotesController < ApplicationController
 	@count = current_user.votes.count
     @votes = current_user.votes.order(created_at: :desc)[starting..ending]
 	#if @votes == nil then render_404; return; end
-	current_user.votes[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
+	current_user.votes.limit(1000)[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
     #respond_with(@votes)
   end
   
@@ -31,7 +31,7 @@ class VotesController < ApplicationController
 		@page = 0
 	end
 	ending = starting + Rails.application.config.vote_list_max - 1
-    @votes = Vote.order(created_at: :desc)[starting..ending]
+    @votes = Vote.order(created_at: :desc).limit(1000)[starting..ending]
 	#if @votes == nil then render_404; return; end
 	Vote.all[starting + Rails.application.config.vote_list_max..ending + Rails.application.config.vote_list_max] == nil ? @more = 0 : @more = 1
     #respond_with(@votes)

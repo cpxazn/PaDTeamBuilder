@@ -21,15 +21,39 @@
 		</div>
 		<div class="panel-body">
 			<table width=100% height=100%>
-			<tr>
-				<td><span class="badge">Current</span></td>
-				<td><span class="label label-<%= rating_style(@score) %>"><%= round?(@score) %> out of <%= Rails.application.config.vote_rating_max %></span><span class="label label-primary"><%= @votes %> votes</span></td>
-			</tr>
-			<tr>
-				<td><span class="badge">All Time</span></td>
-				<td><span class="label label-<%= rating_style(@score_all) %>"><%= round?(@score_all) %> out of <%= Rails.application.config.vote_rating_max %></span><span class="label label-primary"><%= @votes_all %> votes</span></td>
-			</tr>
+				<tr>
+					<td><span class="badge">Current</span></td>
+					<td><span class="label label-<%= rating_style(@score) %>"><%= round?(@score) %> out of <%= Rails.application.config.vote_rating_max %></span><span class="label label-primary"><%= @votes %> votes</span></td>
+				</tr>
+				<tr>
+					<td><span class="badge">All Time</span></td>
+					<td><span class="label label-<%= rating_style(@score_all) %>"><%= round?(@score_all) %> out of <%= Rails.application.config.vote_rating_max %></span><span class="label label-primary"><%= @votes_all %> votes</span></td>
+				</tr>
 			</table>
+		</div>
+	</div>
+	<div class="panel panel-default monster tags details">
+		<div class="center-text panel-heading monster tags">
+			<strong>Pairing Specific Tags</strong>
+		</div>
+		<div class="panel-body tags">
+			<%= form_tag(monster_tag_pair_path(@leader.id, sub_id: @sub.id), method: "get", remote:true ) do %>
+				<div>
+					<p><select id="tags-modale" style="width:100%;" disabled multiple="true" name="tags[]" class="tags select2">
+					<% @leader.tag_list_on("sub_" + @sub.id.to_s).each do |t| %>
+						<option selected="selected"><%= t %></option>
+					<% end %>
+					</select></p>
+				</div>
+				<% if user_signed_in? %>
+					<div id="edit-modale" class="tags  button-container col-xs-3">
+						<button type="button" id="edit-tags-modale" class="btn btn-default tags" aria-label="Left Align">Edit</button>
+					</div>
+					<div id="update-modale" class="tags  button-container col-xs-3">
+						<%= submit_tag "Update", id:"update-tags-modale", class: "tags btn btn-default" %>
+					</div>
+				<% end %>
+			<% end %>
 		</div>
 	</div>
 </div>
@@ -54,3 +78,4 @@
 <div id="history" class="page-tab">
 	History
 </div>
+<%= render partial: 'modale' %>

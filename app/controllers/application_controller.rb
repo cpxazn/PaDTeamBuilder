@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 	helper_method :hash_not_nil, :fetch_monster_url_by_id_json, :censor_username, :censor_email, 
 		:render_404, :user_voted_default_month, :fetch_user_vote_by_default_month, :rating_style, 
 		:fetch_monster_by_id_json, :fetch_monster_by_name_json, :fetch_active_skill_by_id_json, 
-		:fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json, :format_date,
+		:fetch_leader_skill_by_id_json, :fetch_awakenings_by_id_json, :format_date, :fetch_monster_by_id,
 		:round?
 		
 	before_filter :configure_permitted_parameters, if: :devise_controller?

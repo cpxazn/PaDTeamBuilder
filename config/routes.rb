@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 		get 'json/graph', controller: 'monsters', action: 'graph_json' , on: :collection
 		get 'detail' , controller: 'monsters', action: 'detail' , on: :collection 
 		get 'tag', controller: 'monsters', action: 'add_tag'
+		get 'tag/pair', controller: 'monsters', action: 'add_pair_tag'
 		#get 'json/graph/monthly' ,  controller: 'monsters', action: 'graph_monthly_json' , on: :collection 
 		#get 'json/graph/since' ,  controller: 'monsters', action: 'graph_since_json' , on: :collection 
 		#get 'json/graph/weighted' ,  controller: 'monsters', action: 'graph_weighted_json' , on: :collection 

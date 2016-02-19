@@ -1,12 +1,14 @@
-div.tags { 
+div.tags.button-container  { 
 	padding-left: 0px;
 }
 div#update.tags {
 	display: none;
 }
-
+div#update-modale.tags {
+	display: none;
+}
 select.tags {
-	width:100%;
+	width:100% !important;
 }
 
 //Hide buttons on default for javascript disabled users
@@ -42,11 +44,7 @@ div.front-page.section table {
 	height: 100px;
 }
 
-//Details page div height
-.panel.details {
-	height: 122px;
 
-}
 
 //Monster Header
 div.jumbotron.monster { overflow: hidden; }
@@ -113,10 +111,13 @@ select.vote {
 }
 
 
-//Details tab paddings
+//Details Modale
 ul.nav-tabs { padding-top: 10px;}
 div.page-tab { padding-top: 10px;}
-.monster.detail.summary { width:240px; }
+div.monster.details.summary { width:240px; }
+div.panel-default.tags { width: 500px; overflow: hidden; }
+div.panel-body.tags { overflow: auto;}
+.panel-body.tags { max-height: 140px; }
 
 //Width of the main vote dropdown
 select.vote {
