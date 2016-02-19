@@ -1,9 +1,6 @@
-
-
 $(document).ready(function(){
-	$('div.tags').empty();
-	$('div.tags').append("<%= j render partial: 'tags', locals: { tags: @tags } %>");
-
-	
+	$('select.tags').prop("disabled", true);
+	$('div#edit.tags').show();
+	$('div#update.tags').hide();
 }); 
 

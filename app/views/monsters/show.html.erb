@@ -28,6 +28,8 @@
 </div>
 
 <div class="monster-container">
+
+	<!-- Suggested Subs -->
 	<div class="monster-list left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Subs</div>
@@ -58,7 +60,7 @@
 													<li><%= link_to i.to_s, {controller: "votes", action: "create", current_id: @monster_db.id, monster_id: s["id"], rating: i, commit: "Sub"}, method: "post" %></li>
 												<% end %>
 												<% if user_voted_default_month(@monster_db.id,s["id"]) %>
-													<li><%=  link_to "-", {controller: "votes", action: "create", current_id: @monster_db.id, monster_id: s["id"], rating: 0, commit: "Sub"}, method: "post" %></li>
+													<li><%= link_to "-", {controller: "votes", action: "create", current_id: @monster_db.id, monster_id: s["id"], rating: 0, commit: "Sub"}, method: "post" %></li>
 												<% end %>
 											</ul>
 										</div>
@@ -75,6 +77,7 @@
 		</div>
 	</div>
 
+	<!-- Make a Suggestion -->
 	<div class="monster-list right clear-right">
 		<div class="panel panel-default">
 			<div class="panel-heading">Make a Suggestion</div>
@@ -107,6 +110,7 @@
 		</div>
 	</div>
 
+	<!-- Voting Guidelines -->
 	<div class="monster-list clear-right right">
 		<div class="panel panel-default">
 			<div class="panel-heading">Voting Guidelines</div>
@@ -133,6 +137,35 @@
 		</div>
 	</div>
 	
+	<!-- Tags -->
+	<div class="monster-list clear-right right">
+		<div class="panel panel-default">
+			<div class="panel-heading">Tags</div>
+			<div class="monster-container panel-body">
+				<div>
+					<%= form_tag(monster_tag_path(@monster_db.id), method: "get", remote:true ) do %>
+						<div>
+							<p><select disabled multiple="true" name="tags[]" class="tags select2">
+							<% @monster_db.tag_list.each do |t| %>
+								<option selected="selected"><%= t %></option>
+							<% end %>
+							</select></p>
+						</div>
+						<% if user_signed_in? %>
+							<div id="edit" class="tags col-xs-3">
+								<button type="button" id="edit-tags" class="btn btn-default tags" aria-label="Left Align">Edit</button>
+							</div>
+							<div id="update" class="tags col-xs-3">
+								<%= submit_tag "Update", id:"update-tags", class: "tags btn btn-default" %>
+							</div>
+						<% end %>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Suggested Leader -->
 	<div class="monster-list clear-left left">
 		<div class="panel panel-default">
 			<div class="panel-heading">Suggested Leaders</div>
@@ -178,47 +211,22 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="monster-list clear-right right">
-		<div class="panel panel-default">
-			<div class="panel-heading">Tags</div>
-			<div class="monster-container panel-body">
-				<div class="">
-					<div class="tags">
-						<% @monster_db.tag_list.each do |t| %>
-							<span class="badge"><%= t %></span>
-						<% end %>
-					</div>
-					<% if user_signed_in? %>
-						<p><img id="lookup" src=""/></p>
-						<%= form_tag(monster_tag_path(@monster_db.id), method: "get", remote:true ) do %>
-							<div>
-								<p><input name="tag_name" id="tag-field" class="tag lookup typeahead form-control" type="text" placeholder="Tag Name"></p>
-							</div>
-							<div class="vote col-xs-3">
-									<%= submit_tag "Add", id:"add-tag", class: "btn btn-default" %>
-							</div>
-						<% end %>
-					<% end %>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 
+<!-- Modale -->
 <div class="modal fade" id="vote_details" tabindex="-1" role="dialog" aria-labelledby="vote_details" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-	<div class="modal-header">
-	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	  <h4 class="modal-title"></h4>
-	</div>
-	<div class="modal-body">
-	</div>
-	<div class="modal-footer">
-	  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	</div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		  <h4 class="modal-title"></h4>
+		</div>
+		<div class="modal-body">
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 

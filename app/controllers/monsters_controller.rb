@@ -3,18 +3,40 @@ class MonstersController < ApplicationController
   #before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :cache_data, only: [:index, :json, :show, :populate, :details]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
+  before_action :authenticate_user!, only: [:add_tag]
 
   respond_to :html
 
   def add_tag
-		@tag = params[:tag_name]
-		@monster_id = params[:monster_id]
-		@monster = fetch_monster_by_id(@monster_id)
-		if @tag.length > 0 and @tag.length < 25 and @monster != nil
-			@monster.tag_list.add(@tag)
-			@monster.save
-			@monster.reload
-			@tags = @monster.tag_list
+		new_tags = params[:tags]
+		monster_id = params[:monster_id]
+		monster = fetch_monster_by_id(monster_id)
+		if new_tags == nil then new_tags = [] end
+		if monster != nil
+			old_tags = monster.tag_list
+			if old_tags == nil then old_tags = [] end
+			old_tags.each do |old|
+				found = 0
+				new_tags.each do |new|
+					if old == new then found = 1 end
+				end
+				if found == 0 then 
+					monster.tag_list.remove(old) 
+				end
+			end
+			old_tags = monster.tag_list
+			new_tags.each do |new|
+				found = 0
+				old_tags.each do |old|
+					if new == old then found = 1 end
+				end
+				if found == 0 then 
+					monster.tag_list.add(new) 
+				end
+			end
+			monster.save
+			monster.reload
+			#tags = @monster.tag_list
 		end
 		respond_to do |format|
 			format.js

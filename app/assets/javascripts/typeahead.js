@@ -36,32 +36,34 @@ $(document).ready(function(){
 				
 	});
 	
-	
-	var tagEngine = new Bloodhound({
-		datumTokenizer: function (d) {
-            return Bloodhound.tokenizers.whitespace(d.name);
-		},
-		queryTokenizer: Bloodhound.tokenizers.whitespace,
-		remote: { url: "/monsters/json/tags?name=%QUERY",
-			wildcard: '%QUERY'}
-	});
-	
-	monEngine.initialize();
+	$('select.tags').select2({
+		tags: true,
+		multiple: true,
+        minimumInputLength: 1,
+		ajax: {
+			url: "/monsters/json/tags",
+			dataType: "json",
+			type: "GET",
+			data: function (params) {
 
-    $('.typeahead.tag').typeahead(
-		{hint: false, highlight: true, minLength: 1}
-		,
-		{
-			limit: 1000,
-			name: 'tags',
-			displayKey: 'name',
-			source: tagEngine.ttAdapter(),
-			templates: {
-				suggestion: function(data){
-					return '<div>' + data.name + '</div>';
+				var queryParameters = {
+					name: params.term
 				}
+				return queryParameters;
+			},
+			processResults: function (data) {
+				//console.log(data);
+				return {
+					results: $.map(data, function (item) {
+						
+						return {
+							text: item.name,
+						}
+					})
+				};
 			}
-		}	
-	);
-	
+		}
+    });
+
+
 }); 

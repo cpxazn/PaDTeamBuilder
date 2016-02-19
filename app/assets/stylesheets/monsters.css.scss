@@ -1,3 +1,13 @@
+div.tags { 
+	padding-left: 0px;
+}
+div#update.tags {
+	display: none;
+}
+
+select.tags {
+	width:100%;
+}
 
 //Hide buttons on default for javascript disabled users
 .btn.show-low.sub {
@@ -83,6 +93,7 @@ div.jumbotron.monster { overflow: hidden; }
 div.vote.select { 
 	padding-left: 0px;
 }
+
 //Change main vote select dropdown height to 34 to match the buttons
 select.vote {
 	height: 33.5px;
