@@ -9,10 +9,12 @@ class MonstersController < ApplicationController
   def add_tag
 		@tag = params[:tag_name]
 		@monster_id = params[:monster_id]
-		if @tag.length > 0
+		@monster = fetch_monster_by_id(@monster_id)
+		if @tag.length > 0 and @tag.length < 25 and @monster != nil
 			@monster.tag_list.add(@tag)
 			@monster.save
 			@monster.reload
+			@tags = @monster.tag_list
 		end
 		respond_to do |format|
 			format.js

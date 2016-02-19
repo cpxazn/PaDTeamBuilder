@@ -1,6 +1,9 @@
 
 
 $(document).ready(function(){
-	$('div.tags').append("escape_javascript(@tag)");
+	$('div.tags').empty();
+	$('div.tags').append("<%= j render partial: 'tags', locals: { tags: @tags } %>");
+
+	
 }); 
 
