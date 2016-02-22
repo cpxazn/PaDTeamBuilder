@@ -1,3 +1,4 @@
+//Tags
 div.tags.button-container  { 
 	padding-left: 0px;
 }
@@ -44,8 +45,6 @@ div.front-page.section table {
 	height: 100px;
 }
 
-
-
 //Monster Header
 div.jumbotron.monster { overflow: hidden; }
 .header-details > .panel {
@@ -65,18 +64,16 @@ div.jumbotron.monster { overflow: hidden; }
 //Modal scrollbar and height
 .modal-body {
 	overflow-y: auto;
-	max-height: 750px;
-
+	max-height: 450px;
 }
 //Prevent page from shifting left when opening modal
 .modal-open[style] {
 	padding-right: 0px !important;
 }
-
 //Modal size
 @media screen and (min-width: 768px) {
 	
-	#vote_details .modal-dialog  {width:1200px;}
+	#vote_details .modal-dialog  {width:1100px;}
 
 }
 

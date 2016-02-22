@@ -1,0 +1,29 @@
+<h1>Listing c_ratings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Comment</th>
+      <th>Score</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @c_ratings.each do |c_rating| %>
+      <tr>
+        <td><%= c_rating.user_id %></td>
+        <td><%= c_rating.comment_id %></td>
+        <td><%= c_rating.score %></td>
+        <td><%= link_to 'Show', c_rating %></td>
+        <td><%= link_to 'Edit', edit_c_rating_path(c_rating) %></td>
+        <td><%= link_to 'Destroy', c_rating, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New C rating', new_c_rating_path %>

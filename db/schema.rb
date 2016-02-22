@@ -11,7 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218193226) do
+ActiveRecord::Schema.define(version: 20160222142426) do
+
+  create_table "c_ratings", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "comment_id"
+    t.integer  "score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "comments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "leader_id"
+    t.integer  "sub_id"
+    t.text     "comment"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "monsters", force: true do |t|
     t.string   "name"

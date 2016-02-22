@@ -54,8 +54,6 @@ class VotesController < ApplicationController
 
 	monster_id = params[:monster_id]
 	monster_name = params[:monster_name]
-	  puts "---------------------" + monster_id.to_s
-  puts "---------------------" + monster_name.to_s
 	monster = fetch_monster_by_one(monster_id, monster_name)
 	current = params[:current_id]
 	option = params[:commit]

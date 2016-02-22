@@ -1,3 +1,12 @@
+<% #Valid variables %>
+<% #@monster: hash of current monster from json %>
+<% #@monster_db: monster object %>
+<% #@active_skill: hash of active skill from json %>
+<% #@leader_skill: hash of leader skill from json %>
+<% #@awakenings: array of hash of awoken skills from json %>
+<% #@subs: array of hash of subs from json %>
+<% #@leaders: array of hash of leaders from json %>
+
 <div class="jumbotron monster">
 	<div class="header header-name">
 		<h2><%= image_tag(Rails.application.config.img_path_monsters + @monster["image60_href"]	, :border => 0, :title => @monster_db.id.to_s + ". " + @monster["name"]) %><%= " " + @monster["name"] %></h2>
@@ -179,7 +188,7 @@
 	<!-- Suggested Leader -->
 	<div class="monster-list clear-left left">
 		<div class="panel panel-default">
-			<div class="panel-heading">Suggested Leaders</div>
+			<div class="panel-heading">Suggested Leaders for this Sub</div>
 			<div class="monster-container panel-body">
 				<div class="shown leaders">
 					<% if @leaders != nil %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @c_rating.user_id %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @c_rating.comment_id %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @c_rating.score %>
+</p>
+
+<%= link_to 'Edit', edit_c_rating_path(@c_rating) %> |
+<%= link_to 'Back', c_ratings_path %>

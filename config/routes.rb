@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 	
+  resources :c_ratings
+
+  resources :comments
+
 	resources :votes, except: [:edit, :update, :destroy, :new] do
 		get 'statistics' , controller: 'votes', action: 'statistics', on: :collection 
 	end

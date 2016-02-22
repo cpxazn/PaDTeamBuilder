@@ -3,7 +3,7 @@ class MonstersController < ApplicationController
   #before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :cache_data, only: [:index, :json, :show, :populate, :details]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
-  before_action :authenticate_user!, only: [:add_tag]
+  before_action :authenticate_user!, only: [:add_tag, :add_pair_tag]
 
   respond_to :html
   def add_pair_tag
@@ -169,6 +169,7 @@ class MonstersController < ApplicationController
 		@votes = @leader.vote_count(@sub.id);
 		@score_all = @leader.fetch_score_all(@sub.id);
 		@votes_all = @leader.fetch_vote_count_all(@sub.id);
+		@comments = Comment.sorted(@leader.id, @sub.id)
 		respond_to do |format|
 			format.html
 			format.js

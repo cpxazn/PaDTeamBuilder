@@ -63,19 +63,56 @@
 	chart1(<%= @leader.id %>,<%= @sub.id %>,['count'],'#chart2','Ratings Count',null,null);
 </script>
 
-<ul class="nav nav-tabs">
-  <li id="statistics" role="presentation" class="active"><a href="#">Statistics</a></li>
-  <li id="comments" role="presentation"><a href="#">Comments</a></li>
-  <li style="display: none;" id="history" role="presentation"><a href="#">History</a></li>
-</ul>
-<div id="statistics" class="page-tab">
-	<div id="chart1" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
-	<div id="chart2" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
-</div>
-<div id="comments" class="page-tab">
-	Comments to be implemented
-</div>
-<div id="history" class="page-tab">
-	History
-</div>
-<%= render partial: 'modale' %>
+
+	<ul class="nav nav-tabs">
+	  <li id="statistics" role="presentation" class="active"><a href="#">Statistics</a></li>
+	  <li id="comments" role="presentation"><a href="#">Comments ( <%= @comments.count %> )</a></li>
+	  <li style="display: none;" id="history" role="presentation"><a href="#">History</a></li>
+	</ul>
+	<div id="statistics" class="page-tab">
+		<div id="chart1" style="width: 900px; height: 300px; margin: 0 auto"></div>
+		<div id="chart2" style="width: 900px; height: 300px; margin: 0 auto"></div>
+	</div>
+	<div id="comments" class="page-tab">
+		<% @comments.each do |c| %>
+			<div id="<%= c.id %>" class="panel panel-default">
+				<div class="panel-body comment">
+					<div class="c-rating comment">
+						<%= if c.comment != "[deleted]" then link_to "", c_ratings_path(comment_id: c.id, score: 1), method: :post, title: "Mark Helpful", class: "glyphicon glyphicon-chevron-up" end %>
+					</div>
+					<div class="comment body">
+						<%= c.comment %>
+					</div>
+				</div>
+				<div class="panel-footer comment" style="overflow:hidden;">
+					<span style="float:left"><%= c.user.username + " - 	" + time_ago_in_words(c.created_at) + " ago" %></span>
+					<% if c.comment != "[deleted]" and c.user_id == current_user.id %>
+						<span style="float:right"><%= link_to 'Delete', c, method: :delete, data: { confirm: 'Are you sure?' } %></span>
+					<% end %>
+					<span style="float:right">Score: <%= c.score %></span>
+				</div>
+			</div>
+		<% end %>
+		<% if user_signed_in? %>
+			<%= render partial: 'monsters/show/commentbox' %>
+		<% else %>
+			<p>You must be <%= link_to "logged in", new_user_session_path() %> to comment</p>
+		<% end %>
+	</div>
+	<div id="history" class="page-tab">
+		History
+	</div>
+
+
+<%= render partial: 'monsters/show/modale' %>
+<script>
+	<% if params[:tab] == "2" %>
+		$('div.page-tab').hide();
+		$('.nav-tabs li').removeClass("active");
+		$('.nav-tabs li#comments').addClass("active");
+		$('div#comments.page-tab').show();
+	<% else %>
+		$('div#comments.page-tab').hide();
+		$('div#history.page-tab').hide();
+	<% end %>
+</script>

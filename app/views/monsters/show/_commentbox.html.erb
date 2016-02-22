@@ -1,0 +1,11 @@
+<div>
+<%= form_for(Comment.new) do |f| %>
+  <div>
+    <%= f.text_area :comment, cols: 60, rows: 5 %>
+	<%= f.hidden_field(:leader_id, value: @leader.id) %>
+	<%= f.hidden_field(:sub_id, value: @sub.id) %>
+	<br>
+    <%= f.submit %>
+  </div>
+<% end %>
+</div>
