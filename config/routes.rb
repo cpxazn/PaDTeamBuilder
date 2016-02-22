@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 	
-  resources :c_ratings
+  resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
 
-  resources :comments
+  resources :comments,  except: [:edit, :update, :new, :show]
 
 	resources :votes, except: [:edit, :update, :destroy, :new] do
 		get 'statistics' , controller: 'votes', action: 'statistics', on: :collection 

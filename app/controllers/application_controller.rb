@@ -209,6 +209,13 @@ class ApplicationController < ActionController::Base
   def hash_not_nil(hash, key)
 	return hash != nil ? hash[key].to_s : ""
   end
+  #Checks if object is nil or not. If it is, then return an empty string.
+  #Input: string from object
+  #Output: string
+  helper_method :not_nil
+  def not_nil(obj)
+	return if obj == nil ? "" : obj
+  end
   #Returns formatted local date to be used in the view
   #Input: date
   #Output: string

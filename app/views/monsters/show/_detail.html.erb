@@ -86,7 +86,7 @@
 				</div>
 				<div class="panel-footer comment" style="overflow:hidden;">
 					<span style="float:left"><%= c.user.username + " - 	" + time_ago_in_words(c.created_at) + " ago" %></span>
-					<% if c.comment != "[deleted]" and c.user_id == current_user.id %>
+					<% if c.comment != "[deleted]" and user_signed_in? and c.user_id == current_user.id %>
 						<span style="float:right"><%= link_to 'Delete', c, method: :delete, data: { confirm: 'Are you sure?' } %></span>
 					<% end %>
 					<span style="float:right">Score: <%= c.score %></span>

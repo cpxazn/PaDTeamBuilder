@@ -10,7 +10,12 @@ class Monster < ActiveRecord::Base
 	end
 	#Uses default parameters to fetch data. Fetches all data up from specified month
 	def score(intSub)
-		return fetch_weighted_avg(intSub, 0)
+		score = fetch_weighted_avg(intSub, 0)
+		if score.is_a?(Float) and score.nan?
+			return 0
+		else
+			return score
+		end
 		#return fetch_score_ago(intSub, Rails.application.config.vote_display_default).round(1)
 	end
 	def vote_count(intSub)

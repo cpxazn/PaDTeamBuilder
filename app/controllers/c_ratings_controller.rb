@@ -23,7 +23,15 @@ class CRatingsController < ApplicationController
   def create
     c_rating = CRating.new(c_rating_params)
 	c_rating.user_id = current_user.id
-    c_rating.save
+	if c_rating.user_id != c_rating.comment.user_id then
+		if c_rating.save
+			flash.now[:notice] = 'Comment rated'
+		else
+			flash.now[:alert] = 'Could not rate comment'
+		end
+	else
+		flash.now[:alert] = 'Cannot rate your own comment'
+	end
 	redirect_to detail_monsters_path(leader_id: c_rating.comment.leader_id, sub_id: c_rating.comment.sub_id, tab: 2), anchor: c_rating.comment.id, notice: flash[:notice], alert: flash[:alert]
   end
 
