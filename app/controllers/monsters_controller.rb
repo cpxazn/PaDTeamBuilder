@@ -2,7 +2,7 @@ class MonstersController < ApplicationController
   require 'open-uri'
   #before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
-  before_action :authenticate_user!, only: [:add_tag, :add_pair_tag]
+  before_action :authenticate_user!, only: [:add_tag, :add_pair_tag, :tag_update]
   respond_to :html
   
   def search
@@ -152,9 +152,10 @@ class MonstersController < ApplicationController
 				monster.tag_list.add(new) 
 			end
 		end
+		
 		monster.save
 		monster.reload
-		#tags = @monster.tag_list
+		@tags = populate_default_monster_tag(monster.id)
 	end
 	respond_to do |format|
 		format.js
@@ -235,68 +236,11 @@ class MonstersController < ApplicationController
 #Others
   #Initial tag population of all monsters
   def tag_update
-	monsters = Rails.cache.fetch("monster")
-	monsters.each do |m|
-		monster = Monster.where(id: m["id"]).first_or_initialize
-		monster.name = m["name"]
-		#Element
-		element = Array.new
-		if m["element"] != nil then element.push(m["element"]) end
-		if m["element2"] != nil then element.push(m["element2"]) end
-			element.each do |e|
-			case e
-				when 0
-					monster.tag_list.add("fire")
-				when 1
-					monster.tag_list.add("water")
-				when 2
-					monster.tag_list.add("wood")
-				when 3
-					monster.tag_list.add("light")
-				when 4
-					monster.tag_list.add("dark")
-			end
+	if current_user.username == 'cpxazn'
+		monsters = Rails.cache.fetch("monster")
+		monsters.each do |m|
+			populate_default_monster_tag(m["id"])
 		end
-		type = Array.new
-		if m["type"] != nil then type.push(m["type"]) end
-		if m["type2"] != nil then type.push(m["type2"]) end
-		if m["type3"] != nil then type.push(m["type3"]) end	
-		type.each do |t|
-			case t
-				when 0
-					monster.tag_list.add("evo material")
-				when 1
-					monster.tag_list.add("balanced")
-				when 2
-					monster.tag_list.add("physical")
-				when 3
-					monster.tag_list.add("healer")
-				when 4
-					monster.tag_list.add("dragon")
-				when 5
-					monster.tag_list.add("god")
-				when 6
-					monster.tag_list.add("attacker")
-				when 7
-					monster.tag_list.add("devil")
-				when 8
-					monster.tag_list.add("machine")
-				when 12
-					monster.tag_list.add("awoken skill material")
-				when 13
-					monster.tag_list.add("protected")
-				when 14
-					monster.tag_list.add("enhance material")
-			end
-		end	
-		awakenings = fetch_awakenings_by_id_json(m["id"])
-		awakenings.each do |a|
-			if a["id"] >= 4
-				monster.tag_list.add(a["name"])
-			end
-		end
-		
-		monster.save
 	end
 	redirect_to monsters_path
   end

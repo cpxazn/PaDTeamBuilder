@@ -5,7 +5,78 @@ class ApplicationController < ActionController::Base
 	after_filter :store_location
 
 #Monster functions
+  #Populate default tag
+  #Input: monster id
+  #Output: monster object
+  def populate_default_monster_tag(id)
+	monster = fetch_monster_by_id(id)
+	monster_json = fetch_monster_by_id_json(id)
+	
+	#Element
+	element = Array.new
+	if monster_json["element"] != nil then element.push(monster_json["element"]) end
+	if monster_json["element2"] != nil then element.push(monster_json["element2"]) end
+		element.each do |e|
+		case e
+			when 0
+				monster.tag_list.add("fire")
+			when 1
+				monster.tag_list.add("water")
+			when 2
+				monster.tag_list.add("wood")
+			when 3
+				monster.tag_list.add("light")
+			when 4
+				monster.tag_list.add("dark")
+		end
+	end
+	type = Array.new
+	if monster_json["type"] != nil then type.push(monster_json["type"]) end
+	if monster_json["type2"] != nil then type.push(monster_json["type2"]) end
+	if monster_json["type3"] != nil then type.push(monster_json["type3"]) end	
+	type.each do |t|
+		case t
+			when 0
+				monster.tag_list.add("evo material")
+			when 1
+				monster.tag_list.add("balanced")
+			when 2
+				monster.tag_list.add("physical")
+			when 3
+				monster.tag_list.add("healer")
+			when 4
+				monster.tag_list.add("dragon")
+			when 5
+				monster.tag_list.add("god")
+			when 6
+				monster.tag_list.add("attacker")
+			when 7
+				monster.tag_list.add("devil")
+			when 8
+				monster.tag_list.add("machine")
+			when 12
+				monster.tag_list.add("awoken skill material")
+			when 13
+				monster.tag_list.add("protected")
+			when 14
+				monster.tag_list.add("enhance material")
+		end
+	end	
+	awakenings = fetch_awakenings_by_id_json(monster_json["id"])
+	awakenings.each do |a|
+		if a["id"] >= 4
+			monster.tag_list.add(a["name"])
+		end
+	end
+	
+	monster.save
+
+	return monster.tag_list
+  end
+  
   #Search monster by name
+  #Input: partial or full monster name as string
+  #Output: array of json hash that matches input name
   def search_monster_by_name_json(name)
 	monsters = Rails.cache.fetch("monster")
 	result = Array.new
