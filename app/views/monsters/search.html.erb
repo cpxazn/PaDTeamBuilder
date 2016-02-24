@@ -9,7 +9,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Tags</div>
 				<div class="monster-container panel-body">
-					<div class="section">
+					<div class="tag-section">
 						<%= form_tag(tags_monsters_path(), method: "get") do %>
 							<div>
 								<p><select multiple="true" name="tags[]" class="tags select2">
@@ -24,7 +24,7 @@
 						<% end %>
 					</div>
 					
-					<div class="section">
+					<div class="tags section">
 						<select id="tag_list" name="tag_list" size="8">
 							<% @tags.each do |t| %>
 								<option value="<%= t.name %>"><%= t.name %> (<%= t.taggings_count %>) </option>

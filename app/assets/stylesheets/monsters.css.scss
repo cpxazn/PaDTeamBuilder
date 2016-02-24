@@ -11,7 +11,7 @@ div#update-modale.tags {
 select.tags {
 	width:100% !important;
 }
-.monster-container .section { margin-top: 10px; }
+.monster-container .tags.section { margin-top: 10px; }
 div.tags-container > .panel.left {
 	width: 28%;
 }
@@ -84,13 +84,6 @@ div.jumbotron.monster { overflow: hidden; }
 
 }
 
-//Include scrollbars to monster containers
-.monster-container.panel-body {
-  overflow-y: auto;
-  max-height:555px;
-  padding-bottom:100px;
-}
-
 //Remove padding from select div under suggestions
 div.vote.select { 
 	padding-left: 0px;
@@ -136,6 +129,15 @@ div.monster-container > .panel {
 //Container that has the suggest sub and leaders, and make a suggestions
 div.monster-container {
 	width: 100%;
+	overflow: hidden;
+}
+
+
+//Include scrollbars to monster containers
+.monster-container.panel-body {
+  overflow-y: auto;
+  max-height:555px;
+  padding-bottom:100px;
 }
 
 .dropdown {  overflow: visible !important;	}

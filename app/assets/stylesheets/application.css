@@ -15,9 +15,22 @@
  *= require_tree .
  *= require_self
  */
- 
- footer.footer { width: 100%; }
+html {overflow-y: scroll;}
+html, body { height: 100%;}
+body { padding-top: 70px;}
+.content {overflow: hidden; width: 1150px;}
 
+/* Footer */
+body > div.container {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;}
+.push { height:50px;}
+footer { height:50px; background:#000; color:#fff; }
+@media screen and (max-width: 800px) {
+	footer {
+		display: none;
+	}
+}
+
+/* Navbar Collapse */
  @media (max-width: 810px) {
     .navbar-header {
         float: none;
@@ -54,15 +67,17 @@
         display:block !important;
     }
 }
- 
-textarea { resize: none; } 
 
-div.loginbox { margin-top: 20px; }
-.content {overflow: hidden; padding-bottom: 300px; width: 1150px;}
-body { padding-top: 70px;}
+
+textarea { resize: none; } 
 
 div.left {
 	float: left;
+	clear: left;	
+}
+div.right {
+	float: right;
+	clear: right;
 }
 div.clear-left{
 	clear: left;	
@@ -70,17 +85,10 @@ div.clear-left{
 div.clear-right{
 	clear: right;
 }
-div.right {
-	float: right;
 
-}
 
 div.clear {
 	clear:both;
-}
-
-html {
-	overflow-y: scroll;
 }
 
 .center { margin: auto; }
