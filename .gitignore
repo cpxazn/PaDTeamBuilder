@@ -18,5 +18,5 @@
 # Ignore application configuration
 /config/application.yml
 
-/public/static/
+/public/static/img/monsters/40x40/*
 /public/static/img/monsters/60x60/*
