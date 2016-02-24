@@ -9,52 +9,12 @@
 
 <div class="front-page wrapper">
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp1' %>
+		<%= render partial: 'monsters/index/fp1', locals: {votes: @latestVotes} %>
 	</div>
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp2' %>
+		<%= render partial: 'monsters/index/fp2', locals: {monsters: @topMonsters} %>
 	</div>
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp3' %>
+		<%= render partial: 'monsters/index/fp3', locals: {users: @topUsers} %>
 	</div>
-</div>
-
-
-
-
-
-
-<!--
-<div>
-	<table class="center">
-		<tr>
-			<% count=0 %>
-			<% @monsters.each do |monster| %>
-				<td><%= link_to image_tag("http://padherder.com" + monster["image60_href"]	, :border => 0,  :title => monster["id"].to_s + ". " + monster["name"]),	 monster_path(monster["id"]) %></td>
-				<% count = count + 1 %>
-				<% if count % 15 == 0 %>
-					</tr><tr>
-				<% end %>
-			<% end %>
-		</tr>
-	</table>
-</div>
-
-<div>
-	<nav>
-		<ul class="pagination">
-			<% if @page == 1 or @page == 0 %>
-				<li class="disabled"><%= link_to "<<", "#" %></li>
-			<% else %>
-				<li><%= link_to "<<", monsters_path(page: if @page == 0 then 0 else @page - 1 end) %></li>
-			<% end %>
-			<% if @more == 1 %>
-				<li><%= link_to ">>", monsters_path(page: @page == 0 ? 2 : @page + 1) %></li>
-			<% else %>
-				<li class="disabled"><%= link_to ">>", "#" %></li>
-			<% end %>
-
-		</ul>
-	</nav>
-</div>
--->
+</div>	

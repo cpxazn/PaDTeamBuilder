@@ -1,0 +1,56 @@
+<% #Valid variables %>
+<% #@monsters: Monsters returned by matching tags %>
+
+<div class="tags-container">
+	<!-- Left Panel -->
+	<div class="panel left-panel left">
+		<!-- Tags -->
+		<div class="monster-list">
+			<div class="panel panel-default">
+				<div class="panel-heading">Tags</div>
+				<div class="monster-container panel-body">
+					<div class="section">
+						<%= form_tag(tags_monsters_path(), method: "get") do %>
+							<div>
+								<p><select multiple="true" name="tags[]" class="tags select2">
+									<% if @selected != nil %>
+										<% @selected.each do |t| %>
+											<option selected="selected" value="<%= t %>"><%= t %></option>
+										<% end %>
+									<% end %>
+								</select></p>
+								<button type="submit">Submit</button>
+							</div>
+						<% end %>
+					</div>
+					
+					<div class="section">
+						<select id="tag_list" name="tag_list" size="8">
+							<% @tags.each do |t| %>
+								<option value="<%= t.name %>"><%= t.name %> (<%= t.taggings_count %>) </option>
+							<% end %>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Right Panel -->
+	<div class="panel-right panel right">
+		<!-- Results -->
+		<div class="monster-list">
+			<div class="panel panel-default">
+				<div class="panel-heading">Results <%= if @monsters != nil then "(" + @monsters.size.to_s + ")" else "( 0 )" end %></div>
+				<div class="monster-container panel-body">
+					<div>
+						<% if @monsters != nil %>
+							<% @monsters.each do |m| %>
+								<%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(m["id"]), :border => 0, :title => m["id"].to_s + ". " + m["name"]), monster_path(m["id"]) %>
+							<% end %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

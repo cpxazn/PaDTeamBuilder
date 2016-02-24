@@ -1,116 +1,23 @@
 class MonstersController < ApplicationController
   require 'open-uri'
   #before_action :set_monster, only: [:edit, :update, :destroy]
-  before_action :cache_data, only: [:index, :json, :show, :populate, :details]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
   before_action :authenticate_user!, only: [:add_tag, :add_pair_tag]
-
   respond_to :html
-  def add_pair_tag
-		new_tags = params[:tags]
-		leader_id = params[:monster_id]
-		sub_id = params[:sub_id]
-		sub = fetch_monster_by_id(sub_id)
-		leader = fetch_monster_by_id(leader_id)
-		context = "sub_" + sub_id.to_s
-		if new_tags == nil then new_tags = [] end
-		if leader != nil and sub != nil
-			old_tags = leader.tag_list_on(context).dup
-			if old_tags == nil then old_tags = [] end
-			old_tags.each do |old|
-				found = 0
-				new_tags.each do |new|
-					if old == new then 
-						found = 1 
-					end
-				end
-				if found == 0 then 
-					leader.tag_list_on(context).remove(old) 
-				end
-			end
-			old_tags = leader.tag_list_on(context).dup
-			new_tags.each do |new|
-				found = 0
-				old_tags.each do |old|
-					if new == old then found = 1 end
-				end
-				if found == 0 then 
-					leader.tag_list_on(context).add(new) 
-				end
-			end
-			leader.save
-			leader.reload
-			#tags = @leader.tag_list
-		end
-		respond_to do |format|
-			format.js
-		end
+  
+  def search
+	@tags = ActsAsTaggableOn::Tag.order(taggings_count: :desc)
+	@selected = params[:tags]
+	if @selected != nil and @selected.size > 0
+		monsters = Monster.tagged_with(@selected)
+		@monsters = fetch_monster_json_by_array(monsters)
+		if @monsters != nil then @monsters = @monsters.sort_by { |hash| hash['element'].to_i } end 
+	end
   end
-  def add_tag
-		new_tags = params[:tags]
-		monster_id = params[:monster_id]
-		monster = fetch_monster_by_id(monster_id)
-		if new_tags == nil then new_tags = [] end
-		if monster != nil
-			old_tags = monster.tag_list.dup
-			if old_tags == nil then old_tags = [] end
-			old_tags.each do |old|
-				found = 0
-				new_tags.each do |new|
-					if old == new then found = 1 end
-				end
-				if found == 0 then 
-					monster.tag_list.remove(old) 
-				end
-			end
-			old_tags = monster.tag_list.dup
-			new_tags.each do |new|
-				found = 0
-				old_tags.each do |old|
-					if new == old then found = 1 end
-				end
-				if found == 0 then 
-					monster.tag_list.add(new) 
-				end
-			end
-			monster.save
-			monster.reload
-			#tags = @monster.tag_list
-		end
-		respond_to do |format|
-			format.js
-		end
-  end 
-  #Uses @page to keep track of page number. Formulas are used to determine which monsters to display.
-  #@monsters is the list of monsters to be displayed
   def index
-	@page = params[:page].to_i
-	if @page.is_a? Numeric and @page != nil and @page > 0
-		starting = (@page - 1) * Rails.application.config.monster_list_max
-	else
-		starting = 0
-		@page = 0
-	end
-	ending = starting + Rails.application.config.monster_list_max - 1
-	@monsters = Rails.cache.fetch("monster")[starting..ending]
-	if @monsters == nil then render_404; return; end
-	Rails.cache.fetch("monster")[starting + Rails.application.config.monster_list_max..ending + Rails.application.config.monster_list_max] == nil ? @more = 0 : @more = 1
-    respond_with(@monsters)
-  end
-  def tags_json
-	name = params[:name]
-	results = Array.new
-	if name != nil
-		ActsAsTaggableOn::Tag.all.each do |t|
-			if t.name.downcase.include? name.downcase
-				results.push(t)
-			end
-		end
-	else
-		results = ActsAsTaggableOn::Tag.all
-	end
-
-	render :json => results
+	@latestVotes = Vote.order(created_at: :desc).limit(5)
+	@topMonsters = Monster.top
+	@topUsers = User.top
   end
   #Shows a particular monster from JSON. Input parameter is params[:id]
   def show
@@ -119,16 +26,16 @@ class MonstersController < ApplicationController
 	#Make sure monster was fetched
 	if @monster != nil
 		@monster_db = fetch_monster_by_id(@monster["id"])
-		@subs = Array.new
-		@leaders = Array.new
 		
 		#Check to make sure this monster exists in the database
-		if @monster_db != nil
+		if @monster_db != nil			
 			#Update monster name if it has changed
 			if @monster_db.name != @monster["name"] then 
 				@monster_db.name = @monster["name"]
 				@monster_db.save
 			end
+			
+			@subs = Array.new
 			#Get suggested subs
 			@subs_list = Monster.find(@monster["id"]).subs
 			@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
@@ -138,7 +45,8 @@ class MonstersController < ApplicationController
 					@subs.push(sub)
 				end
 			end
-
+			
+			@leaders = Array.new
 			#Get suggested leaders
 			@leaders_list = Monster.find(@monster["id"]).leaders
 			@leaders_list = @leaders_list.sort_by { | x | x[:score] }.reverse
@@ -176,51 +84,106 @@ class MonstersController < ApplicationController
 		end
 	end
   end
-  #Unused
-  def new
-    @monster = Monster.new
-    respond_with(@monster)
-  end
-  #Unused
-  def edit
-  end
-  #Unused
-  def update
-    @monster.update(monster_params)
-    respond_with(@monster)
-  end	
-  #Unused
-  def destroy
-    @monster.destroy
-    respond_with(@monster)
-  end
-  #Returns json data
-  def idlookup_json
-  	monster = monster_id_json_params
-	monsters = Rails.cache.fetch("monster")
-	monsters.each do |m|
-		if m["id"].to_s == monster.to_s
-			render :json => m
-			break
+ 
+  def add_pair_tag
+	new_tags = params[:tags]
+	leader_id = params[:monster_id]
+	sub_id = params[:sub_id]
+	sub = fetch_monster_by_id(sub_id)
+	leader = fetch_monster_by_id(leader_id)
+	context = "sub_" + sub_id.to_s
+	if new_tags == nil then new_tags = [] end
+	if leader != nil and sub != nil
+		old_tags = leader.tag_list_on(context).dup
+		if old_tags == nil then old_tags = [] end
+		old_tags.each do |old|
+			found = 0
+			new_tags.each do |new|
+				if old == new then 
+					found = 1 
+				end
+			end
+			if found == 0 then 
+				leader.tag_list_on(context).remove(old) 
+			end
 		end
+		old_tags = leader.tag_list_on(context).dup
+		new_tags.each do |new|
+			found = 0
+			old_tags.each do |old|
+				if new == old then found = 1 end
+			end
+			if found == 0 then 
+				leader.tag_list_on(context).add(new) 
+			end
+		end
+		leader.save
+		leader.reload
+		#tags = @leader.tag_list
+	end
+	respond_to do |format|
+		format.js
 	end
   end
+  def add_tag
+	new_tags = params[:tags]
+	monster_id = params[:monster_id]
+	monster = fetch_monster_by_id(monster_id)
+	if new_tags == nil then new_tags = [] end
+	if monster != nil
+		old_tags = monster.tag_list.dup
+		if old_tags == nil then old_tags = [] end
+		old_tags.each do |old|
+			found = 0
+			new_tags.each do |new|
+				if old == new then found = 1 end
+			end
+			if found == 0 then 
+				monster.tag_list.remove(old) 
+			end
+		end
+		old_tags = monster.tag_list.dup
+		new_tags.each do |new|
+			found = 0
+			old_tags.each do |old|
+				if new == old then found = 1 end
+			end
+			if found == 0 then 
+				monster.tag_list.add(new) 
+			end
+		end
+		monster.save
+		monster.reload
+		#tags = @monster.tag_list
+	end
+	respond_to do |format|
+		format.js
+	end
+  end
+  
+#JSON
+  #Tags
+  def tags_json
+	name = params[:name]
+	results = Array.new
+	if name != nil
+		ActsAsTaggableOn::Tag.all.each do |t|
+			if t.name.downcase.include? name.downcase
+				results.push(t)
+			end
+		end
+	else
+		results = ActsAsTaggableOn::Tag.all
+	end
+
+	render :json => results
+  end
+  
   #Gets monster parameters for typeahead
   def typeahead_json
 	monster = monster_name_json_params
-	monsters = Rails.cache.fetch("monster")
-	result = Array.new
-	monsters.each do |m|
-		if m["name"].upcase.include? monster.upcase
-			temp = Hash.new
-			temp["name"] = m["name"]
-			temp["id"] = m["id"]
-			temp["img_url"] = m["image60_href"]
-			result.push(temp)
-		end
-	end
-	
-	render :json => result
+	results = search_monster_by_name_json(monster.upcase)
+	render :json => results
   end
   #Graphs
   def graph_json
@@ -229,7 +192,6 @@ class MonstersController < ApplicationController
 	else
 		@graph = params["graph"]
 	end
-	
 	data = Array.new
 	puts "graph: " + @graph
 	case @graph
@@ -269,51 +231,96 @@ class MonstersController < ApplicationController
 	end
 	render :json => data
   end
-  #Not used
-  def populate
-		monsters = Rails.cache.fetch("monster")
-		monsters.each do |m|
-			monster = Monster.where(id: m["id"]).first_or_initialize
-			monster.name = m["name"]
-			monster.save
+  
+#Others
+  #Initial tag population of all monsters
+  def tag_update
+	monsters = Rails.cache.fetch("monster")
+	monsters.each do |m|
+		monster = Monster.where(id: m["id"]).first_or_initialize
+		monster.name = m["name"]
+		#Element
+		element = Array.new
+		if m["element"] != nil then element.push(m["element"]) end
+		if m["element2"] != nil then element.push(m["element2"]) end
+			element.each do |e|
+			case e
+				when 0
+					monster.tag_list.add("fire")
+				when 1
+					monster.tag_list.add("water")
+				when 2
+					monster.tag_list.add("wood")
+				when 3
+					monster.tag_list.add("light")
+				when 4
+					monster.tag_list.add("dark")
+			end
 		end
-		#@monster = Monster.find(params[:id])
-		redirect_to monsters_path
+		type = Array.new
+		if m["type"] != nil then type.push(m["type"]) end
+		if m["type2"] != nil then type.push(m["type2"]) end
+		if m["type3"] != nil then type.push(m["type3"]) end	
+		type.each do |t|
+			case t
+				when 0
+					monster.tag_list.add("evo material")
+				when 1
+					monster.tag_list.add("balanced")
+				when 2
+					monster.tag_list.add("physical")
+				when 3
+					monster.tag_list.add("healer")
+				when 4
+					monster.tag_list.add("dragon")
+				when 5
+					monster.tag_list.add("god")
+				when 6
+					monster.tag_list.add("attacker")
+				when 7
+					monster.tag_list.add("devil")
+				when 8
+					monster.tag_list.add("machine")
+				when 12
+					monster.tag_list.add("awoken skill material")
+				when 13
+					monster.tag_list.add("protected")
+				when 14
+					monster.tag_list.add("enhance material")
+			end
+		end	
+		awakenings = fetch_awakenings_by_id_json(m["id"])
+		awakenings.each do |a|
+			if a["id"] >= 4
+				monster.tag_list.add(a["name"])
+			end
+		end
+		
+		monster.save
+	end
+	redirect_to monsters_path
   end
-  #Caching
-  def cache_data
-	request_uri = 'https://www.padherder.com/api/monsters/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("monster", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/active_skills/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("active_skills", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/leader_skills/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("leader_skills", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/awakenings/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("awakenings", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
+  
+  
+  #Unused
+  def new
+    @monster = Monster.new
+    respond_with(@monster)
   end
+  #Unused
+  def edit
+  end
+  #Unused
+  def update
+    @monster.update(monster_params)
+    respond_with(@monster)
+  end	
+  #Unused
+  def destroy
+    @monster.destroy
+    respond_with(@monster)
+  end
+
   
   private
     def fetch_both

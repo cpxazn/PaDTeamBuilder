@@ -22,36 +22,52 @@
 
 
 <body>
-	<nav class="navbar navbar-fixed-top navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-right" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
 				<a class="navbar-brand" href="/">PaD Team Builder</a>
 			</div>
-			<div class="collapse navbar-collapse" id="navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><%= link_to "Home", monsters_path %></li>
-					<li><%= link_to "User Activity", statistics_votes_path %></li>
+			<div class="collapse navbar-collapse" id="nav-right">
+				<div class="nav navbar-nav navbar-header">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Navigation<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+								<li><%= link_to "Search Tags", tags_monsters_path %></li>
+								<li><%= link_to "Vote Activity", statistics_votes_path %></li>
+								<% if user_signed_in? %>
+									<li><%= link_to "My Votes", votes_path %></li>
+								<% end %>
+						</ul>
+					</li>
+				</div>
+				<ul class="nav navbar-nav navbar-right"">
+					<li>
+						<div class="form-group navbar-form" style="width:400px;">
+							<input id="monster-field" class="monster form-control typeahead main" placeholder="Monster Name" autofocus="autofocus" type="text">
+						</div>
+					</li>
 					<% if user_signed_in? %>
-						<li><%= link_to "My Votes", votes_path %></li>
-					<% end %>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<% if user_signed_in? %>
-						<li><p class="navbar-text"><strong><%= current_user.username%></strong></p</li>
-						<li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
-						<li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_user.username %><span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><%= link_to "Edit Profile", edit_user_registration_path, :class => 'navbar-link' %></li>	
+								<li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+							</ul>
+						</li>
 					<% else %>
 						<li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %></li>
 						<li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
-					<% end %>
+					<% end %>	
 				</ul>
-				<div class="navbar-form navbar-right">
-					<div class="form-group" style="width:400px;">
-						<input id="monster-field" class="monster form-control typeahead main" placeholder="Monster Name" autofocus="autofocus" type="text">
-					</div>
-				</div>
-			</div><!-- /.navbar-collapse -->
-		</div><!-- /.container-fluid -->
+
+			</div>
+		</div>
 	</nav>
 	<div class="container">
 		<div class="content center">
@@ -68,7 +84,6 @@
 				<p class="navbar-text">All Puzzle and Dragons images are registered trademarks or trademarks of <a href="http://www.gunghoonline.com/games/puzzle-dragons/">GungHo Online Entertainment, Inc</a></p>
 			</ul>
 		</div>	
-
     </div><!-- /.container -->
 </body>
 

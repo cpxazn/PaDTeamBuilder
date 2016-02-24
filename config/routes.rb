@@ -1,26 +1,23 @@
 Rails.application.routes.draw do
 	
-  resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
+	resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
 
-  resources :comments,  except: [:edit, :update, :new, :show]
+	resources :comments,  except: [:edit, :update, :new, :show]
 
 	resources :votes, except: [:edit, :update, :destroy, :new] do
 		get 'statistics' , controller: 'votes', action: 'statistics', on: :collection 
 	end
 
 	resources :monsters, except: [:destroy, :new, :create, :update, :edit] do
-		get 'json/tags', controller: 'monsters', action: 'tags_json' , on: :collection 
-		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json' , on: :collection 
-		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json' , on: :collection
-		get 'json/graph', controller: 'monsters', action: 'graph_json' , on: :collection
-		get 'detail' , controller: 'monsters', action: 'detail' , on: :collection 
+		get 'json/tags', controller: 'monsters', action: 'tags_json', on: :collection 
+		get 'json/typeahead', controller: 'monsters', action: 'typeahead_json', on: :collection 
+		get 'json/id' ,  controller: 'monsters', action: 'idlookup_json', on: :collection
+		get 'json/graph', controller: 'monsters', action: 'graph_json', on: :collection
+		get 'detail' , controller: 'monsters', action: 'detail', on: :collection 
 		get 'tag', controller: 'monsters', action: 'add_tag'
 		get 'tag/pair', controller: 'monsters', action: 'add_pair_tag'
-		#get 'json/graph/monthly' ,  controller: 'monsters', action: 'graph_monthly_json' , on: :collection 
-		#get 'json/graph/since' ,  controller: 'monsters', action: 'graph_since_json' , on: :collection 
-		#get 'json/graph/weighted' ,  controller: 'monsters', action: 'graph_weighted_json' , on: :collection 
-		#get 'json/graph/count', controller: 'monsters', action: 'graph_count_json' , on: :collection
-		#get 'populate' ,  controller: 'monsters', action: 'populate' , on: :collection 
+		get 'tags', controller: 'monsters', action: 'search', on: :collection
+		get 'tags/update', controller: 'monsters', action: 'tag_update', on: :collection
 	end
 
 	devise_for :users

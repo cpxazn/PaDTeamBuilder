@@ -12,7 +12,7 @@
 			<th>Updated</th>
 		</tr>
 	</thead>
-	<% Vote.order(created_at: :desc).limit(5).each do |v| %>
+	<% votes.each do |v| %>
 		<tbody>
 			<tr class="center">
 				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(v.leader.id), :border => 0) , v.leader %></td>

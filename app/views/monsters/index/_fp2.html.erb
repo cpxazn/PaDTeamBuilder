@@ -10,7 +10,7 @@
 			<th>Total Votes</th>
 		</tr>
 	</thead>
-	<% Monster.top.each do |m| %>
+	<% monsters.each do |m| %>
 		<tbody>
 			<tr class="center">
 				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(m.id), :border => 0) , m %></td>

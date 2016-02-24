@@ -41,6 +41,7 @@ $(document).ready(function(){
 		}
 	);
 
+	//Allow editing tags
 	$('#edit-tags').click(
 		function() {
 			$('#update-tags').show();
@@ -50,4 +51,10 @@ $(document).ready(function(){
 		}
 			
 	);
+	
+	//List box select tags
+	$('#tag_list').change(function() {
+		$("select.tags").append('<option selected="selected" value="'+$('#tag_list').val()+'">'+$('#tag_list').val()+'</option>');
+		$("select.tags").trigger("change");
+	});
 }); 
