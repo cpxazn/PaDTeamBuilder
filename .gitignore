@@ -19,3 +19,4 @@
 /config/application.yml
 
 /public/static/
+/public/static/img/monsters/60x60/*
