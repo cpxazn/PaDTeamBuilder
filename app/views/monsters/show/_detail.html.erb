@@ -78,7 +78,7 @@
 			<div id="<%= c.id %>" class="panel panel-default">
 				<div class="panel-body comment">
 					<div class="c-rating comment">
-						<%= if c.comment != "[deleted]" then link_to "", c_ratings_path(comment_id: c.id, score: 1), method: :post, title: "Mark Helpful", class: "glyphicon glyphicon-chevron-up" end %>
+						<%= if user_signed_in? then if c.comment != "[deleted]" then link_to "", c_ratings_path(comment_id: c.id, score: 1), method: :post, title: "Mark Helpful", class: "glyphicon glyphicon-chevron-up" end end %>
 					</div>
 					<div class="comment body">
 						<%= c.comment %>
@@ -89,7 +89,7 @@
 					<% if c.comment != "[deleted]" and user_signed_in? and c.user_id == current_user.id %>
 						<span style="float:right"><%= link_to 'Delete', c, method: :delete, data: { confirm: 'Are you sure?' } %></span>
 					<% end %>
-					<span style="float:right">Score: <%= c.score %></span>
+					<span style="float:right">Helpful: <%= c.score %></span>
 				</div>
 			</div>
 		<% end %>
