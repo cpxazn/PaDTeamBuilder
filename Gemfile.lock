@@ -64,9 +64,10 @@ GEM
     json (1.8.3)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mime-types (2.99)
+    mime-types (2.99.1)
     minitest (5.8.4)
     multi_json (1.11.2)
+    open_uri_redirections (0.2.1)
     orm_adapter (0.5.0)
     rack (1.5.5)
     rack-test (0.6.3)
@@ -141,6 +142,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   json
+  open_uri_redirections
   rails (= 4.1.8)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

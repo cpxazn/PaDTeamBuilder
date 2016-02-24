@@ -1,11 +1,24 @@
 class MonstersController < ApplicationController
   require 'open-uri'
+  require 'open_uri_redirections'
   before_action :cache_data
   #before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
   before_action :authenticate_user!, only: [:add_tag, :add_pair_tag, :tag_update]
   respond_to :html
   
+	
+  def image_proxy
+	remote_url = Rails.application.config.img_path_monsters + "#{request.path}"
+	local_url = "public#{request.path}"
+  
+	if not File.exist? local_url
+		IO.copy_stream(open(remote_url, :allow_redirections => :safe), local_url)
+	end
+ 
+	send_file local_url, type: 'image/png', disposition: 'inline'
+  end
+	
   def search
 	@tags = ActsAsTaggableOn::Tag.order(taggings_count: :desc)
 	@selected = params[:tags]
@@ -312,6 +325,7 @@ class MonstersController < ApplicationController
 			JSON.parse(open(url).read)
 		end
 	end
+
 	
 #Unused
   def new

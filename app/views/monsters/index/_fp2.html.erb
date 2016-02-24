@@ -13,7 +13,7 @@
 	<% monsters.each do |m| %>
 		<tbody>
 			<tr class="center">
-				<td><%= link_to image_tag(Rails.application.config.img_path_monsters + fetch_monster_url_by_id_json(m.id), :border => 0) , m %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m.id), :border => 0) , m %></td>
 				<td class="valign center"><%= m.votes_count %></td>
 			</tr>
 		</tbody>

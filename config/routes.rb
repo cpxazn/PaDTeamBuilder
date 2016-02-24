@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
 	devise_for :users
 	
+	match '/static/img/monsters/:size/:id.:basename.png' => "monsters#image_proxy", via: [:get]
+	
 	root 'monsters#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
