@@ -44,6 +44,7 @@ $(document).ready(function(){
 			url: "/monsters/json/tags",
 			dataType: "json",
 			type: "GET",
+			delay: 300,
 			data: function (params) {
 
 				var queryParameters = {

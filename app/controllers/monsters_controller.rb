@@ -116,7 +116,11 @@ class MonstersController < ApplicationController
 				if new == old then found = 1 end
 			end
 			if found == 0 then 
-				leader.tag_list_on(context).add(new) 
+				if new.length <= Rails.application.config.tag_max_length 
+					leader.tag_list_on(context).add(new) 
+				else
+					flash.now[:alert] = 'Error: One or more tags could not be saved due to length limitation: ' + Rails.application.config.tag_max_length.to_s 
+				end
 			end
 		end
 		leader.save
@@ -151,7 +155,11 @@ class MonstersController < ApplicationController
 				if new == old then found = 1 end
 			end
 			if found == 0 then 
-				monster.tag_list.add(new) 
+				if new.length <= Rails.application.config.tag_max_length 
+					monster.tag_list.add(new)
+				else
+					flash.now[:alert] = 'Error: One or more tags could not be saved due to length limitation: ' + Rails.application.config.tag_max_length.to_s
+				end
 			end
 		end
 		
