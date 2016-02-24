@@ -1,5 +1,6 @@
 class MonstersController < ApplicationController
   require 'open-uri'
+  before_action :cache_data
   #before_action :set_monster, only: [:edit, :update, :destroy]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
   before_action :authenticate_user!, only: [:add_tag, :add_pair_tag, :tag_update]
@@ -14,6 +15,7 @@ class MonstersController < ApplicationController
 		if @monsters != nil then @monsters = @monsters.sort_by { |hash| hash['element'].to_i } end 
 	end
   end
+  
   def index
 	@latestVotes = Vote.order(created_at: :desc).limit(5)
 	@topMonsters = Monster.top
@@ -245,27 +247,6 @@ class MonstersController < ApplicationController
 	redirect_to monsters_path
   end
   
-  
-  #Unused
-  def new
-    @monster = Monster.new
-    respond_with(@monster)
-  end
-  #Unused
-  def edit
-  end
-  #Unused
-  def update
-    @monster.update(monster_params)
-    respond_with(@monster)
-  end	
-  #Unused
-  def destroy
-    @monster.destroy
-    respond_with(@monster)
-  end
-
-  
   private
     def fetch_both
 		if params["sub_id"] == nil or params["leader_id"] == nil then render_404; return; end
@@ -289,4 +270,57 @@ class MonstersController < ApplicationController
     def monster_params
 		params.require(:monster).permit(:name)
     end
+	#Rails Cache
+	def cache_data
+		request_uri = 'https://www.padherder.com/api/monsters/'
+		request_query = ''
+		url = "#{request_uri}#{request_query}"
+
+		Rails.cache.fetch("monster", expires_in: 12.hours) do
+			JSON.parse(open(url).read)
+		end
+
+		request_uri = 'https://www.padherder.com/api/active_skills/'
+		request_query = ''
+		url = "#{request_uri}#{request_query}"
+
+		Rails.cache.fetch("active_skills", expires_in: 12.hours) do
+			JSON.parse(open(url).read)
+		end
+
+		request_uri = 'https://www.padherder.com/api/leader_skills/'
+		request_query = ''
+		url = "#{request_uri}#{request_query}"
+
+		Rails.cache.fetch("leader_skills", expires_in: 12.hours) do
+			JSON.parse(open(url).read)
+		end
+
+		request_uri = 'https://www.padherder.com/api/awakenings/'
+		request_query = ''
+		url = "#{request_uri}#{request_query}"
+
+		Rails.cache.fetch("awakenings", expires_in: 12.hours) do
+			JSON.parse(open(url).read)
+		end
+	end
+	
+#Unused
+  def new
+    @monster = Monster.new
+    respond_with(@monster)
+  end
+  #Unused
+  def edit
+  end
+  #Unused
+  def update
+    @monster.update(monster_params)
+    respond_with(@monster)
+  end	
+  #Unused
+  def destroy
+    @monster.destroy
+    respond_with(@monster)
+  end
 end

@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-	before_action :cache_data, only: [:search_monster_by_name_json, :fetch_awakenings_by_id_json, :fetch_leader_skill_by_id_json, :fetch_active_skill_by_id_json, :fetch_monster_by_id_json, :fetch_monster_by_name_json]
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
 	after_filter :store_location
@@ -355,42 +354,6 @@ class ApplicationController < ActionController::Base
 		format.any  { head :not_found }
 	  end
 	  return
-  end
-
-  
-#Rails Cache
-  def cache_data
-	request_uri = 'https://www.padherder.com/api/monsters/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("monster", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/active_skills/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("active_skills", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/leader_skills/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("leader_skills", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
-	
-	request_uri = 'https://www.padherder.com/api/awakenings/'
-	request_query = ''
-	url = "#{request_uri}#{request_query}"
-
-	Rails.cache.fetch("awakenings", expires_in: 12.hours) do
-		JSON.parse(open(url).read)
-	end
   end
   
 #Devise
