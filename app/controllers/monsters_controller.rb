@@ -9,7 +9,7 @@ class MonstersController < ApplicationController
 	@tags = ActsAsTaggableOn::Tag.order(taggings_count: :desc)
 	@selected = params[:tags]
 	if @selected != nil and @selected.size > 0
-		monsters = Monster.tagged_with(@selected)
+		monsters = Monster.tagged_with(@selected, :on => :tags)
 		@monsters = fetch_monster_json_by_array(monsters)
 		if @monsters != nil then @monsters = @monsters.sort_by { |hash| hash['element'].to_i } end 
 	end
@@ -119,7 +119,7 @@ class MonstersController < ApplicationController
 		end
 		leader.save
 		leader.reload
-		#tags = @leader.tag_list
+		@tags = leader.tag_list_on(context)
 	end
 	respond_to do |format|
 		format.js

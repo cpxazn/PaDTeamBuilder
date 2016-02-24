@@ -2,5 +2,11 @@ $(document).ready(function(){
 	$('select#tags-modale').prop("disabled", true);
 	$('div#edit-modale.tags').show();
 	$('div#update-modale.tags').hide();
+	
+	$("select#tags-modale").empty();
+	<% @tags.each do |t| %>
+		$("select#tags-modale").append('<option selected="selected" value="<%= t %>"><%= t %></option>');
+	<% end %>
+	$("select#tags-modale").trigger("change");
 }); 
 
