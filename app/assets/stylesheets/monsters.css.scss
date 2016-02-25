@@ -153,23 +153,22 @@ div.monster-container {
 
 //Smaller monster search box
 .small-monster-input {
-	width: 400px;
+	width: 100%;
 }
 //Larger monster search box
 .large-monster-input {
-	width: 598px;
+	width: 100%;
 }
 
-//Always expand typeahead text box to max of div width
-input.typeahead 	{ 
-	width: 100% !important; 
-}
+
 
 //Size of div for search text field in index
 .body-search {
-	width:600px;
+	width:60%;
 }
 
+
+.tt-input { border-radius: 0px; }
 .tt-query {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
      -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -196,7 +195,15 @@ input.typeahead 	{
   max-height: 250px;
 }
 
+.twitter-typeahead { }
+.twitter-typeahead .tt-input { float: none;}
+
 .twitter-typeahead, .tt-hint, .tt-input, .tt-menu { width: 100%; }
+//Always expand typeahead text box to max of div width
+input.typeahead { 
+	width: 100% !important; 
+}
+
 
 .tt-suggestion {
   padding: 3px 20px;
@@ -212,5 +219,7 @@ input.typeahead 	{
 .tt-suggestion p {
   margin: 0;
 }
+
+
 
 	

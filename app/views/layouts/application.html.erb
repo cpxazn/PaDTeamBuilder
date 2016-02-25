@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="PaD Team Builder – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta name="keywords" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, maximum-scale=1" />
   <meta property="og:description" content="PaD Team Builder – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta property="og:site_name" content="PaD Team Builder" />
   <meta property="og:url" content="http://cpx.asuscomm.com:3000/" />
@@ -25,7 +25,7 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-right" aria-expanded="false">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#searchbar" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -33,26 +33,20 @@
 				</button>
 				<a class="navbar-brand" href="/">PaD Team Builder</a>
 			</div>
-			<div class="collapse navbar-collapse" id="nav-right">
-				<div class="nav navbar-nav navbar-header">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Navigation<span class="caret"></span></a>
-						<ul class="dropdown-menu">
+			
+			<div class="navbar-collapse collapse" id="searchbar">
+     			<div class="nav navbar-nav navbar-header">
+
 								<li><%= link_to "Home", monsters_path %></li>
 								<li><%= link_to "Search Tags", tags_monsters_path %></li>
 								<li><%= link_to "Vote Activity", statistics_votes_path %></li>
 								<% if user_signed_in? %>
 									<li><%= link_to "My Votes", votes_path %></li>
 								<% end %>
-						</ul>
-					</li>
+
 				</div>
-				<ul class="nav navbar-nav navbar-right"">
-					<li>
-						<div class="form-group navbar-form" style="width:400px;">
-							<input id="monster-field" class="monster form-control typeahead main" placeholder="Monster Name" autofocus="autofocus" type="text">
-						</div>
-					</li>
+				
+				<ul class="nav navbar-nav navbar-right">
 					<% if user_signed_in? %>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_user.username %><span class="caret"></span></a>
@@ -67,11 +61,28 @@
 					<% end %>	
 				</ul>
 
+				<form class="navbar-form">
+					<div class="form-group" style="display:inline;">
+						<div class="input-group" style="display:table;">
+							<span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+							<input id="monster-field" class="form-control monster typeahead main" placeholder="Monster Name" autofocus="autofocus" type="text">
+						</div>
+					</div>
+				</form>
+
+			</div><!--/.nav-collapse -->
+			
+			
+
 			</div>
 		</div>
 	</nav>
+
+
+
+
 	<div class="container">
-		<div class="content center">
+		<div class="content col-xs-12 center">
 					<% if notice %>
 						<div class="alert alert-info" role="alert"><%= notice %></div>
 					<% end %>
