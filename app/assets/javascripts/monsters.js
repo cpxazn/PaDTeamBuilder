@@ -57,4 +57,8 @@ $(document).ready(function(){
 		$("select.tags").append('<option selected="selected" value="'+$('#tag_list').val()+'">'+$('#tag_list').val()+'</option>');
 		$("select.tags").trigger("change");
 	});
+	$('button#reset').click(function() {
+		$("select.tags").empty();
+		$("select.tags").trigger("change");
+	});
 }); 
