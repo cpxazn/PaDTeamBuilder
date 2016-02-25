@@ -1,16 +1,10 @@
 //Tags
-div.tags.button-container  { 
-	padding-left: 0px;
-}
-div#update.tags {
-	display: none;
-}
-div#update-modale.tags {
-	display: none;
-}
-select.tags {
-	width:100% !important;
-}
+div.tags.button-container  {padding-left: 0px;}
+div#update.tags {display: none;}
+div#update-modale.tags {display: none;}
+select.tags {width:100% !important;}
+select#tag_list {width:99%;}
+
 .monster-container .tags.section { margin-top: 10px; }
 div.tags-container > .panel.left {
 	width: 28%;
