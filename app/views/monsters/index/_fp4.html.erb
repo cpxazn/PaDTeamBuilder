@@ -1,20 +1,22 @@
 <table class="table table-striped front-page">
 	<thead>
 		<tr class="center">
-			<th colspan=4>Top Contributor</th>
+			<th colspan=4>Lastest Comments</th>
 		</tr>
 	</thead>
 	<thead>
 		<tr class="center">
+			<th>Leader</th>
+			<th>Sub</th>
 			<th>User</th>
-			<th>Votes</th>
 		</tr>
 	</thead>
-	<% users.each do |u| %>
+	<% comments.each do |c| %>
 		<tbody>
 			<tr class="center">
-				<td><%= u.username %></td>
-				<td><%= u.votes_count %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.leader.id), :border => 0) , c.leader %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.sub.id), :border => 0) , c.sub	 %></td>
+				<td><%= link_to c.user.username, detail_monsters_path(leader_id: c.leader.id, sub_id: c.sub.id, tab: 2) + "#" + c.id.to_s %></td>	
 			</tr>
 		</tbody>
 	<% end %>

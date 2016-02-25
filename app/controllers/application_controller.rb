@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
 			return m
 			break
 		end
-	end
+	end	
 	return nil
   end
   #Create monster from JSON info
@@ -182,11 +182,13 @@ class ApplicationController < ActionController::Base
   def create_monster(id, name)
 	if id == nil and name == nil then return nil end
 	if name == nil and id != nil then 
-		name = fetch_monster_by_id_json(id)["name"]
+		name = fetch_monster_by_id_json(id)
 		if name == nil then return nil end
+		name = name["name"]
 	elsif id == nil and name != nil
 		id = fetch_monster_by_name_json(name)
 		if id == nil then return nil end
+		id = id["name"]
 	end
     return Monster.create(id: id, name: name)
   end

@@ -33,6 +33,7 @@ class MonstersController < ApplicationController
 	@latestVotes = Vote.order(created_at: :desc).limit(5)
 	@topMonsters = Monster.top
 	@topUsers = User.top
+	@latestComments = Comment.latest
   end
   #Shows a particular monster from JSON. Input parameter is params[:id]
   def show
