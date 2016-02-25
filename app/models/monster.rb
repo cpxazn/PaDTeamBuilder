@@ -169,12 +169,14 @@ class Monster < ActiveRecord::Base
 		evos = Rails.cache.fetch("evolutions")
 		last = id
 		current = id
+		dupe = Array.new
 		while current != 0 do
 			evos.each do |item|
 				current = 0
 				evos[item[0].to_s].each do |e|
-					if e["evolves_to"] == last
+					if e["evolves_to"] == last and not dupe.include?(item[0].to_i)
 						current = item[0].to_i
+						dupe.push(current)
 						break
 					end
 				end
@@ -226,6 +228,7 @@ class Monster < ActiveRecord::Base
 	def self.traverse_evo(id, level, results)
 		
 		if not results.include?(Monster.find(id))
+			puts Monster.find(id)
 			results.push(Monster.find(id))
 			Monster.get_next_evo(id).each do |m|
 				traverse_evo(m, level + 1, results)
