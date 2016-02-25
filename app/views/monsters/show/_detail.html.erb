@@ -4,7 +4,7 @@
 			<strong>Leader</strong>
 		</div>
 		<div class="panel-body">
-			<%= link_to image_tag(@leader_details["image60_href"].to_s, :border => 0, :title => @leader.id.to_s + ". " + @leader.name), monster_path(@leader.id) %>
+			<%= link_to image_tag(@leader_details["image60_href"].to_s, :border => 0, :title => @leader.tooltip), monster_path(@leader.id) %>
 		</div>
 	</div>
 	<div class="panel panel-default monster details">
@@ -12,7 +12,7 @@
 			<strong>Sub</strong>
 		</div>
 		<div class="panel-body">
-			<%= link_to image_tag(@sub_details["image60_href"].to_s, :border => 0, :title => @sub.id.to_s + ". " + @sub.name), monster_path(@sub.id) %>
+			<%= link_to image_tag(@sub_details["image60_href"].to_s, :border => 0, :title => @sub.tooltip), monster_path(@sub.id) %>
 		</div>
 	</div>
 	<div class="panel panel-default monster details summary">

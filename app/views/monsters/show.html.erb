@@ -9,7 +9,7 @@
 
 <div class="jumbotron monster">
 	<div class="header header-name">
-		<h2><%= link_to image_tag(@monster["image60_href"]	, :border => 0, :title => @monster_db.id.to_s + ". " + @monster["name"]), Rails.application.config.pad_db_monster_path + @monster_db.id.to_s %><%= " " + @monster["name"] %></h2>
+		<h2><%= link_to image_tag(@monster["image60_href"]	, :border => 0, :title => @monster_db.tooltip), Rails.application.config.pad_db_monster_path + @monster_db.id.to_s %><%= " " + @monster["name"] %></h2>
 	</div>
 	<div class="header header-details">
 		<div class="panel panel-default left">
@@ -58,18 +58,7 @@
 										<strong><%= score %></strong>
 									</div>
 									<div class="panel-body">
-										<%
-											title = s["id"].to_s + ". " + s["name"] + "&#13;Tags: "
-											fetch_monster_by_id(s["id"]).tag_list.each do |t|
-												title = title + t + ", "
-											end
-											title = title + "&#13;&#13;Pairing Specific Tags: "
-											@monster_db.tag_list_on("sub_" + s["id"].to_s).each do |t|
-												title = title + t + ", "
-											end
-											title = title.html_safe
-										%>
-										<%= link_to image_tag(s["image60_href"].to_s, class: "center-image", :border => 0, :title => title ), detail_monsters_path(leader_id: @monster_db.id, sub_id: s["id"]), remote:true %>
+										<%= link_to image_tag(s["image60_href"].to_s, class: "center-image", :border => 0, :title => @monster_db.detailed_tooltip(s["id"])), detail_monsters_path(leader_id: @monster_db.id, sub_id: s["id"]), remote:true %>
 									</div>
 									<% if user_signed_in? %>
 										<div class="dropdown">
@@ -116,14 +105,7 @@
 										<strong><%= score %></strong>
 									</div>
 									<div class="panel-body">
-										<%
-											title = l["id"].to_s + ". " + l["name"] + "&#13;Tags: "
-											fetch_monster_by_id(l["id"]).tag_list.each do |t|
-												title = title + t + ", "
-											end
-											title = title.html_safe
-										%>
-										<%= link_to image_tag(l["image60_href"].to_s, :border => 0, :title => title), detail_monsters_path(leader_id: l["id"], sub_id: @monster_db.id), remote:true %>
+										<%= link_to image_tag(l["image60_href"].to_s, :border => 0, :title => @monster_db.detailed_tooltip(l["id"])), detail_monsters_path(leader_id: l["id"], sub_id: @monster_db.id), remote:true %>
 									</div>
 									<% if user_signed_in? %>
 										<div class="dropdown">

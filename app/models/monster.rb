@@ -1,7 +1,8 @@
 class Monster < ActiveRecord::Base
 	has_many :votes, class_name: "Vote", foreign_key: "leader_id", dependent: :destroy
-	has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
-	has_many :comments, class_name: "Comment", foreign_key: "comment_id", through: :leaders
+	#has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
+	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
+	has_many :comments, class_name: "Comment", foreign_key: "id", through: :leaders
 	acts_as_taggable
 	validates :name, presence: true
 	
@@ -141,4 +142,27 @@ class Monster < ActiveRecord::Base
 		end
 		return result
 	end
+	
+	def tooltip
+		return id.to_s + ". " + name
+	end
+	def tag_delim
+		results = ""
+		self.tag_list.each do |t|
+			results = results + t + ", "
+		end
+		return results[0..results.length-3]
+	end
+	def tag_delim_pair(sub_id)
+		results = ""
+		self.tag_list_on("sub_" + sub_id.to_s).each do |t|
+			results = results + t + ", "
+		end
+		return results[0..results.length-3]
+	end
+	
+	def detailed_tooltip(id)
+		results = (Monster.find(id).tooltip + "&#13;Tags: " + Monster.find(id).tag_delim + "&#13;Pairing Specific Tags: " + tag_delim_pair(id)).html_safe
+	end
+
 end
