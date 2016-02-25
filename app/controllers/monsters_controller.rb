@@ -38,7 +38,7 @@ class MonstersController < ApplicationController
   #Shows a particular monster from JSON. Input parameter is params[:id]
   def show
 	@monster = fetch_monster_by_id_json(params[:id])
-	
+
 	#Make sure monster was fetched
 	if @monster != nil
 		@monster_db = fetch_monster_by_id(@monster["id"])
@@ -77,6 +77,7 @@ class MonstersController < ApplicationController
 			@active_skill = fetch_active_skill_by_id_json(@monster["id"])
 			@leader_skill = fetch_leader_skill_by_id_json(@monster["id"])
 			@awakenings = fetch_awakenings_by_id_json(@monster["id"])
+			@related = @monster_db.get_all_evo
 		else
 			render_404; return;
 		end
@@ -323,6 +324,14 @@ class MonstersController < ApplicationController
 		url = "#{request_uri}#{request_query}"
 
 		Rails.cache.fetch("awakenings", expires_in: 12.hours) do
+			JSON.parse(open(url).read)
+		end
+		
+		request_uri = 'https://www.padherder.com/api/evolutions/'
+		request_query = ''
+		url = "#{request_uri}#{request_query}"
+
+		Rails.cache.fetch("evolutions", expires_in: 12.hours) do
 			JSON.parse(open(url).read)
 		end
 	end

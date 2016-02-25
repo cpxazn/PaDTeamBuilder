@@ -223,6 +223,18 @@
 				</div>
 			</div>
 		</div>
+			
+		<!-- Related Evolutions -->
+		<div class="monster-list">
+			<div class="panel panel-default">
+				<div class="panel-heading">Related Evolutions</div>
+				<div class="monster-container panel-body">
+					<% @related.each do |m| %>
+								<%= link_to image_tag(fetch_monster_url_by_id_json(m.id), :border => 0, :title => m.tooltip), m, remote:true %>
+					<% end %>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
