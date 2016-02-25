@@ -1,0 +1,21 @@
+<table class="table table-striped front-page">
+	<thead>
+		<tr class="center">
+			<th colspan=4>Top Contributor</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr class="center">
+			<th>User</th>
+			<th>Votes</th>
+		</tr>
+	</thead>
+	<% users.each do |u| %>
+		<tbody>
+			<tr class="center">
+				<td><%= u.username %></td>
+				<td><%= u.votes_count %></td>
+			</tr>
+		</tbody>
+	<% end %>
+</table>

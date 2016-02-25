@@ -30,6 +30,7 @@ module PadTeamBuilder
 	config.monster_list_max = 90 #Max number of monsters to list in index
 	config.img_path_awakenings = "/static/img/awakenings/" #Path to awakening .png
 	config.img_path_monsters = "http://padherder.com" #Path to APIs
+	config.pad_db_monster_path = "http://www.puzzledragonx.com/en/monster.asp?n="
 	config.tag_max_length = 30
 	ActsAsTaggableOn.remove_unused_tags = true
 	ActsAsTaggableOn.force_lowercase = true
