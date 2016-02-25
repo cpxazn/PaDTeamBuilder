@@ -182,7 +182,7 @@ class ApplicationController < ActionController::Base
   def create_monster(id, name)
 	if id == nil and name == nil then return nil end
 	if name == nil and id != nil then 
-		name = fetch_monster_by_id_json(id)
+		name = fetch_monster_by_id_json(id)["name"]
 		if name == nil then return nil end
 	elsif id == nil and name != nil
 		id = fetch_monster_by_name_json(name)
