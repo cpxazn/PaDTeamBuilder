@@ -231,7 +231,7 @@
 				<div class="monster-container panel-body">
 					<% @related.each do |m| %>
 						<% if m != @monster_db %>
-							<%= link_to image_tag(fetch_monster_url_by_id_json(m.id), :border => 0, :title => m.tooltip), m, remote:true %>
+							<%= link_to image_tag(fetch_monster_url_by_id_json(m.id), :border => 0, :title => m.tooltip), m %>
 						<% end %>
 					<% end %>
 				</div>

@@ -9,6 +9,7 @@ class Monster < ActiveRecord::Base
 	def self.top
 		where('votes_count > 0').order('votes_count DESC').limit(5)
 	end
+
 	#Uses default parameters to fetch data. Fetches all data up from specified month
 	def score(intSub)
 		score = fetch_weighted_avg(intSub, 0)

@@ -5,10 +5,11 @@ class Vote < ActiveRecord::Base
 	validates :leader_id, :sub_id, :user_id, :score, presence: true
 	#validates_uniqueness_of :sub_id, scope: [:user_id, :leader_id]
 	
-	def self.timestwo
-	Vote.all.each do |v|
-		intScore = v.score * 2
-		v.update(score: intScore)
+	def self.recent_top
+		date_condition = Rails.application.config.vote_display_default.months.ago
+		results = where("created_at > ?", date_condition).group(:leader_id).count
+		results = results.sort_by { |leader, count| count }.reverse[0..4]
 	end
-  end
+	
+
 end

@@ -1,7 +1,7 @@
 <table class="table table-striped front-page">
 	<thead>
 		<tr class="center">
-			<th colspan=2>Most Ratings</th>
+			<th colspan=2><p>Most Ratings (3 months)</p></th>
 		</tr>
 	</thead>
 	<thead>
@@ -13,8 +13,8 @@
 	<% monsters.each do |m| %>
 		<tbody>
 			<tr class="center">
-				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m.id), :border => 0, title: m.tooltip) , m %></td>
-				<td class="valign center"><%= m.votes_count %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m[0].id), :border => 0, title: m[0].tooltip) , m[0] %></td>
+				<td class="valign center"><%= m[1] %></td>
 			</tr>
 		</tbody>
 	<% end %>
