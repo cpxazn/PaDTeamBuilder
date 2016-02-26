@@ -215,6 +215,10 @@ class MonstersController < ApplicationController
 	results = search_monster_by_name_json(monster.upcase)
 	render :json => results
   end
+  def subs_json
+	subs = Monster.find(params.require(:id)).subs
+	render :json => subs.sort_by { | x | x[:score] }.reverse[0..10]
+  end
   #Graphs
   def graph_json
 	if params["graph"] == nil
@@ -288,7 +292,7 @@ class MonstersController < ApplicationController
     def set_monster
 		@monster = Monster.find(params[:id])
     end
-	def monster_id_json_params
+	def monster_id_params
 		params.require(:id)
 	end
 	def monster_name_json_params

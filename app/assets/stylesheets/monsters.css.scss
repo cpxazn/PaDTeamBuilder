@@ -1,4 +1,4 @@
-//Tags
+/*Tags*/
 div.tags.button-container  {padding-left: 0px;}
 div#update.tags {display: none;}
 div#update-modale.tags {display: none;}
@@ -13,12 +13,12 @@ div.tags-container > .panel.right {
 	width: 70.4%;
 }
 
-//Hide buttons on default for javascript disabled users
+/*Hide buttons on default for javascript disabled users*/
 .btn.show-low.sub {
 	display: none;
 }
 
-//Front page
+/*Front page*/
 table.front-page tr.center td,
 table.front-page tr.center th {
 	vertical-align:middle;
@@ -30,7 +30,7 @@ div.front-page.wrapper {
 	
 }
 div.front-page.section {
-	margin: 20px;
+	margin: 8px;
 	display: inline-block;
 	vertical-align: top;
 
@@ -39,18 +39,17 @@ div.front-page.section table {
 	width: 100% !important;
 }
 
-//Scrollbar on modify vote
+/*Scrollbar on modify vote*/
 .vote.dropdown-menu {
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: 100px;
 }
 
-//Monster Header
+/*Monster Header*/
 div.jumbotron.monster { overflow: hidden; }
 .header-details > .panel {
 	width: 48%;
-	//display: inline-block;
 	vertical-align: top;
 }
 .jumbotron .header-details {
@@ -62,38 +61,38 @@ div.jumbotron.monster { overflow: hidden; }
 }
 
 
-//Modal scrollbar and height
+/*Modal scrollbar and height*/
 .modal-body {
 	overflow-y: auto;
 	max-height: 450px;
 }
-//Prevent page from shifting left when opening modal
+/*Prevent page from shifting left when opening modal*/
 .modal-open[style] {
 	padding-right: 0px !important;
 }
-//Modal size
+/*Modal size*/
 @media screen and (min-width: 768px) {
 	
 	#vote_details .modal-dialog  {width:1100px;}
 
 }
 
-//Remove padding from select div under suggestions
+/*Remove padding from select div under suggestions*/
 div.vote.select { 
 	padding-left: 0px;
 }
 
-//Change main vote select dropdown height to 34 to match the buttons
+/*Change main vote select dropdown height to 34 to match the buttons*/
 select.vote {
 	height: 33.5px;
 }
 
-//Smaller heading on the individual monster scores
+/*Smaller heading on the individual monster scores*/
 .monster.panel-heading {
 	padding: 4px 4px;
 }
 
-//Left and right margins and inline block for each suggested monster
+/*Left and right margins and inline block for each suggested monster*/
 .panel.monster {
 	margin-left: 2px;
 	margin-right: 2px;
@@ -102,7 +101,7 @@ select.vote {
 }
 
 
-//Details Modale
+/*Details Modale*/
 ul.nav-tabs { padding-top: 10px;}
 div.page-tab { padding-top: 10px;}
 div.monster.details.summary { width:240px; }
@@ -110,24 +109,24 @@ div.panel-default.tags { width: 500px; overflow: hidden; }
 div.panel-body.tags { overflow: auto;}
 .panel-body.tags { max-height: 140px; }
 
-//Width of the main vote dropdown
+/*Width of the main vote dropdown*/
 select.vote {
 	width: 20%;
 }
 
-//Size of the suggested sub and leader divs
+/*Size of the suggested sub and leader divs*/
 div.monster-container > .panel {
 	width: 49.5%;
 }
 
-//Container that has the suggest sub and leaders, and make a suggestions
+/*Container that has the suggest sub and leaders, and make a suggestions*/
 div.monster-container {
 	width: 100%;
 	overflow: hidden;
 }
 
 
-//Include scrollbars to monster containers
+/*Include scrollbars to monster containers*/
 .monster-container.panel-body {
   overflow-y: auto;
   max-height:555px;
@@ -135,7 +134,7 @@ div.monster-container {
 }
 
 .dropdown {  overflow: visible !important;	}
-//Size of the individual monster vote
+/*Size of the individual monster vote*/
 .vote.dropdown-menu {
 
   min-width: 100% !important;
@@ -145,18 +144,18 @@ div.monster-container {
  width: 100% !important;
 }
 
-//Smaller monster search box
+/*Smaller monster search box*/
 .small-monster-input {
 	width: 100%;
 }
-//Larger monster search box
+/*Larger monster search box*/
 .large-monster-input {
 	width: 100%;
 }
 
 
 
-//Size of div for search text field in index
+/*Size of div for search text field in index*/
 .body-search {
 	width:60%;
 }
@@ -193,7 +192,7 @@ div.monster-container {
 .twitter-typeahead .tt-input { float: none;}
 
 .twitter-typeahead, .tt-hint, .tt-input, .tt-menu { width: 100%; }
-//Always expand typeahead text box to max of div width
+/*Always expand typeahead text box to max of div width*/
 input.typeahead { 
 	width: 100% !important; 
 }

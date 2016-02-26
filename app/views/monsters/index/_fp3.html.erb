@@ -10,12 +10,13 @@
 			<th>Votes</th>
 		</tr>
 	</thead>
-	<% users.each do |u| %>
-		<tbody>
+	<tbody>
+		<% users.each do |u| %>
+		
 			<tr class="center">
 				<td><%= u.username %></td>
 				<td><%= u.votes_count %></td>
 			</tr>
-		</tbody>
-	<% end %>
+		<% end %>
+	</tbody>
 </table>

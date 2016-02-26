@@ -10,12 +10,12 @@
 			<th>Total Votes</th>
 		</tr>
 	</thead>
-	<% monsters.each do |m| %>
-		<tbody>
+	<tbody>
+		<% monsters.each do |m| %>
 			<tr class="center">
 				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m[0].id), :border => 0, title: m[0].tooltip) , m[0] %></td>
 				<td class="valign center"><%= m[1] %></td>
 			</tr>
-		</tbody>
-	<% end %>
+		<% end %>
+	</tbody>
 </table>
