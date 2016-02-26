@@ -30,7 +30,7 @@ class MonstersController < ApplicationController
   end
   
   def index
-	@latestVotes = Vote.order(created_at: :desc).limit(5)
+	@latestVotes = Vote.order(created_at: :desc).limit(10)
 	topMonstersArray = Vote.recent_top(Rails.application.config.vote_display_default)
 	@topMonsters = Array.new
 	topMonstersArray.each do |m|

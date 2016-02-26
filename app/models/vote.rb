@@ -8,7 +8,7 @@ class Vote < ActiveRecord::Base
 	def self.recent_top(m)
 		date_condition = m.months.ago
 		results = where("created_at > ?", date_condition).group(:leader_id).count
-		results = results.sort_by { |leader, count| count }.reverse[0..4]
+		results = results.sort_by { |leader, count| count }.reverse[0..9]
 	end
 	
 
