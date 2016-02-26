@@ -223,7 +223,7 @@ class MonstersController < ApplicationController
 		@graph = params["graph"]
 	end
 	data = Array.new
-	puts "graph: " + @graph
+	#puts "graph: " + @graph
 	case @graph
 		when "count"
 			data.push("Ratings")

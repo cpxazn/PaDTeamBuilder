@@ -50,7 +50,7 @@ class Monster < ActiveRecord::Base
 	#Fetches all data up until specified month
 	def fetch_score_until(intSub, intM)
 		m = fetch_vote_date_eom(intM)
-		puts "until:" + m.to_s
+		#puts "until:" + m.to_s
 		vote = Vote.where("leader_id = ? and sub_id = ? and created_at <= ?", self.id, intSub, m)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
@@ -74,7 +74,7 @@ class Monster < ActiveRecord::Base
 	def fetch_score_between(intSub, intM, intM2)
 		m = fetch_vote_date_eom(intM)
 		m2 = fetch_vote_date_bom(intM2)
-		puts "between: " + m.to_s + " and " + m2.to_s
+		#puts "between: " + m.to_s + " and " + m2.to_s
 		vote = Vote.where("leader_id = ? and sub_id = ? and created_at <= ? and created_at >= ?", self.id, intSub, m, m2)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
@@ -229,7 +229,7 @@ class Monster < ActiveRecord::Base
 	def self.traverse_evo(id, level, results)
 		
 		if not results.include?(Monster.find(id))
-			puts Monster.find(id)
+			#puts Monster.find(id)
 			results.push(Monster.find(id))
 			Monster.get_next_evo(id).each do |m|
 				traverse_evo(m, level + 1, results)
