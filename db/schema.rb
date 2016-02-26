@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222142426) do
+ActiveRecord::Schema.define(version: 20160226073920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,9 @@ ActiveRecord::Schema.define(version: 20160222142426) do
     t.datetime "updated_at"
   end
 
+  add_index "c_ratings", ["comment_id"], name: "index_c_ratings_on_comment_id", using: :btree
+  add_index "c_ratings", ["user_id"], name: "index_c_ratings_on_user_id", using: :btree
+
   create_table "comments", force: true do |t|
     t.integer  "user_id"
     t.integer  "leader_id"
@@ -33,6 +36,10 @@ ActiveRecord::Schema.define(version: 20160222142426) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "comments", ["leader_id"], name: "index_comments_on_leader_id", using: :btree
+  add_index "comments", ["sub_id"], name: "index_comments_on_sub_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "monsters", force: true do |t|
     t.string   "name"
@@ -91,5 +98,9 @@ ActiveRecord::Schema.define(version: 20160222142426) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "votes", ["leader_id"], name: "index_votes_on_leader_id", using: :btree
+  add_index "votes", ["sub_id"], name: "index_votes_on_sub_id", using: :btree
+  add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
 
 end
