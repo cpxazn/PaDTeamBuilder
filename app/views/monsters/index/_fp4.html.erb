@@ -18,7 +18,7 @@
 				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.leader.id), :border => 0, title: c.leader.tooltip) , c.leader %></td>
 				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.sub.id), :border => 0, title: c.sub.tooltip) , c.sub	 %></td>
 				<td><%= link_to c.user.username, detail_monsters_path(leader_id: c.leader.id, sub_id: c.sub.id, tab: 2) + "#" + c.id.to_s %></td>
-				<td><%= time_ago_in_words(c.created_at) %> ago</td>
+				<td><%= time_ago_in_words(c.created_at) %></td>
 			</tr>
 		<% end %>
 	</tbody>
