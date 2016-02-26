@@ -7,7 +7,7 @@ class Monster < ActiveRecord::Base
 	validates :name, presence: true
 	
 	def self.top
-		where('votes_count > 0').order('votes_count DESC').limit(10)
+		where('votes_count > 0').order('votes_count DESC').limit(Rails.application.config.fp_display_max_monsters)
 	end
 
 	#Uses default parameters to fetch data. Fetches all data up from specified month

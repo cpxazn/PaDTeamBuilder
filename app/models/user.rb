@@ -9,6 +9,6 @@ class User < ActiveRecord::Base
 	has_many :comments
 	
 	def self.top
-		where('votes_count > 0').order('votes_count desc').limit(20)
+		where('votes_count > 0').order('votes_count desc').limit(Rails.application.config.fp_display_max_users)
 	end
 end
