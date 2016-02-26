@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
 	after_filter :store_location
@@ -289,6 +290,14 @@ class ApplicationController < ActionController::Base
 
 
 #Generic functions
+  #Format time ago in words
+  #Input: date
+  #Output: string
+  helper_method :time_ago
+  def time_ago(d)
+	result = view_context.time_ago_in_words(d)
+	return result == "less than a minute ago" ? "< 1 minute" : result
+  end
   #Check if string contains only numbers
   #Input: string
   #Output: boolean

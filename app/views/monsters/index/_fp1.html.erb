@@ -18,7 +18,7 @@
 					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.leader.id), :border => 0, title: v.leader.tooltip) , v.leader %></td>
 					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.sub.id), :border => 0, title: v.sub.tooltip) , v.sub	 %></td>
 					<td><%= v.score %></td>	
-					<td><%= time_ago_in_words(v.created_at) %></td>
+					<td><%= time_ago(v.created_at) %></td>
 				</tr>
 			<% end %>
 	</tbody>
