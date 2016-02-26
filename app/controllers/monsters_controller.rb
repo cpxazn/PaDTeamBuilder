@@ -31,7 +31,7 @@ class MonstersController < ApplicationController
   
   def index
 	@latestVotes = Vote.order(created_at: :desc).limit(5)
-	topMonstersArray = Vote.recent_top
+	topMonstersArray = Vote.recent_top(Rails.application.config.vote_display_default)
 	@topMonsters = Array.new
 	topMonstersArray.each do |m|
 		@topMonsters.push([fetch_monster_by_id(m[0]),m[1]])
