@@ -296,7 +296,7 @@ class ApplicationController < ActionController::Base
   helper_method :time_ago
   def time_ago(d)
 	result = view_context.time_ago_in_words(d)
-	return result == "less than a minute ago" ? "< 1 minute" : result
+	return result == "less than a minute" ? "< 1 minute" : result
   end
   #Check if string contains only numbers
   #Input: string
