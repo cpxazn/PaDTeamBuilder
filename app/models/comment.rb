@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
 	belongs_to :user, dependent: :destroy
 	belongs_to :leader, class_name: "Monster", foreign_key: "leader_id"
 	belongs_to :sub, class_name: "Monster", foreign_key: "sub_id"
-	has_many :c_ratings
+	has_many :c_ratings, dependent: :destroy
 	validates :user_id, :leader_id, :sub_id, :comment, presence: true
 	
 	def score

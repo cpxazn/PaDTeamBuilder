@@ -2,7 +2,7 @@ class Monster < ActiveRecord::Base
 	has_many :votes, class_name: "Vote", foreign_key: "leader_id", dependent: :destroy
 	#has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
 	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
-	has_many :comments, class_name: "Comment", foreign_key: "id", through: :leaders
+	has_many :comments, class_name: "Comment", foreign_key: "id", through: :leaders, dependent: :destroy
 	acts_as_taggable
 	validates :name, presence: true
 	
