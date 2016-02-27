@@ -11,21 +11,25 @@
 	<div class="header header-name">
 		<h2><%= link_to image_tag(@monster["image60_href"]	, :border => 0, :title => @monster_db.tooltip), Rails.application.config.pad_db_monster_path + @monster_db.id.to_s %><%= " " + @monster["name"] %></h2>
 	</div>
-	<div class="header header-details">
-		<div class="panel panel-default left">
-			<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> <% if @active_skill != nil %>(<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)<% end %></div>
-			<div class="panel-body"><%= hash_not_nil(@active_skill,"effect") %></div>
+	<div class="header header-details col-md-12">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> <% if @active_skill != nil %>(<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)<% end %></div>
+				<div class="panel-body"><%= hash_not_nil(@active_skill,"effect") %></div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Awoken Skills</div>
+				<div class="panel-body">
+					<% @awakenings.each do |a| %>
+						<%= image_tag(hash_not_nil(a,"url"), :border => 0, title: (hash_not_nil(a,"name") + "&#13;" + hash_not_nil(a,"desc")).html_safe) %>
+					<% end %>
+				</div>
+			</div>
 		</div>
-		<div class="panel panel-default right">
-			<div class="panel-heading">LS: <%= hash_not_nil(@leader_skill,"name") %></div>
-			<div class="panel-body"><%= hash_not_nil(@leader_skill,"effect") %></div>
-		</div>
-		<div class="panel panel-default left">
-			<div class="panel-heading">Awoken Skills</div>
-			<div class="panel-body">
-				<% @awakenings.each do |a| %>
-					<%= image_tag(hash_not_nil(a,"url"), :border => 0, title: (hash_not_nil(a,"name") + "&#13;" + hash_not_nil(a,"desc")).html_safe) %>
-				<% end %>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">LS: <%= hash_not_nil(@leader_skill,"name") %></div>
+				<div class="panel-body"><%= hash_not_nil(@leader_skill,"effect") %></div>
 			</div>
 		</div>
 	</div>
@@ -37,7 +41,7 @@
 </div>
 
 <div class="monster-container">
-	<div class="panel-left left section">
+	<div class="panel-left section col-md-7">
 		<!-- Suggested Subs -->
 		<div class="monster-list" style="display:block;">
 			<div class="panel panel-default">
@@ -135,7 +139,7 @@
 		</div>
 	</div>
 	
-	<div class="panel-right right section">
+	<div class="panel-right section col-md-5">
 		<!-- Make a Suggestion -->
 		<div class="monster-list">
 			<div class="panel panel-default section">

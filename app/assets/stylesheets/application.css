@@ -19,12 +19,15 @@ html {overflow-y: scroll;}
 html, body { height: 100%;}
 body { padding-top: 70px;}
 body > .container , .content {overflow: hidden;}
+@media (min-width: 1200px) {.container {width: 1220px;}}
 
 /* Footer */
 body > div.container {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;}
 .push, footer { height:50px;}
 footer { border-radius:0px !important; }
 @media screen and (max-width: 800px) {footer {display: none;}}
+
+
 
 
 textarea { resize: none; } 

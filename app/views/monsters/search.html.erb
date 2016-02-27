@@ -3,7 +3,7 @@
 
 <div class="tags-container">
 	<!-- Left Panel -->
-	<div class="panel-left left">
+	<div class="panel-left col-md-3">
 		<!-- Tags -->
 		<div class="monster-list">
 			<div class="panel panel-default">
@@ -25,7 +25,7 @@
 						<% end %>
 					</div>
 					
-					<div class="tags section">
+					<div class="tag-section select">
 						<select id="tag_list" name="tag_list" size="8">
 							<% @tags.each do |t| %>
 								<option value="<%= t.name %>"><%= t.name %> (<%= t.taggings_count %>) </option>
@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<!-- Right Panel -->
-	<div class="panel-right right">
+	<div class="panel-right col-md-9">
 		<!-- Results -->
 		<div class="monster-list">
 			<div class="panel panel-default">
