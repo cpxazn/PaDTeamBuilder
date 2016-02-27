@@ -1,7 +1,10 @@
 To Do List
-1. Implement weighted average
-2. Monster with low scores should be hidden
-3. Users should be able to leave comments when voting
-4. Add admin users to edit/remove comments
-5. Integrate with Pad herder to view what subs are available
-6. Automatic smart team construction
+1. Leader Leader Ratings
+2. PADX Link on Details Page
+3. More descriptive leader button
+4. Front Page Announcements
+5. Team for dungeon ratings
+6. Implement admin users
+7. Integrate with Pad herder to view what subs are available
+8. Automatic smart team construction
+
