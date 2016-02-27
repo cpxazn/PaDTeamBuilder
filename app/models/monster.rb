@@ -2,7 +2,8 @@ class Monster < ActiveRecord::Base
 	has_many :votes, class_name: "Vote", foreign_key: "leader_id", dependent: :destroy
 	#has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
 	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
-	has_many :comments, class_name: "Comment", foreign_key: "id", through: :leaders, dependent: :destroy
+	has_many :leader_comments, class_name: "Comment", foreign_key: "leader_id", dependent: :destroy
+	has_many :sub_comments, class_name: "Comment", foreign_key: "sub_id", dependent: :destroy
 	acts_as_taggable
 	validates :name, presence: true
 	
@@ -164,79 +165,6 @@ class Monster < ActiveRecord::Base
 	
 	def detailed_tooltip(id)
 		results = (Monster.find(id).tooltip + "&#13;Tags: " + Monster.find(id).tag_delim + "&#13;Pairing Specific Tags: " + tag_delim_pair(id)).html_safe
-	end
-	
-	def get_base_evo
-		evos = Rails.cache.fetch("evolutions")
-		last = id
-		current = id
-		dupe = Array.new
-		while current != 0 do
-			evos.each do |item|
-				current = 0
-				evos[item[0].to_s].each do |e|
-					if e["evolves_to"] == last and not dupe.include?(item[0].to_i)
-						current = item[0].to_i
-						dupe.push(current)
-						break
-					end
-				end
-				if current != 0
-					last = current
-					break
-				end
-				
-			end
-		end
-		return last
-			
-	end
-	
-	def self.get_next_evo(id)
-		results = Array.new
-		evos = Rails.cache.fetch("evolutions")[id.to_s]
-		if evos != nil
-			evos.each do |e|
-				results.push(e["evolves_to"])
-			end
-		end
-		results
-	end
-	
-	#def get_prior_evo
-	#	evos = Rails.cache.fetch("evolutions")
-	#	last = id
-	#	current = 0
-	#	evos.each do |item|
-	#		evos[item[0].to_s].each do |e|
-	#			if e["evolves_to"] == last
-	#				current = item[0].to_i
-	#				break
-	#			end
-	#		end
-	#		if current != 0
-	#			last = current
-	#			break
-	#		end
-	#	end
-	#	return current == 0 ? id : last
-	#end
-	
-	def get_all_evo
-		results = Array.new
-		Monster.traverse_evo(get_base_evo, 0, results)
-	end
-	def self.traverse_evo(id, level, results)
-		
-		if not results.include?(Monster.find(id))
-			#puts Monster.find(id)
-			results.push(Monster.find(id))
-			Monster.get_next_evo(id).each do |m|
-				traverse_evo(m, level + 1, results)
-			end
-		end
-		return results
-
 	end
 
 end

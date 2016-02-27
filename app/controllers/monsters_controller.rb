@@ -81,7 +81,7 @@ class MonstersController < ApplicationController
 			@active_skill = fetch_active_skill_by_id_json(@monster["id"])
 			@leader_skill = fetch_leader_skill_by_id_json(@monster["id"])
 			@awakenings = fetch_awakenings_by_id_json(@monster["id"])
-			@related = @monster_db.get_all_evo
+			@related = get_all_evo(@monster_db.id)
 		else
 			render_404; return;
 		end
@@ -279,6 +279,54 @@ class MonstersController < ApplicationController
   end
   
   private
+  	def get_base_evo(id)
+		evos = Rails.cache.fetch("evolutions")
+		last = id
+		current = id
+		dupe = Array.new
+		while current != 0 do
+			evos.each do |item|
+				current = 0
+				evos[item[0].to_s].each do |e|
+					if e["evolves_to"] == last and not dupe.include?(item[0].to_i)
+						current = item[0].to_i
+						dupe.push(current)
+						break
+					end
+				end
+				if current != 0
+					last = current
+					break
+				end
+				
+			end
+		end
+		return last	
+	end
+	def get_next_evo(id)
+		results = Array.new
+		evos = Rails.cache.fetch("evolutions")[id.to_s]
+		if evos != nil
+			evos.each do |e|
+				results.push(e["evolves_to"])
+			end
+		end
+		results
+	end
+	def get_all_evo(id)
+		results = Array.new
+		traverse_evo(get_base_evo(id), 0, results)
+	end
+	def traverse_evo(id, level, results)
+		
+		if not results.include?(fetch_monster_by_id(id))
+			results.push(fetch_monster_by_id(id))
+			get_next_evo(id).each do |m|
+				traverse_evo(m, level + 1, results)
+			end
+		end
+		return results
+	end
     def fetch_both
 		if params["sub_id"] == nil or params["leader_id"] == nil then render_404; return; end
 		@sub = fetch_monster_by_id(params["sub_id"])

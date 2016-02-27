@@ -288,7 +288,6 @@ class ApplicationController < ActionController::Base
   end
   
 
-
 #Generic functions
   #Format time ago in words
   #Input: date
