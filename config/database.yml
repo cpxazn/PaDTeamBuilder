@@ -33,3 +33,9 @@ production:
   port: <%= ENV["OPENSHIFT_POSTGRESQL_DB_PORT"] %>
   username: <%= ENV["OPENSHIFT_POSTGRESQL_DB_USERNAME"] %>
   password: <%= ENV["OPENSHIFT_POSTGRESQL_DB_PASSWORD"] %>
+  
+home:
+  <<: *default
+  database: <%= ENV["DB_PROD"] %>
+  host: <%= ENV["DB_PROD_HOST"] %>
+  port: <%= ENV["DB_PROD_PORT"] %>
