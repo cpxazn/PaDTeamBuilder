@@ -4,13 +4,16 @@ div#update.tags {display: none;}
 div#update-modale.tags {display: none;}
 select.tags {width:100% !important;}
 select#tag_list {width:99%;}
+div.tags-container{ overflow: hidden;}
+
 
 .monster-container .tags.section { margin-top: 10px; }
-div.tags-container > .panel.left {
+div.tags-container > .panel-left {
 	width: 28%;
 }
-div.tags-container > .panel.right {
+div.tags-container > .panel-right {
 	width: 70.4%;
+	overflow: hidden;
 }
 
 /*Hide buttons on default for javascript disabled users*/
@@ -115,7 +118,7 @@ select.vote {
 }
 
 /*Size of the suggested sub and leader divs*/
-div.monster-container > .panel {
+div.monster-container > .section {
 	width: 49.5%;
 }
 
