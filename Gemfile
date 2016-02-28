@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.8'
+gem 'rails'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
 gem 'pg'
-
+gem 'rack'
 
 
 # Use SCSS for stylesheets
@@ -54,3 +54,6 @@ gem 'figaro'
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'open_uri_redirections'
 gem 'turnout'
+group :production do
+  gem 'unicorn'
+end
