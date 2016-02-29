@@ -3,21 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="PaD Rater – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
+  <meta name="description" content="PaD Rater  ECommunity driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta name="keywords" content="" />
   <meta name="viewport" content="width=device-width, maximum-scale=1" />
-  <meta property="og:description" content="PaD Rater – Community driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
+  <meta property="og:description" content="PaD Rater  ECommunity driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
   <meta property="og:site_name" content="PaD Rater" />
-  <meta property="og:url" content="http://cpx.asuscomm.com:3000/" />
+  <meta property="og:url" content="http://pad-rater.com" />
   <meta property="og:locale" content="en_us" />
   <meta property="og:title" content="PaD Rater" />
-  <meta name="twitter:url" content="http://cpx.asuscomm.com:3000/" />
+  <meta name="twitter:url" content="http://pad-rater.com" />
   <meta name="twitter:title" content="PaD Rater" />
   <meta name="twitter:card" content="summary" />
   <title>PAD Rater</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  
+  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74420805-1', 'auto');
+	  ga('send', 'pageview');
+  </script>
 </head>
 
 
@@ -86,11 +96,43 @@
 					<% if alert %>
 						<div class="alert alert-danger" role="alert"><%= alert %></div>
 					<% end %>
+					<div class="center-text adsense">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Title Large -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7081880005128516"
+     data-ad-slot="2164139987"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+					</div>
 					<%= yield %>
+					<div class="center-text adsense">
+						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+						<!-- Responsive bottom -->
+						<ins class="adsbygoogle"
+							 style="display:block"
+							 data-ad-client="ca-pub-7081880005128516"
+							 data-ad-slot="7593394782"
+							 data-ad-format="auto"></ins>
+						<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
 					<div class="push"></div>
 		</div>
     </div><!-- /.container -->
 	<footer class="navbar-inverse footer">
+		<span style="float:left;">
+			<form  class="navbar-form" style="padding-top:3px;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+				<div class="form-group" style="display:inline;">
+					<input type="hidden" name="cmd" value="_s-xclick">
+					<input type="hidden" name="hosted_button_id" value="NVHR4XJXDP3TJ">
+					<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+				</div>
+			</form>
+		</span>
 		<span style="float:right;"><p class="navbar-text">All Puzzle and Dragons images are registered trademarks or trademarks of <a href="http://www.gunghoonline.com/games/puzzle-dragons/">GungHo Online Entertainment, Inc</a></p></span>
 	</footer>
 

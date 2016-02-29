@@ -21,6 +21,9 @@ body { padding-top: 70px;}
 body > .container , .content {overflow: hidden;}
 @media (min-width: 1200px) {.container {width: 1220px;}}
 
+/* Adsense */
+div.adsense { margin-bottom: 10px; }
+
 /* Footer */
 body > div.container {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;}
 .push, footer { height:50px;}
