@@ -54,6 +54,6 @@ gem 'figaro'
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'open_uri_redirections'
 gem 'turnout'
-group :production do
+platforms :ruby do 
   gem 'unicorn'
 end
