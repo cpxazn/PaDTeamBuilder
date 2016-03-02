@@ -39,52 +39,61 @@ class MonstersController < ApplicationController
 	@topUsers = User.top
 	@latestComments = Comment.latest
   end
+  
   #Shows a particular monster from JSON. Input parameter is params[:id]
   def show
-	@monster = fetch_monster_by_id_json(params[:id])
+	@monster = fetch_monster_by_id(params[:id])
 
 	#Make sure monster was fetched
 	if @monster != nil
-		@monster_db = fetch_monster_by_id(@monster["id"])
+		update_monster_name_with_json(@monster)
+		@monster.url = fetch_monster_url_by_id_json(@monster.id)
 		
-		#Check to make sure this monster exists in the database
-		if @monster_db != nil			
-			#Update monster name if it has changed
-			if @monster_db.name != @monster["name"] then 
-				@monster_db.name = @monster["name"]
-				@monster_db.save
-			end
-			
-			@subs = Array.new
-			#Get suggested subs
-			@subs_list = Monster.find(@monster["id"]).subs
-			@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
-			@subs_list.each do |s|
-				sub = fetch_monster_by_id_json(s[:id])
-				if sub != nil
-					@subs.push(sub)
+		@subs = Array.new
+		#Get suggested subs
+		@subs_list = @monster.subs
+		@subs_list = @subs_list.sort_by { | x | x[:score] }.reverse
+		@subs_list.each do |s|
+			sub = fetch_monster_by_id(s[:id])
+			if sub != nil
+				sub.avg = s[:score]
+				sub.url = fetch_monster_url_by_id_json(sub.id)
+				if user_signed_in? and user_voted_default_month(@monster.id,sub.id)
+					sub.user_score = fetch_user_vote_by_default_month(@monster.id, s.id).score
 				end
+				@subs.push(sub)
 			end
-			
-			@leaders = Array.new
-			#Get suggested leaders
-			@leaders_list = Monster.find(@monster["id"]).leaders
-			@leaders_list = @leaders_list.sort_by { | x | x[:score] }.reverse
-			@leaders_list.each do |l|
-				leader = fetch_monster_by_id_json(l[:id])
-				if leader != nil
-					@leaders.push(leader)
-				end
-			end
-			
-			#Get other details
-			@active_skill = fetch_active_skill_by_id_json(@monster["id"])
-			@leader_skill = fetch_leader_skill_by_id_json(@monster["id"])
-			@awakenings = fetch_awakenings_by_id_json(@monster["id"])
-			@related = get_all_evo(@monster_db.id)
-		else
-			render_404; return;
 		end
+		
+		@leaders = Array.new
+		#Get suggested leaders
+		@leaders_list = @monster.leaders
+		@leaders_list = @leaders_list.sort_by { | x | x[:score] }.reverse
+		@leaders_list.each do |l|
+			leader = fetch_monster_by_id(l[:id])
+			if leader != nil
+				leader.avg = l[:score]
+				leader.url = fetch_monster_url_by_id_json(leader.id)
+				@leaders.push(leader)
+			end
+		end
+		
+		@ll = Array.new
+		@ll_list = @monster.ll_list
+		@ll_list.each do |l|
+			leader = fetch_monster_by_id(l[:id])
+			if leader != nil
+				leader.avg = l[:score]
+				leader.url = fetch_monster_url_by_id_json(leader.id)
+				@ll.push(leader)
+			end
+		end
+		
+		#Get other details
+		@active_skill = fetch_active_skill_by_id_json(@monster.id)
+		@leader_skill = fetch_leader_skill_by_id_json(@monster.id)
+		@awakenings = fetch_awakenings_by_id_json(@monster.id)
+		@related = append_monster_url(get_all_evo(@monster.id))
 	else
 		render_404; return;
 	end
@@ -279,6 +288,23 @@ class MonstersController < ApplicationController
   end
   
   private
+	def update_monster_name_with_json(m)
+		monster_json = fetch_monster_by_id_json(m.id)
+		if monster_json != nil and monster_json["name"] != m.name then
+			m.name = monster_json["name"]
+			m.save
+		end
+	end
+    def append_monster_url(arrMonsters)
+		if arrMonsters != nil
+			arrMonsters.each do |m|
+				m.url = fetch_monster_url_by_id_json(m.id)
+			end
+			return arrMonsters
+		else
+			return nil
+		end
+	end
   	def get_base_evo(id)
 		evos = Rails.cache.fetch("evolutions")
 		last = id
@@ -347,14 +373,14 @@ class MonstersController < ApplicationController
 		params.require(:name)
 	end
     def monster_params
-		params.require(:monster).permit(:name)
+		params.require(:monster).permit(:name,:url)
     end
 	#Rails Cache
 	def cache_data
 		request_uri = 'https://www.padherder.com/api/monsters/'
 		request_query = ''
 		url = "#{request_uri}#{request_query}"
-
+		#Rails.cache.clear
 		Rails.cache.fetch("monster", expires_in: 12.hours) do
 			JSON.parse(open(url).read)
 		end

@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226073920) do
+ActiveRecord::Schema.define(version: 20160229193120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "c_ratings", force: true do |t|
+  create_table "c_ratings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "comment_id"
     t.integer  "score"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20160226073920) do
   add_index "c_ratings", ["comment_id"], name: "index_c_ratings_on_comment_id", using: :btree
   add_index "c_ratings", ["user_id"], name: "index_c_ratings_on_user_id", using: :btree
 
-  create_table "comments", force: true do |t|
+  create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "leader_id"
     t.integer  "sub_id"
@@ -37,23 +37,19 @@ ActiveRecord::Schema.define(version: 20160226073920) do
     t.datetime "updated_at"
   end
 
-  add_index "comments", ["leader_id"], name: "index_comments_on_leader_id", using: :btree
-  add_index "comments", ["sub_id"], name: "index_comments_on_sub_id", using: :btree
-  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
-
-  create_table "monsters", force: true do |t|
-    t.string   "name"
+  create_table "monsters", force: :cascade do |t|
+    t.string   "name",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "votes_count"
   end
 
-  create_table "taggings", force: true do |t|
+  create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
-    t.string   "taggable_type"
+    t.string   "taggable_type", limit: 255
     t.integer  "tagger_id"
-    t.string   "tagger_type"
+    t.string   "tagger_type",   limit: 255
     t.string   "context",       limit: 128
     t.datetime "created_at"
   end
@@ -61,36 +57,45 @@ ActiveRecord::Schema.define(version: 20160226073920) do
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
   add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
 
-  create_table "tags", force: true do |t|
-    t.string  "name"
-    t.integer "taggings_count", default: 0
+  create_table "tags", force: :cascade do |t|
+    t.string  "name",           limit: 255
+    t.integer "taggings_count",             default: 0
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
-  create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.string   "padherder"
-    t.string   "username"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.string   "padherder",              limit: 255
+    t.string   "username",               limit: 255
     t.integer  "votes_count"
+    t.integer  "vote_lls_count"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
-  create_table "votes", force: true do |t|
+  create_table "vote_lls", force: :cascade do |t|
+    t.integer  "leaders",                 array: true
+    t.integer  "user_id"
+    t.integer  "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "votes", force: :cascade do |t|
     t.integer  "score"
     t.integer  "leader_id"
     t.integer  "sub_id"
@@ -98,9 +103,5 @@ ActiveRecord::Schema.define(version: 20160226073920) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "votes", ["leader_id"], name: "index_votes_on_leader_id", using: :btree
-  add_index "votes", ["sub_id"], name: "index_votes_on_sub_id", using: :btree
-  add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
 
 end

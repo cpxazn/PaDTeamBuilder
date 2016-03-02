@@ -4,6 +4,7 @@ class Monster < ActiveRecord::Base
 	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
 	has_many :leader_comments, class_name: "Comment", foreign_key: "leader_id", dependent: :destroy
 	has_many :sub_comments, class_name: "Comment", foreign_key: "sub_id", dependent: :destroy
+	attr_accessor :url, :avg, :user_vote
 	acts_as_taggable
 	validates :name, presence: true
 	
@@ -144,6 +145,21 @@ class Monster < ActiveRecord::Base
 		end
 		return result
 	end
+	
+	def ll
+		VoteLl.where("'?' = ANY(leaders)",id).order(score: :desc)
+	end
+	
+	def ll_list
+		results = Array.new
+		ll.each do |l|
+			l.leaders = l.leaders.reject{|a| a == id}[0]
+			results.push(id: l.id, score: l.score)
+		end
+		results
+	end
+	
+	
 	
 	def tooltip
 		return id.to_s + ". " + name
