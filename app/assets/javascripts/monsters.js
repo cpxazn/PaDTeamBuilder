@@ -28,18 +28,15 @@ $(document).ready(function(){
 	//Show/Hide Low Scores
 	$('div.monster-container div.low-score').hide();
 	$('.btn.show-low').show();
-	$('.btn.show-low.subs').click(
+	$("[class*='show-low']").click(
 		function() {
-			$('div.monster-container div.low-score.subs').toggle();
-			if($(".btn.show-low.subs").text() == 'Show Hidden') {$(".btn.show-low.subs").html('Hide');} else {$(".btn.show-low.subs").html('Show Hidden');}
+			 var button = $(this).attr('id');
+			$('div.monster-container div.low-score.' + button).toggle();
+			if($(".btn.show-low." + button).text() == 'Show Hidden') {$(".btn.show-low." + button).html('Hide');} else {$(".btn.show-low." + button).html('Show Hidden');}
 		}
 	);
-	$('.btn.show-low.leaders').click(
-		function() {
-			$('div.monster-container div.low-score.leaders').toggle();
-			if($(".btn.show-low.leaders").text() == 'Show Hidden') {$(".btn.show-low.leaders").html('Hide');} else {$(".btn.show-low.leaders").html('Show Hidden');}
-		}
-	);
+
+   
 
 	//Allow editing tags
 	$('#edit-tags').click(

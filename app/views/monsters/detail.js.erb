@@ -2,5 +2,5 @@ $modal = $('.modal'),
 $modalBody = $('.modal .modal-body'),
 $modalHeading = $('.modal .modal-title');
 $modalHeading.html('Details');
-$modalBody.html("<%= escape_javascript(render partial: 'monsters/show/detail', leader_id: @leader_id, sub_id: @sub_id) %>");
+$modalBody.html("<%= escape_javascript(render partial: 'monsters/show/detail', leader_id: @leader_id, sub_id: @sub_id, type: @type) %>");
 $modal.modal();

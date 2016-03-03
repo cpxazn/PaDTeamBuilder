@@ -56,42 +56,61 @@ class VotesController < ApplicationController
 	monster_name = params[:monster_name]
 	monster = fetch_monster_by_one(monster_id, monster_name)
 	current = params[:current_id]
-	option = params[:commit]
+	option = params[:commit].downcase
 	rating = params[:rating]
+
 	if monster == nil then monster = create_monster(monster_id, monster_name) end
 	
 	if is_number?(rating) and rating.to_i <= Rails.application.config.vote_rating_max and rating.to_i >= 0
-		rating = rating.to_i
+		
 		if monster != nil
-			if (option =~ /^Sub/)
-				sub_id = monster.id
-				leader_id = current
-			elsif (option =~ /^Leader/)
-				sub_id = current
-				leader_id = monster.id
+			rating = rating.to_i
+			
+			if (option =~ /^sub$/)
+				monster_id2 = monster.id
+				monster_id1 = current.to_i
+				type = "ls"
+			elsif (option =~ /^leader\/leader$/)
+				type = "ll"
+				if current.to_i <= monster.id.to_i 
+					monster_id1 = current.to_i
+					monster_id2 = monster.id.to_i	
+				else
+					monster_id1 = monster.id.to_i
+					monster_id2 = current.to_i
+				end
+			elsif (option =~ /^leader$/)
+				monster_id2 = current.to_i
+				monster_id1 = monster.id
+				type = "ls"
 			else
 				redirect_to monster_path(current)
+				return
 			end
 			
-			if Monster.where(id: leader_id).count == 1 and Monster.where(id: sub_id).count == 1
-				if user_voted_default_month(leader_id, sub_id)
+			if Monster.where(id: monster_id1).count == 1 and Monster.where(id: monster_id2).count == 1
+				if user_voted_default_month(monster_id1, monster_id2, type)
+					vote = fetch_user_vote_by_default_month(monster_id1, monster_id2, type)
 					if rating > 0
-						vote = fetch_user_vote_by_default_month(leader_id, sub_id)
 						if vote.update(score: rating.to_i)
 							flash.now[:notice] = 'Vote Updated'
 						else
 							flash.now[:alert] = 'Error: Could not save vote!'
 						end
 					else
-						vote = fetch_user_vote_by_default_month(leader_id, sub_id)
 						vote.destroy
 						flash.now[:notice] = 'Vote Removed'
 					end
 				else
 					if rating > 0
-						vote = Vote.new(score:rating.to_i,leader_id: leader_id, sub_id: sub_id, user_id: current_user.id)
+						case type
+							when "ls"
+								vote = Vote.new(score:rating.to_i,leader_id: monster_id1, sub_id: monster_id2, user_id: current_user.id)
+							when "ll"
+								vote = VoteLl.new(score:rating.to_i,leaders: [monster_id1, monster_id2], user_id: current_user.id)
+						end
 						if vote.save
-							flash.now[:notice] = 'Vote Submitted'
+							flash.now[:notice] = 'Vote Submitted.' + option
 						else
 							flash.now[:alert] = 'Error: Could not save vote!'
 						end
@@ -100,7 +119,7 @@ class VotesController < ApplicationController
 					end
 				end
 			else
-				flash.now[:alert] = 'Error: ' + leader_id.to_s + ' is not a valid monster id'
+				flash.now[:alert] = 'Error: ' + monster_id1.to_s + ' is not a valid monster id'
 			end
 		else
 			flash.now[:alert] = 'Error: Invalid monster name'

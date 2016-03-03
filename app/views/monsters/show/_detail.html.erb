@@ -9,7 +9,7 @@
 	</div>
 	<div class="panel panel-default monster details">
 		<div class="center-text panel-heading monster">
-			<strong>Sub</strong>
+			<strong><% if @type == "ls" then concat "Sub" else concat "Leader" end %></strong>
 		</div>
 		<div class="panel-body">
 			<%= link_to image_tag(@sub_details["image60_href"].to_s, :border => 0, :title => @sub.tooltip), monster_path(@sub.id) %>
@@ -59,8 +59,8 @@
 </div>
 
 <script>
-	chart1(<%= @leader.id %>,<%= @sub.id %>,['since','monthly','weighted'],'#chart1','Ratings',1,<%= Rails.application.config.vote_rating_max %>);
-	chart1(<%= @leader.id %>,<%= @sub.id %>,['count'],'#chart2','Ratings Count',null,null);
+	chart1(<%= @leader.id %>,<%= @sub.id %>,'<%= @type %>',['since','monthly','weighted'],'#chart1','Ratings',1,<%= Rails.application.config.vote_rating_max %>);
+	chart1(<%= @leader.id %>,<%= @sub.id %>,'<%= @type %>',['count'],'#chart2','Ratings Count',null,null);
 </script>
 
 

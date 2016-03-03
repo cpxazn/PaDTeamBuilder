@@ -1,5 +1,5 @@
-function chart1(l,s,urls,id,title,tick,maxy) {		
-	parameters = '?leader_id=' + l + '&sub_id=' + s;
+function chart1(m1,m2,t,urls,id,title,tick,maxy) {		
+	parameters = '?leader_id=' + m1 + '&sub_id=' + m2 + '&type=' + t;
 	//urls = ['/monsters/json/graph/since' + parameters,'/monsters/json/graph/monthly' + parameters];
 	
 	var jxhr = [];
@@ -13,7 +13,7 @@ function chart1(l,s,urls,id,title,tick,maxy) {
 		jxhr.push(
 			$.getJSON(url, function (json) {
 				result.push(json);
-				//console.log(json);
+				console.log(json);
 			})
 		);
 

@@ -24,8 +24,12 @@ class CRatingsController < ApplicationController
     c_rating = CRating.new(c_rating_params)
 	c_rating.user_id = current_user.id
 	if c_rating.user_id != c_rating.comment.user_id then
-		if c_rating.save
-			flash.now[:notice] = 'Comment rated'
+		if c_rating.score == 1 or c_rating.score == -1
+			if c_rating.save
+				flash.now[:notice] = 'Comment rated'
+			else
+				flash.now[:alert] = 'Could not rate comment'
+			end
 		else
 			flash.now[:alert] = 'Could not rate comment'
 		end

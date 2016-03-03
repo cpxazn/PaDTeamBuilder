@@ -4,17 +4,34 @@ class Monster < ActiveRecord::Base
 	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
 	has_many :leader_comments, class_name: "Comment", foreign_key: "leader_id", dependent: :destroy
 	has_many :sub_comments, class_name: "Comment", foreign_key: "sub_id", dependent: :destroy
-	attr_accessor :url, :avg, :user_vote
+	attr_accessor :url, :avg, :user_score
 	acts_as_taggable
 	validates :name, presence: true
+	
+	def query_gen(t)
+		case t
+			when "ls"
+				return "leader_id = ? and sub_id = ? "
+			when "ll"
+				return "? = ANY(leaders) and ? = ANY(leaders) "
+		end
+	end
+	def model_gen(t)
+		case t
+			when "ls"
+				return Vote
+			when "ll"
+				return VoteLl
+		end
+	end
 	
 	def self.top
 		where('votes_count > 0').order('votes_count DESC').limit(Rails.application.config.fp_display_max_monsters)
 	end
 
 	#Uses default parameters to fetch data. Fetches all data up from specified month
-	def score(intSub)
-		score = fetch_weighted_avg(intSub, 0)
+	def score(intSub, t)
+		score = fetch_weighted_avg(intSub, 0, t)
 		if score.is_a?(Float) and score.nan?
 			return 0
 		else
@@ -22,11 +39,11 @@ class Monster < ActiveRecord::Base
 		end
 		#return fetch_score_ago(intSub, Rails.application.config.vote_display_default).round(1)
 	end
-	def vote_count(intSub)
-		return fetch_vote_count_all(intSub)
+	def vote_count(intSub, t)
+		return fetch_vote_count_all(intSub, t)
 	end
 	
-	def fetch_weighted_avg(intSub,m)
+	def fetch_weighted_avg(intSub,m, t)
 		weight_avg_list = Rails.application.config.vote_weighted_avg
 		result = 0
 		count = 0
@@ -34,9 +51,9 @@ class Monster < ActiveRecord::Base
 		weight_avg_list.each do |w|
 			tmp = 0
 			if w[1] == 0
-				tmp = fetch_score_until(intSub, w[0] + m) * w[2]
+				tmp = fetch_score_until(intSub, w[0] + m, t) * w[2]
 			else
-				tmp = fetch_score_between(intSub, w[0] + m,w[1] + m) * w[2]
+				tmp = fetch_score_between(intSub, w[0] + m,w[1] + m, t) * w[2]
 			end
 			if tmp > 0
 				count = count + 1
@@ -50,63 +67,61 @@ class Monster < ActiveRecord::Base
 	end
 	
 	#Fetches all data up until specified month
-	def fetch_score_until(intSub, intM)
+	def fetch_score_until(intSub, intM, t)
 		m = fetch_vote_date_eom(intM)
-		#puts "until:" + m.to_s
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at <= ?", self.id, intSub, m)
+		vote = model_gen(t).where(query_gen(t) + "and created_at <= ?", self.id, intSub, m)			
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_until(intSub, intM)
+	def fetch_vote_count_until(intSub, intM, t)
 		m = fetch_vote_date_eom(intM)
-		return Vote.where("leader_id = ? and sub_id = ? and created_at <= ?", self.id, intSub, m).count
+		return model_gen(t).where(query_gen(t) + "and created_at <= ?", self.id, intSub, m).count
 	end
 	
 	#Fetches all data up from specified month
-	def fetch_score_ago(intSub, intM)
+	def fetch_score_ago(intSub, intM, t)
 		m = fetch_vote_date_eom(intM)
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at >= ?", self.id, intSub, m)
+		vote = model_gen(t).where(query_gen(t) + "and created_at >= ?", self.id, intSub, m)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_ago(intSub, intM)
+	def fetch_vote_count_ago(intSub, intM, t)
 		m = fetch_vote_date_eom(intM)
-		return Vote.where("leader_id = ? and sub_id = ? and created_at >= ?", self.id, intSub, m).count
+		return model_gen(t).where(query_gen(t) + "and created_at >= ?", self.id, intSub, m).count
 	end
 	
 	#Fetches data between two specified month
-	def fetch_score_between(intSub, intM, intM2)
+	def fetch_score_between(intSub, intM, intM2, t)
 		m = fetch_vote_date_eom(intM)
 		m2 = fetch_vote_date_bom(intM2)
-		#puts "between: " + m.to_s + " and " + m2.to_s
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at <= ? and created_at >= ?", self.id, intSub, m, m2)
+		vote = model_gen(t).where(query_gen(t) + "and created_at <= ? and created_at >= ?", self.id, intSub, m, m2)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_between(intSub, intM, intM2)
+	def fetch_vote_count_between(intSub, intM, intM2, t)
 		m = fetch_vote_date_eom(intM)
 		m2 = fetch_vote_date_bom(intM2)
-		return Vote.where("leader_id = ? and sub_id = ? and created_at <= ? and created_at >= ?", self.id, intSub, m, m2).count
+		return model_gen(t).where(query_gen(t) + "and created_at <= ? and created_at >= ?", self.id, intSub, m, m2).count
 	end
 	
 	#Fetches average for a specific month, from start of month to end of month
-	def fetch_score_by_month(intSub, m)
+	def fetch_score_by_month(intSub, m, t)
 		date = Time.local(m.months.ago.year,m.months.ago.month,1,0,0,0)
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at >= ? and created_at <= ?", self.id, intSub, date, date.end_of_month)
+		vote = model_gen(t).where(query_gen(t) + "and created_at >= ? and created_at <= ?", self.id, intSub, date, date.end_of_month)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_by_month(intSub, m)
+	def fetch_vote_count_by_month(intSub, m, t)
 		date = Time.local(m.months.ago.year,m.months.ago.month,1,0,0,0)
-		return Vote.where("leader_id = ? and sub_id = ? and created_at >= ? and created_at <= ?", self.id, intSub, date, date.end_of_month).count
+		return model_gen(t).where(query_gen(t) + "and created_at >= ? and created_at <= ?", self.id, intSub, date, date.end_of_month).count
 	end
 	
 	#Fetches data from beginning of specified month up until now
-	def fetch_score_ago_beg(intSub, m)
+	def fetch_score_ago_beg(intSub, m, t)
 		#date = Time.local(m.months.ago.year,m.months.ago.month,1,0,0,0)
 		m = m.months.ago.beginning_of_month
-		vote = Vote.where("leader_id = ? and sub_id = ? and created_at >= ?", self.id, intSub, m)
+		vote = model_gen(t).where(query_gen(t) + "and created_at >= ?", self.id, intSub, m)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_ago_beg(intSub, m)
+	def fetch_vote_count_ago_beg(intSub, m, t)
 		date = Time.local(m.months.ago.year,m.months.ago.month,1,0,0,0)
-		return Vote.where("leader_id = ? and sub_id = ? and created_at >= ?", self.id, intSub, date).count
+		return model_gen(t).where(query_gen(t) + "and created_at >= ?", self.id, intSub, date).count
 	end
 	
 	#Fetch date depending on Rails config
@@ -118,12 +133,12 @@ class Monster < ActiveRecord::Base
 	end
 	
 	#Fetches all data
-	def fetch_score_all(intSub)
-		vote = Vote.where(leader_id: self.id, sub_id: intSub)
+	def fetch_score_all(intSub, t)
+		vote = model_gen(t).where(query_gen(t), self.id, intSub)
 		return vote.count > 0 ? (vote.sum(:score).round(1) / vote.count).round(1) : 0
 	end
-	def fetch_vote_count_all(intSub)
-		return Vote.where(leader_id: self.id, sub_id: intSub).count	
+	def fetch_vote_count_all(intSub, t)
+		return model_gen(t).where(query_gen(t), self.id, intSub).count	
 	end
 	
 	
@@ -132,7 +147,7 @@ class Monster < ActiveRecord::Base
 		subs_list = Vote.where(leader_id: self.id).select('DISTINCT sub_id').map(&:sub_id)
 		result = Array.new
 		subs_list.each do |s|
-			result.push(id: s, score: score(s))
+			result.push(id: s, score: score(s,"ls"))
 		end
 		return result
 	end
@@ -141,22 +156,34 @@ class Monster < ActiveRecord::Base
 		leader_list = Vote.where(sub_id: self.id).select('DISTINCT leader_id').map(&:leader_id)
 		result = Array.new
 		leader_list.each do |l|
-			result.push(id: l, score: Monster.find(l).score(self.id))
+			result.push(id: l, score: Monster.find(l).score(self.id,"ls"))
 		end
 		return result
 	end
 	
 	def ll
-		VoteLl.where("'?' = ANY(leaders)",id).order(score: :desc)
+		VoteLl.where("'?' = ANY(leaders)",id).select('DISTINCT leaders')
 	end
 	
 	def ll_list
-		results = Array.new
+		beforeList = Array.new
 		ll.each do |l|
-			l.leaders = l.leaders.reject{|a| a == id}[0]
-			results.push(id: l.id, score: l.score)
+			if l.leaders.size == 2
+				if l.leaders[0] == l.leaders[1] then
+					beforeList.push(l.leaders[0])
+				else
+					l.leaders = l.leaders.reject{|a| a == id}[0]
+					beforeList.push(l.leaders)
+				end
+			end
 		end
-		results
+		beforeList = beforeList.uniq
+		
+		result = Array.new
+		beforeList.each do |l|
+			result.push(id: l, score: Monster.find(self.id).score(l,"ll"))
+		end
+		result
 	end
 	
 	

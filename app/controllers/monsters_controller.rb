@@ -58,8 +58,8 @@ class MonstersController < ApplicationController
 			if sub != nil
 				sub.avg = s[:score]
 				sub.url = fetch_monster_url_by_id_json(sub.id)
-				if user_signed_in? and user_voted_default_month(@monster.id,sub.id)
-					sub.user_score = fetch_user_vote_by_default_month(@monster.id, s.id).score
+				if user_signed_in? and user_voted_default_month(@monster.id,sub.id,"ls")
+					sub.user_score = fetch_user_vote_by_default_month(@monster.id, sub.id,"ls").score
 				end
 				@subs.push(sub)
 			end
@@ -74,6 +74,9 @@ class MonstersController < ApplicationController
 			if leader != nil
 				leader.avg = l[:score]
 				leader.url = fetch_monster_url_by_id_json(leader.id)
+				if user_signed_in? and user_voted_default_month(leader.id,@monster.id,"ls")
+					leader.user_score = fetch_user_vote_by_default_month(leader.id,@monster.id,"ls").score
+				end
 				@leaders.push(leader)
 			end
 		end
@@ -85,6 +88,9 @@ class MonstersController < ApplicationController
 			if leader != nil
 				leader.avg = l[:score]
 				leader.url = fetch_monster_url_by_id_json(leader.id)
+				if user_signed_in? and user_voted_default_month(@monster.id,leader.id,"ll")
+					leader.user_score = fetch_user_vote_by_default_month(@monster.id,leader.id,"ll").score
+				end
 				@ll.push(leader)
 			end
 		end
@@ -103,10 +109,10 @@ class MonstersController < ApplicationController
   #Gets rating details, passes to modale or actual view
   def detail
 	if @sub != nil and @leader != nil
-		@score = @leader.score(@sub.id);
-		@votes = @leader.vote_count(@sub.id);
-		@score_all = @leader.fetch_score_all(@sub.id);
-		@votes_all = @leader.fetch_vote_count_all(@sub.id);
+		@score = @leader.score(@sub.id,@type);
+		@votes = @leader.vote_count(@sub.id, @type);
+		@score_all = @leader.fetch_score_all(@sub.id, @type);
+		@votes_all = @leader.fetch_vote_count_all(@sub.id, @type);
 		@comments = Comment.sorted(@leader.id, @sub.id)
 		respond_to do |format|
 			format.html
@@ -235,8 +241,13 @@ class MonstersController < ApplicationController
 	else
 		@graph = params["graph"]
 	end
+	if params["type"] == nil
+		render_404; return;
+	else
+		@type = params["type"]
+	end
 	data = Array.new
-	#puts "graph: " + @graph
+
 	case @graph
 		when "count"
 			data.push("Ratings")
@@ -255,13 +266,13 @@ class MonstersController < ApplicationController
 			Rails.application.config.vote_display_eom ? tmp.push(j.month.ago.strftime("%Y-%m-1")) : tmp.push(j.month.ago.strftime("%Y-%m-%d"))
 			case @graph
 				when "count"
-					tmp.push(@leader.fetch_vote_count_by_month(@sub.id, i))
+					tmp.push(@leader.fetch_vote_count_by_month(@sub.id, i, @type))
 				when "monthly"
-					tmp.push(@leader.fetch_score_by_month(@sub.id, i))
+					tmp.push(@leader.fetch_score_by_month(@sub.id, i, @type))
 				when "since"
-					tmp.push(@leader.fetch_score_ago_beg(@sub.id, i))
+					tmp.push(@leader.fetch_score_ago_beg(@sub.id, i, @type))
 				when "weighted"
-					tmpData = @leader.fetch_weighted_avg(@sub.id, i)
+					tmpData = @leader.fetch_weighted_avg(@sub.id, i, @type)
 					if tmpData.is_a?(Float) && tmpData.nan?
 						tmp.push(0)
 					else
@@ -354,7 +365,8 @@ class MonstersController < ApplicationController
 		return results
 	end
     def fetch_both
-		if params["sub_id"] == nil or params["leader_id"] == nil then render_404; return; end
+		if params["sub_id"] == nil or params["leader_id"] == nil or params["type"] == nil or (params["type"] != "ll" and params["type"] != "ls") then render_404; return; end
+		@type = params["type"]
 		@sub = fetch_monster_by_id(params["sub_id"])
 		@leader = fetch_monster_by_id(params["leader_id"])
 		#if @sub == nil then create(params["sub_id"],nil) end

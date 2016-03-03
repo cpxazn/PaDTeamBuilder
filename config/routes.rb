@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 	
-  resources :vote_lls
+	resources :vote_lls
 	resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
 
 	resources :comments,  except: [:edit, :update, :new, :show]
