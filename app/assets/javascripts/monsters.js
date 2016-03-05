@@ -30,7 +30,7 @@ $(document).ready(function(){
 	$('.btn.show-low').show();
 	$("[class*='show-low']").click(
 		function() {
-			 var button = $(this).attr('id');
+			var button = $(this).attr('id');
 			$('div.monster-container div.low-score.' + button).toggle();
 			if($(".btn.show-low." + button).text() == 'Show Hidden') {$(".btn.show-low." + button).html('Hide');} else {$(".btn.show-low." + button).html('Show Hidden');}
 		}

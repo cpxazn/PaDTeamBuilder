@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 	
 	match '/static/img/monsters/:size/:id.:basename.png' => "monsters#image_proxy", via: [:get]
 	
-	root 'monsters#index'
+	root 'news#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

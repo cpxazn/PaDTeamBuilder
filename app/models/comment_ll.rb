@@ -10,4 +10,14 @@ class CommentLl < ActiveRecord::Base
 	def score
 		c_ll_ratings.sum(:score)
 	end
+	
+	def self.latest
+		where("comment <> '[deleted]'").order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
+	end
+	def leader1
+		return Monster.find(leaders[0])
+	end
+	def leader2
+		return Monster.find(leaders[1])
+	end
 end

@@ -1,21 +1,20 @@
 <table class="table table-striped front-page">
 	<thead>
 		<tr class="center">
-			<th colspan=4>Top Contributor</th>
+			<th colspan=2>3 Months Leader/Sub Count</th>
 		</tr>
 	</thead>
 	<thead>
 		<tr class="center">
-			<th>User</th>
+			<th>Leader</th>
 			<th>Votes</th>
 		</tr>
 	</thead>
 	<tbody>
-		<% users.each do |u| %>
-		
+		<% monsters.each do |m| %>
 			<tr class="center">
-				<td><%= u.username %></td>
-				<td><%= u.votes_count %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m[0].id), :border => 0, title: m[0].tooltip) , m[0] %></td>
+				<td class="valign center"><%= m[1] %></td>
 			</tr>
 		<% end %>
 	</tbody>

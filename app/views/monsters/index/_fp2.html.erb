@@ -1,21 +1,25 @@
 <table class="table table-striped front-page">
 	<thead>
 		<tr class="center">
-			<th colspan=2>3 Months Count</th>
+			<th colspan=4>Leader/Leader Activity</th>
 		</tr>
 	</thead>
 	<thead>
 		<tr class="center">
-			<th>Leader</th>
-			<th>Votes</th>
+			<th>Leader 1</th>
+			<th>Leader 2</th>
+			<th>Score</th>
+			<th>Time Ago</th>
 		</tr>
 	</thead>
 	<tbody>
-		<% monsters.each do |m| %>
-			<tr class="center">
-				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m[0].id), :border => 0, title: m[0].tooltip) , m[0] %></td>
-				<td class="valign center"><%= m[1] %></td>
-			</tr>
-		<% end %>
+			<% votes.each do |v| %>
+				<tr class="center">
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.leader1.id), :border => 0, title: v.leader1.tooltip) , v.leader1 %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.leader2.id), :border => 0, title: v.leader2.tooltip) , v.leader2	 %></td>
+					<td><%= v.score %></td>	
+					<td><%= time_ago(v.created_at) %></td>
+				</tr>
+			<% end %>
 	</tbody>
 </table>

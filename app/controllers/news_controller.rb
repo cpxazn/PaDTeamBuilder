@@ -1,10 +1,13 @@
 class NewsController < ApplicationController
   before_action :set_news, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, only: [:create, :destroy, :edit, :new, :update, :show]
+  before_action :check_admin, only: [:create, :destroy, :edit, :new, :update, :show]
+  
   # GET /news
   # GET /news.json
   def index
-    @news = News.all
+    @pinned = News.where(pinned:true)
+	@updates = News.where(pinned:false)
   end
 
   # GET /news/1
@@ -62,6 +65,11 @@ class NewsController < ApplicationController
   end
 
   private
+	def check_admin
+		if not current_user.admin
+			redirect_to root_path
+		end
+	end
     # Use callbacks to share common setup or constraints between actions.
     def set_news
       @news = News.find(params[:id])
@@ -69,6 +77,6 @@ class NewsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def news_params
-      params.require(:news).permit(:title, :news, :user_id)
+      params.require(:news).permit(:title, :news, :user_id, :pinned)
     end
 end

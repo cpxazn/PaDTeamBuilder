@@ -1,0 +1,25 @@
+<table class="table table-striped table-border front-page">
+	<thead>
+		<tr class="center">
+			<th colspan=4>Latest Leader/Sub Comments</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr class="center">
+			<th>Leader</th>
+			<th>Sub</th>
+			<th>User</th>
+			<th>Time Ago</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% comments.each do |c| %>
+			<tr class="center">
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.leader.id), :border => 0, title: c.leader.tooltip) , c.leader %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.sub.id), :border => 0, title: c.sub.tooltip) , c.sub	 %></td>
+				<td><%= link_to c.user.username, detail_monsters_path(leader_id: c.leader.id, sub_id: c.sub.id, tab: 2, type: "ls") + "#" + c.id.to_s %></td>
+				<td><%= time_ago(c.created_at) %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

@@ -12,12 +12,18 @@
 		<%= render partial: 'monsters/index/fp1', locals: {votes: @latestVotes} %>
 	</div>
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp2', locals: {monsters: @topMonsters} %>
+		<%= render partial: 'monsters/index/fp2', locals: {votes: @latestVotesLl} %>
 	</div>
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp3', locals: {users: @topUsers} %>
+		<%= render partial: 'monsters/index/fp3', locals: {monsters: @topMonsters} %>
 	</div>
 	<div class="front-page section">
-		<%= render partial: 'monsters/index/fp4', locals: {comments: @latestComments} %>
+		<%= render partial: 'monsters/index/fp4', locals: {users: @topUsers} %>
+	</div>
+	<div class="front-page section">
+		<%= render partial: 'monsters/index/fp5', locals: {comments: @latestComments} %>
+	</div>
+	<div class="front-page section">
+		<%= render partial: 'monsters/index/fp6', locals: {comments: @latestCommentsLl} %>
 	</div>
 </div>	

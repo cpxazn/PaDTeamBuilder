@@ -31,13 +31,17 @@ class MonstersController < ApplicationController
   
   def index
 	@latestVotes = Vote.order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
+	@latestVotesLl = VoteLl.order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
+	
 	topMonstersArray = Vote.recent_top(Rails.application.config.vote_display_default)
 	@topMonsters = Array.new
 	topMonstersArray.each do |m|
 		@topMonsters.push([fetch_monster_by_id(m[0]),m[1]])
 	end
+	
 	@topUsers = User.top
 	@latestComments = Comment.latest
+	@latestCommentsLl = CommentLl.latest
   end
   
   #Shows a particular monster from JSON. Input parameter is params[:id]

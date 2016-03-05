@@ -338,7 +338,7 @@ class ApplicationController < ActionController::Base
   #Output: string
   helper_method :format_date
   def format_date(date)
-	return date.localtime.strftime("%-m-%e-%Y %l:%M %p EST")
+	return date.localtime.strftime("%-m/%-d/%Y %l:%M %p EST")
   end
     #Censors all but the first letter of the username
   #Input: string
