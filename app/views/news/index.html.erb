@@ -32,8 +32,8 @@
 				<%= news.news.html_safe %>
 			  </div>
 			  <div class="panel-footer">
+				<span style="float:left"><%= format_date(news.created_at) %></span>
 				<% if user_signed_in? and current_user.admin %>
-					<span style="float:left"><%= format_date(news.created_at) %></span>
 					<span style="float:right"><%= link_to 'Edit', edit_news_path(news) %></span>
 				<% end %>
 			  </div>
