@@ -6,7 +6,7 @@ class NewsController < ApplicationController
   # GET /news
   # GET /news.json
   def index
-    @pinned = News.where(pinned:true)
+    @pinned = News.where(pinned:true).order(:created_at)
 	@updates = News.where(pinned:false)
   end
 
