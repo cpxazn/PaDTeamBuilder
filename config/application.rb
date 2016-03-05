@@ -29,6 +29,7 @@ module PadTeamBuilder
 	config.vote_low_score = 3.5 #Low score to be hidden in monster#show page
 	config.comment_low_score = -3  #Low score for comment to be hidden on details page
 	config.monster_list_max = 90 #Max number of monsters to list in index
+	config.news_display_max = 10 #Max number of updates to display in index
 	config.img_path_awakenings = "/static/img/awakenings/" #Path to awakening .png
 	config.img_path_monsters = "http://padherder.com" #Path to APIs
 	config.pad_db_monster_path = "http://www.puzzledragonx.com/en/monster.asp?n="

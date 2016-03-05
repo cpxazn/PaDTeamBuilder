@@ -32,7 +32,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-	if current_user.id = @comment.user_id
+	if current_user.id == @comment.user_id or current_user.admin
 		@comment.comment = "[deleted]"
 		@comment.save
 	end
