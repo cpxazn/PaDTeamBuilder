@@ -56,7 +56,8 @@ class MonstersController < ApplicationController
 		@subs_list.each do |s|
 			sub = fetch_monster_by_id(s[:id])
 			if sub != nil
-				sub.avg = s[:score]
+				sub.avg = round?(s[:score])
+				sub.avg_count = @monster.vote_count(sub.id,"ls")
 				sub.url = fetch_monster_url_by_id_json(sub.id)
 				if user_signed_in? and user_voted_default_month(@monster.id,sub.id,"ls")
 					sub.user_score = fetch_user_vote_by_default_month(@monster.id, sub.id,"ls").score
@@ -72,7 +73,8 @@ class MonstersController < ApplicationController
 		@leaders_list.each do |l|
 			leader = fetch_monster_by_id(l[:id])
 			if leader != nil
-				leader.avg = l[:score]
+				leader.avg = round?(l[:score])
+				leader.avg_count = leader.vote_count(@monster.id,"ls")
 				leader.url = fetch_monster_url_by_id_json(leader.id)
 				if user_signed_in? and user_voted_default_month(leader.id,@monster.id,"ls")
 					leader.user_score = fetch_user_vote_by_default_month(leader.id,@monster.id,"ls").score
@@ -83,11 +85,13 @@ class MonstersController < ApplicationController
 		
 		@ll = Array.new
 		@ll_list = @monster.ll_list
+		@ll_list = @ll_list.sort_by { | x | x[:score] }.reverse
 		@ll_list.each do |l|
 			leader = fetch_monster_by_id(l[:id])
 			if leader != nil
-				leader.avg = l[:score]
+				leader.avg = round?(l[:score])
 				leader.url = fetch_monster_url_by_id_json(leader.id)
+				leader.avg_count = @monster.vote_count(leader.id,"ll")
 				if user_signed_in? and user_voted_default_month(@monster.id,leader.id,"ll")
 					leader.user_score = fetch_user_vote_by_default_month(@monster.id,leader.id,"ll").score
 				end
@@ -113,7 +117,7 @@ class MonstersController < ApplicationController
 		@votes = @leader.vote_count(@sub.id, @type);
 		@score_all = @leader.fetch_score_all(@sub.id, @type);
 		@votes_all = @leader.fetch_vote_count_all(@sub.id, @type);
-		@comments = Comment.sorted(@leader.id, @sub.id)
+		@comments = Comment.model_gen(@type).sorted(@leader.id, @sub.id)
 		respond_to do |format|
 			format.html
 			format.js
@@ -123,14 +127,15 @@ class MonstersController < ApplicationController
  
   def add_pair_tag
 	new_tags = params[:tags]
-	leader_id = params[:monster_id]
-	sub_id = params[:sub_id]
-	sub = fetch_monster_by_id(sub_id)
-	leader = fetch_monster_by_id(leader_id)
-	context = "sub_" + sub_id.to_s
+	m1_id = params[:monster_id]
+	m2_id = params[:m2_id]
+	type = params[:type]
+	m2 = fetch_monster_by_id(m2_id)
+	m1 = fetch_monster_by_id(m1_id)
+	context = type + "_" + m2_id.to_s
 	if new_tags == nil then new_tags = [] end
-	if leader != nil and sub != nil
-		old_tags = leader.tag_list_on(context).dup
+	if m1 != nil and m2 != nil
+		old_tags = m1.tag_list_on(context).dup
 		if old_tags == nil then old_tags = [] end
 		old_tags.each do |old|
 			found = 0
@@ -140,10 +145,10 @@ class MonstersController < ApplicationController
 				end
 			end
 			if found == 0 then 
-				leader.tag_list_on(context).remove(old) 
+				m1.tag_list_on(context).remove(old) 
 			end
 		end
-		old_tags = leader.tag_list_on(context).dup
+		old_tags = m1.tag_list_on(context).dup
 		new_tags.each do |new|
 			found = 0
 			old_tags.each do |old|
@@ -151,15 +156,15 @@ class MonstersController < ApplicationController
 			end
 			if found == 0 then 
 				if new.length <= Rails.application.config.tag_max_length 
-					leader.tag_list_on(context).add(new) 
+					m1.tag_list_on(context).add(new) 
 				else
 					flash.now[:alert] = 'Error: One or more tags could not be saved due to length limitation: ' + Rails.application.config.tag_max_length.to_s 
 				end
 			end
 		end
-		leader.save
-		leader.reload
-		@tags = leader.tag_list_on(context)
+		m1.save
+		m1.reload
+		@tags = m1.tag_list_on(context)
 	end
 	respond_to do |format|
 		format.js

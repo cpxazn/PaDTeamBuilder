@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
-	
-	resources :vote_lls
+  resources :news
 	resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
-
+	resources :c_ll_ratings, except: [:edit, :update, :destroy, :new, :show]
+		
 	resources :comments,  except: [:edit, :update, :new, :show]
+	resources :comment_lls,  except: [:edit, :update, :new, :show]
 
 	resources :votes, except: [:edit, :update, :destroy, :new] do
 		get 'statistics' , controller: 'votes', action: 'statistics', on: :collection 
 	end
+	resources :vote_lls, except: [:edit, :update, :destroy, :new]
 
 	resources :monsters, except: [:destroy, :new, :create, :update, :edit] do
 		get 'json/tags', controller: 'monsters', action: 'tags_json', on: :collection 

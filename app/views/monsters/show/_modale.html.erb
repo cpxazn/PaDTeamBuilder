@@ -65,6 +65,18 @@ $(document).ready(function(){
 			}
 		}
     });
+	
+	//Show/Hide Low Scores
+	$('div#comments.page-tab div.low-score').hide();
+	$('.btn.show-low').show();
+	$("[class*='show-low']").click(
+		function() {
+			 var button = $(this).attr('id');
+			$('div#comments.page-tab div.low-score.' + button).toggle();
+			if($(".btn.show-low." + button).text() == 'Show Hidden') {$(".btn.show-low." + button).html('Hide');} else {$(".btn.show-low." + button).html('Show Hidden');}
+		}
+	);
+
 
 
 }); 

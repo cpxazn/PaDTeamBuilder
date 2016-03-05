@@ -37,10 +37,10 @@
 			<strong>Pairing Specific Tags</strong>
 		</div>
 		<div class="panel-body tags">
-			<%= form_tag(monster_tag_pair_path(@leader.id, sub_id: @sub.id), method: "get", remote:true ) do %>
+			<%= form_tag(monster_tag_pair_path(@leader.id, m2_id: @sub.id, type: @type), method: "get", remote:true ) do %>
 				<div>
 					<p><select id="tags-modale" style="width:100%;" disabled multiple="true" name="tags[]" class="tags select2">
-					<% @leader.tag_list_on("sub_" + @sub.id.to_s).each do |t| %>
+					<% @leader.tag_list_on(@type + "_" + @sub.id.to_s).each do |t| %>
 						<option selected="selected"><%= t %></option>
 					<% end %>
 					</select></p>
@@ -74,13 +74,19 @@
 		<div id="chart2" style="width: 900px; height: 300px; margin: 0 auto"></div>
 	</div>
 	<div id="comments" class="page-tab">
+		<% hidden = 0; option = "comment" %>
 		<% @comments.each do |c| %>
-			<div id="<%= c.id %>" class="panel panel-default">
+			<div id="<%= c.id %>" class="panel panel-default comment <% if c.score < Rails.application.config.comment_low_score then hidden = 1; concat "low-score"; end %>">
 				<div class="panel-body comment">
 					<div class="c-rating comment">
-						<%= if user_signed_in? then if c.comment != "[deleted]" then link_to "", c_ratings_path(comment_id: c.id, score: 1), method: :post, title: "Mark Helpful", class: "glyphicon glyphicon-chevron-up" end end %>
+						<% if user_signed_in? then %>
+							<% if c.comment != "[deleted]" %>
+								<p><%= link_to "", c_ratings_path(comment_id: c.id, score: 1, type: @type), method: :post, title: "Upvote", class: "glyphicon glyphicon-chevron-up" %></p>
+								<%= link_to "", c_ratings_path(comment_id: c.id, score: -1, type: @type), method: :post, title: "Downvote", class: "glyphicon glyphicon-chevron-down" %>
+							<% end %>
+						<% end %>
 					</div>
-					<div class="comment body">
+					<div class="comment comments">
 						<%= c.comment %>
 					</div>
 				</div>
@@ -89,9 +95,12 @@
 					<% if c.comment != "[deleted]" and user_signed_in? and c.user_id == current_user.id %>
 						<span style="float:right"><%= link_to 'Delete', c, method: :delete, data: { confirm: 'Are you sure?' } %></span>
 					<% end %>
-					<span style="float:right">Helpful: <%= c.score %></span>
+					<span style="float:right">Score: <%= c.score %></span>
 				</div>
 			</div>
+		<% end %>
+		<% if hidden == 1 %>
+			<div style="padding:0;" class="col-md-2"><p><button type="button" id="<%= option %>" class="btn btn-default show-low" aria-label="Left Align">Show Hidden</button></p></div>
 		<% end %>
 		<% if user_signed_in? %>
 			<%= render partial: 'monsters/show/commentbox' %>

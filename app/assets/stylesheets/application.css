@@ -17,7 +17,8 @@
  */
 html {overflow-y: scroll;}
 html, body { height: 100%;}
-body { padding-top: 70px;}
+body { padding-top: 70px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
+   
 body > .container , .content {overflow: hidden;}
 @media (min-width: 1200px) {.container {width: 1220px;}}
 
@@ -27,7 +28,7 @@ div.adsense { margin-bottom: 10px; }
 /* Footer */
 body > div.container {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -50px;}
 .push, footer { height:50px;}
-footer { border-radius:0px !important; }
+footer { border-radius:0px !important; z-index: 1; position:relative;	}
 @media screen and (max-width: 800px) {footer {display: none;}}
 
 

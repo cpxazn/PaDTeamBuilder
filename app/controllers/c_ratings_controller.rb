@@ -1,42 +1,62 @@
 class CRatingsController < ApplicationController
-  before_action :set_c_rating, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:create, :destroy]
   respond_to :html
 
-  def index
-    @c_ratings = CRating.all
-    respond_with(@c_ratings)
+  def find_rating(m1_id, m2_id, t)
+	case t
+		when "ls"
+			return Comment.where(leader_id: m1_id, sub_id: m2_id, user_id: current_user.id).first
+		when "ll"
+			return Comment.where(Monster.query_gen(m1_id, m2_id, t) + "and user_id = ?", m1_id, m2_id, current_user.id).first
+	end
   end
-
-  def show
-    respond_with(@c_rating)
-  end
-
-  def new
-    @c_rating = CRating.new
-    respond_with(@c_rating)
-  end
-
-  def edit
-  end
-
   def create
-    c_rating = CRating.new(c_rating_params)
-	c_rating.user_id = current_user.id
-	if c_rating.user_id != c_rating.comment.user_id then
-		if c_rating.score == 1 or c_rating.score == -1
-			if c_rating.save
-				flash.now[:notice] = 'Comment rated'
+	t = params["type"]
+	if t != nil		
+		p = c_rating_params
+		
+		if t == "ls"
+			c_rating = CRating.model_gen(t).new(p)
+			query = {comment_id: p["comment_id"], user_id: current_user.id}
+			comment = c_rating.comment
+			m1 = comment.leader_id
+			m2 = comment.sub_id
+		elsif t == "ll"
+			c_rating = CRating.model_gen(t).new(comment_ll_id: p["comment_id"], score: p["score"])
+			query = {comment_ll_id: p["comment_id"], user_id: current_user.id}
+			comment = c_rating.comment_ll
+			m1 = comment.leaders[0]
+			m2 = comment.leaders[1]
+		end
+		score = p["score"].to_i
+		old = CRating.model_gen(t).where(query).first
+		if score == 1 or score == -1
+			if current_user.id != comment.user_id then
+				if old != nil then
+					old.score = score
+					if old.save
+						flash.now[:notice] = 'Vote updated'
+					else
+						flash.now[:alert] = 'Could not rate comment'
+					end
+				else
+					c_rating.user_id = current_user.id
+					if c_rating.save
+						flash.now[:notice] = 'Comment rated'
+					else
+						flash.now[:alert] = 'Could not rate comment'
+					end
+				end
 			else
 				flash.now[:alert] = 'Could not rate comment'
 			end
 		else
 			flash.now[:alert] = 'Could not rate comment'
 		end
+		redirect_to detail_monsters_path(leader_id: m1, sub_id: m2, tab: 2, type: t), anchor: comment.id, notice: flash[:notice], alert: flash[:alert]
 	else
-		flash.now[:alert] = 'Cannot rate your own comment'
+		render_404
 	end
-	redirect_to detail_monsters_path(leader_id: c_rating.comment.leader_id, sub_id: c_rating.comment.sub_id, tab: 2), anchor: c_rating.comment.id, notice: flash[:notice], alert: flash[:alert]
   end
 
   def update
@@ -44,16 +64,7 @@ class CRatingsController < ApplicationController
     respond_with(@c_rating)
   end
 
-  def destroy
-    @c_rating.destroy
-    respond_with(@c_rating)
-  end
-
   private
-    def set_c_rating
-      @c_rating = CRating.find(params[:id])
-    end
-
     def c_rating_params
       params.permit(:comment_id,:score)
     end

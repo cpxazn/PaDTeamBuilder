@@ -1,3 +1,8 @@
+div.panel-heading.monster a:link {
+   color:inherit;
+}
+
+
 /*Tags*/
 div.tags.button-container  {padding-left: 0px;}
 div#update.tags {display: none;}
@@ -46,7 +51,6 @@ div.front-page.section table {
 /*Monster Header*/
 div.jumbotron.monster { overflow: hidden; }
 .header-details > .panel {
-	/*width: 48%;*/
 	vertical-align: top;
 }
 .jumbotron .header-details {
@@ -111,10 +115,6 @@ select.vote {
 	width: 20%;
 }
 
-/*Size of the suggested sub and leader divs*/
-/*div.monster-container > .section {
-
-}*/
 
 /*Container that has the suggest sub and leaders, and make a suggestions*/
 div.monster-container {

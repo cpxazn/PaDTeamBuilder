@@ -1,11 +1,10 @@
-<div>
-<%= form_for(Comment.new) do |f| %>
+
+<div class="clear-left">
+<%= form_tag({controller: "comments", action: "create", params: {leader_id: @leader.id, type: @type, sub_id: @sub.id}}) do  %>
   <div>
-    <%= f.text_area :comment, cols: 60, rows: 5 %>
-	<%= f.hidden_field(:leader_id, value: @leader.id) %>
-	<%= f.hidden_field(:sub_id, value: @sub.id) %>
+	<%= text_area_tag(:comment_text, nil,size: "60x5") %>
 	<br>
-    <%= f.submit %>
+	<%= submit_tag("Create Comment") %>
   </div>
 <% end %>
 </div>

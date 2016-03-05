@@ -16,4 +16,13 @@ class Comment < ActiveRecord::Base
 	def self.latest
 		where("comment <> '[deleted]'").order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
 	end
+	
+	def self.model_gen(t)
+  		case t
+			when "ls"
+				return Comment
+			when "ll"
+				return CommentLl
+		end
+	end
 end

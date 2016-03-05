@@ -264,23 +264,17 @@ class ApplicationController < ActionController::Base
 	end
   end
   
+  
   #Gets vote for the current user for the monster
   #Input: leader id as integer, sub id as integer
   #Output: score as float
   helper_method :fetch_user_vote_by_default_month
-  def fetch_user_vote_by_default_month(l,s,t)
-	return fetch_user_vote_by_month(l,s,Rails.application.config.vote_new_user_interval,t)
+  def fetch_user_vote_by_default_month(m1,m2,t)
+	return fetch_user_vote_by_month(m1,m2,Rails.application.config.vote_new_user_interval,t)
   end
   helper_method :fetch_user_vote_by_month
-  def fetch_user_vote_by_month(l,s,m,t)
-  	case t
-		when "ls"
-			return current_user.votes.where("leader_id = ? and sub_id = ? and created_at > ?", l,s, m.month.ago).order(created_at: :desc).first
-		when "ll"
-			return current_user.vote_lls.where("? = ANY(leaders) and ? = ANY(leaders) and created_at > ?", l,s, m.month.ago).order(created_at: :desc).first
-		else
-			return nil
-	end
+  def fetch_user_vote_by_month(m1,m2,mnth,t)
+	return Monster.model_gen(t).where(Monster.query_gen(t, m1, m2) + "and user_id = ? and created_at > ?", m1,m2, current_user.id, mnth.month.ago).order(created_at: :desc).first
   end
   
   #Determines coloring based on the score

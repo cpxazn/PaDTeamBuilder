@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229193120) do
+ActiveRecord::Schema.define(version: 20160305002120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "c_ll_ratings", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "comment_ll_id"
+    t.integer  "score"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "c_ll_ratings", ["comment_ll_id"], name: "index_c_ll_ratings_on_comment_ll_id", using: :btree
+  add_index "c_ll_ratings", ["user_id"], name: "index_c_ll_ratings_on_user_id", using: :btree
 
   create_table "c_ratings", force: :cascade do |t|
     t.integer  "user_id"
@@ -27,6 +38,17 @@ ActiveRecord::Schema.define(version: 20160229193120) do
   add_index "c_ratings", ["comment_id"], name: "index_c_ratings_on_comment_id", using: :btree
   add_index "c_ratings", ["user_id"], name: "index_c_ratings_on_user_id", using: :btree
 
+  create_table "comment_lls", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "leaders",                 array: true
+    t.text     "comment"
+    t.integer  "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "comment_lls", ["user_id"], name: "index_comment_lls_on_user_id", using: :btree
+
   create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "leader_id"
@@ -37,11 +59,23 @@ ActiveRecord::Schema.define(version: 20160229193120) do
     t.datetime "updated_at"
   end
 
+  add_index "comments", ["leader_id"], name: "index_comments_on_leader_id", using: :btree
+  add_index "comments", ["sub_id"], name: "index_comments_on_sub_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
   create_table "monsters", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "votes_count"
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.text     "title"
+    t.text     "news"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -95,6 +129,8 @@ ActiveRecord::Schema.define(version: 20160229193120) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "vote_lls", ["user_id"], name: "index_vote_lls_on_user_id", using: :btree
+
   create_table "votes", force: :cascade do |t|
     t.integer  "score"
     t.integer  "leader_id"
@@ -103,5 +139,9 @@ ActiveRecord::Schema.define(version: 20160229193120) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "votes", ["leader_id"], name: "index_votes_on_leader_id", using: :btree
+  add_index "votes", ["sub_id"], name: "index_votes_on_sub_id", using: :btree
+  add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
 
 end

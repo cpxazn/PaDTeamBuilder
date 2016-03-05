@@ -46,12 +46,13 @@
 		<!-- Suggested Subs -->
 		<%= render partial: "monsters/show/suggestion", :locals => {sugg: @subs, monster: @monster, option: "sub"} %>
 
-		<!-- Suggested Leader -->
-		<%= render partial: "monsters/show/suggestion", :locals => {sugg: @leaders, monster: @monster, option: "leader"} %>
-		
 		<!-- Suggested Leader/Leader Pairing -->
 		<%= render partial: "monsters/show/suggestion", :locals => {sugg: @ll, monster: @monster, option: "ll"} %>
 		
+		<!-- Suggested Leader -->
+		<%= render partial: "monsters/show/suggestion", :locals => {sugg: @leaders, monster: @monster, option: "leader"} %>
+		
+
 	</div>
 	
 	<div class="panel-right section col-md-5">

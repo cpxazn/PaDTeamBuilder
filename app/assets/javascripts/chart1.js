@@ -13,7 +13,7 @@ function chart1(m1,m2,t,urls,id,title,tick,maxy) {
 		jxhr.push(
 			$.getJSON(url, function (json) {
 				result.push(json);
-				console.log(json);
+				//console.log(json);
 			})
 		);
 
