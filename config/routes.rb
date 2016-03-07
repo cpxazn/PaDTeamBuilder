@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :news
+    resources :news
+	get '/about', controller: 'news', action: 'about'
+	get '/privacy', controller: 'news', action: 'privacy'
 	resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
 	resources :c_ll_ratings, except: [:edit, :update, :destroy, :new, :show]
 		

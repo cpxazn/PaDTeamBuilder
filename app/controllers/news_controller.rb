@@ -9,7 +9,10 @@ class NewsController < ApplicationController
     @pinned = News.where(pinned:true).order(:created_at)
 	@updates = News.where(pinned:false).order(created_at: :desc).limit(Rails.application.config.news_display_max)
   end
-
+  def about
+  end
+  def privacy
+  end
   # GET /news/1
   # GET /news/1.json
   def show
