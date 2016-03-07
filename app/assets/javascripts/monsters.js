@@ -16,8 +16,8 @@ $(document).ready(function(){
 	)
 	
 	//Show/Hide Monster Details
-	$('.jumbotron > .header-details').hide();
-	$(".btn.monster-hide").html('Details');
+	//$('.jumbotron > .header-details').hide();
+	$(".btn.monster-hide").html('Hide');
 	$('.btn.monster-hide').show();
 	$('.btn.monster-hide').click(
 		function() {
