@@ -112,7 +112,7 @@ class VotesController < ApplicationController
 								vote = VoteLl.new(score:rating.to_i,leaders: [monster_id1, monster_id2], user_id: current_user.id)
 						end
 						if vote.save
-							flash.now[:notice] = 'Vote Submitted.' + option
+							flash.now[:notice] = 'Vote Submitted.'
 						else
 							flash.now[:alert] = 'Error: Could not save vote!'
 						end
