@@ -6,30 +6,36 @@ class NewsController < ApplicationController
   # GET /news
   # GET /news.json
   def index
+	@title = "News"
     @pinned = News.where(pinned:true).order(:created_at)
 	@updates = News.where(pinned:false).order(created_at: :desc).limit(Rails.application.config.news_display_max)
   end
   def about
+	@title = "About"
   end
   def privacy
+	@title = "Privacy"
   end
   # GET /news/1
   # GET /news/1.json
   def show
+	@title = @news
   end
 
   # GET /news/new
   def new
-    @news = News.new
+    @title = "News " + @news.id.to_s
   end
 
   # GET /news/1/edit
   def edit
+	@title = "Edit News " + @news.id.to_s
   end
 
   # POST /news
   # POST /news.json
   def create
+	@title = "Create News"
     @news = News.new(news_params)
 
     respond_to do |format|

@@ -49,6 +49,7 @@ class MonstersController < ApplicationController
   end
 	
   def search
+	@title = "Tags"
 	@tags = ActsAsTaggableOn::Tag.order(taggings_count: :desc)
 	@selected = params[:tags]
 	if @selected != nil and @selected.size > 0
@@ -59,6 +60,7 @@ class MonstersController < ApplicationController
   end
   
   def index
+	@title = "Summary"
 	@latestVotes = Vote.order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
 	@latestVotesLl = VoteLl.order(created_at: :desc).limit(Rails.application.config.fp_display_max_monsters)
 	
@@ -81,6 +83,8 @@ class MonstersController < ApplicationController
 	if @monster != nil
 		update_monster_name_with_json(@monster)
 		@monster.url = fetch_monster_url_by_id_json(@monster.id)
+		
+		@title = @monster.id.to_s
 		
 		@subs = Array.new
 		#Get suggested subs
@@ -145,7 +149,9 @@ class MonstersController < ApplicationController
   end
   #Gets rating details, passes to modale or actual view
   def detail
+	
 	if @sub != nil and @leader != nil
+		@title = "Details"
 		@score = @leader.score(@sub.id,@type);
 		@votes = @leader.vote_count(@sub.id, @type);
 		@score_all = @leader.fetch_score_all(@sub.id, @type);

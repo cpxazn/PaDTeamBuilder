@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="PaD Rater  ECommunity driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
+  <meta name="description" content="PaD Rater is a community driven Puzzle and Dragons resource site that allows YOU to vote for what you think are the best subs and leaders pairings which will assist others with team building." />
   <meta name="keywords" content="" />
   <meta name="viewport" content="width=device-width, maximum-scale=1" />
-  <meta property="og:description" content="PaD Rater  ECommunity driven Puzzle and Dragons site that allows YOU to vote for what you think are the best subs for each leader" />
+  <meta property="og:description" content="PaD Rater is a community driven Puzzle and Dragons resource site that allows YOU to vote for what you think are the best subs and leaders pairings which will assist others with team building." />
   <meta property="og:site_name" content="PaD Rater" />
   <meta property="og:url" content="http://pad-rater.com" />
   <meta property="og:locale" content="en_us" />
@@ -14,7 +14,8 @@
   <meta name="twitter:url" content="http://pad-rater.com" />
   <meta name="twitter:title" content="PaD Rater" />
   <meta name="twitter:card" content="summary" />
-  <title>PAD Rater</title>
+  
+  <title><% if @title != nil and @title.length > 0 %><%= @title + " | " %><% end %>PAD Rater</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>

@@ -7,6 +7,7 @@ class VotesController < ApplicationController
 
   
   def index
+	@title = "Votes"
   	@page = params[:page].to_i
 	if @page.is_a? Numeric and @page != nil and @page > 0
 		starting = (@page - 1) * Rails.application.config.vote_list_max
@@ -23,6 +24,7 @@ class VotesController < ApplicationController
   end
   
   def statistics
+	@title = "Statistics"
 	@page = params[:page].to_i
 	if @page.is_a? Numeric and @page != nil and @page > 0
 		starting = (@page - 1) * Rails.application.config.vote_list_max
