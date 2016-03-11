@@ -1,0 +1,32 @@
+<table class="table table-striped front-page">
+	<thead>
+		<tr class="center">
+			<th colspan=6>Leader/Sub Outliers (Latest <%= Rails.application.config.questionable_display_max %>)</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr class="center">
+			<th>Leader</th>
+			<th>Sub</th>
+			<th>User Rating</th>
+			<th>Weighted Avg</th>
+			<th>Total Count</th>
+			<th>Time Ago</th>
+		</tr>
+	</thead>
+	<tbody>
+			<% votes.each do |h| %>
+				<% avg = h[:average] %>
+				<% count = h[:count] %>
+				<% v = h[:vote] %>
+				<tr class="center">
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.leader.id), :border => 0, title: v.leader.tooltip, alt: v.leader.name) , v.leader %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(v.sub.id), :border => 0, title: v.sub.tooltip, alt: v.sub.name) , v.sub	 %></td>
+					<td><%= v.score %></td>
+					<td><%= round?(avg) %></td>
+					<td><%= count %></td>
+					<td><%= time_ago(v.created_at) %></td>
+				</tr>
+			<% end %>
+	</tbody>
+</table>

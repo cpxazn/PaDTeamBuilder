@@ -1,0 +1,29 @@
+<table class="table table-striped front-page">
+	<thead>
+		<tr class="center">
+			<th colspan=6>Leader/Sub Low Rarity (Random <%= Rails.application.config.questionable_display_max %>)</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr class="center">
+			<th>Leader</th>
+			<th>Sub</th>
+			<th>Weighted Avg</th>
+			<th>Total Count</th>
+		</tr>
+	</thead>
+	<tbody>
+			<% votes.each do |h| %>
+				<% avg = h[:average] %>
+				<% count = h[:count] %>
+				<% leader = h[:leader] %>
+				<% sub = h[:sub] %>
+				<tr class="center">
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader.id), :border => 0, title: leader.tooltip, alt: leader.name) , leader %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub.id), :border => 0, title: sub.tooltip, alt: sub.name) , sub	 %></td>
+					<td><%= avg %></td>
+					<td><%= count %></td>
+				</tr>
+			<% end %>
+	</tbody>
+</table>

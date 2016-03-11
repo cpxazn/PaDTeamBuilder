@@ -194,8 +194,6 @@ class Monster < ActiveRecord::Base
 		result
 	end
 	
-	
-	
 	def tooltip
 		return id.to_s + ". " + name
 	end

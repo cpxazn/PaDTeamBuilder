@@ -1,0 +1,31 @@
+<table class="table table-striped front-page">
+	<thead>
+		<tr class="center">
+			<th colspan=6>Less than 4 Votes (Random <%= Rails.application.config.questionable_display_max %>)</th>
+		</tr>
+	</thead>
+	<thead>
+		<tr class="center">
+			<th>Leader</th>
+			<th>Sub</th>
+			<th>Vote Count</th>
+			<th>Average</th>
+		</tr>
+	</thead>
+	<tbody>
+			<% votes.each do |v| %>
+				<% leader_id = v[0][0] %>
+				<% leader = Monster.find(leader_id) %>
+				<% sub_id = v[0][1] %>
+				<% sub = Monster.find(sub_id) %>
+				<% count = v[1] %>
+				<% avg = v[2] %>
+				<tr class="center">
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader_id), :border => 0, title: leader.tooltip, alt: leader.name) , leader %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub_id), :border => 0, title: sub.tooltip, alt: sub.name) , sub %></td>
+					<td><%= count %></td>
+					<td><%= avg %></td>
+				</tr>
+			<% end %>
+	</tbody>
+</table>

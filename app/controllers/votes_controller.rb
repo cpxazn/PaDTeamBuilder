@@ -124,6 +124,8 @@ class VotesController < ApplicationController
 		else
 			flash.now[:alert] = 'Error: Invalid monster name'
 		end
+	else
+		flash.now[:alert] = 'Error: Invalid parameters'
 	end
 	redirect_to monster_path(current), notice: flash[:notice], alert: flash[:alert]
     #respond_with(@vote)

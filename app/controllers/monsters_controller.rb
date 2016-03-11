@@ -7,7 +7,36 @@ class MonstersController < ApplicationController
   before_action :authenticate_user!, only: [:add_tag, :add_pair_tag, :tag_update]
   respond_to :html
   
-	
+  def questionable
+	Rails.cache.fetch("questionable_outliers", expires_in: 15.minutes) do
+			Vote.outliers(Rails.application.config.vote_display_default, "ls")
+	end
+	Rails.cache.fetch("questionable_low_count", expires_in: 15.minutes) do
+			Vote.low_count(Rails.application.config.vote_display_default, "ls")
+	end
+	Rails.cache.fetch("questionable_low_rating", expires_in: 15.minutes) do
+			Vote.low_rating(Rails.application.config.vote_display_default, "ls")
+	end
+	Rails.cache.fetch("questionable_low_rarity", expires_in: 15.minutes) do
+			Vote.find_monster_in(fetch_low_rarity_json, Rails.application.config.vote_display_default, "ls")
+	end
+	#@outliers = Vote.outliers(Rails.application.config.vote_display_default, "ls")
+	#@low_count = Vote.low_count(Rails.application.config.vote_display_default, "ls")
+	#@low_rating = Vote.low_rating(Rails.application.config.vote_display_default, "ls")
+	@outliers = Rails.cache.fetch("questionable_outliers")
+	@low_count = Rails.cache.fetch("questionable_low_count")
+	@low_rating = Rails.cache.fetch("questionable_low_rating")
+	@low_rarity = Rails.cache.fetch("questionable_low_rarity")
+  end
+  def fetch_low_rarity_json
+	monsters = Rails.cache.fetch("monster")
+	results = Array.new
+	monsters.each do |m|
+		if m["rarity"] < 5 then results.push(m["id"]) end
+	end
+	return results
+  end
+  
   def image_proxy
 	remote_url = Rails.application.config.img_path_monsters + "#{request.path}"
 	local_url = "public#{request.path}"

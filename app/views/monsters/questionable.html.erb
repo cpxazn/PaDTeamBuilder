@@ -1,0 +1,19 @@
+
+<div class="center center-text">
+	<h1>Questionable Votes</h1>
+</div>
+
+<div class="front-page wrapper">
+	<div class="front-page section">
+		<%= render partial: 'monsters/questionable/outliers', locals: {votes: @outliers} %>
+	</div>
+	<div class="front-page section">
+		<%= render partial: 'monsters/questionable/lowcount', locals: {votes: @low_count} %>
+	</div>
+	<div class="front-page section">
+		<%= render partial: 'monsters/questionable/lowrating', locals: {votes: @low_rating} %>
+	</div>
+	<div class="front-page section">
+		<%= render partial: 'monsters/questionable/lowrarity', locals: {votes: @low_rarity} %>
+	</div>
+</div>	

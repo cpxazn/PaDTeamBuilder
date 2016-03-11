@@ -34,6 +34,7 @@ module PadTeamBuilder
 	config.img_path_monsters = "http://padherder.com" #Path to APIs
 	config.pad_db_monster_path = "http://www.puzzledragonx.com/en/monster.asp?n="
 	config.tag_max_length = 30
+	config.questionable_display_max = 40 #Number of records to show in questionable page
 	config.fp_display_max_monsters = 10
 	config.fp_display_max_users = 20
 	ActsAsTaggableOn.remove_unused_tags = true

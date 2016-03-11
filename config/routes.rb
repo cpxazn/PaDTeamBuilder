@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 		get 'tag/pair', controller: 'monsters', action: 'add_pair_tag'
 		get 'tags', controller: 'monsters', action: 'search', on: :collection
 		get 'tags/update', controller: 'monsters', action: 'tag_update', on: :collection
+		get 'questionable', controller: 'monsters', action: 'questionable', on: :collection
 	end
 
 	devise_for :users
