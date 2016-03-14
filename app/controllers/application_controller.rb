@@ -5,6 +5,18 @@ class ApplicationController < ActionController::Base
 	after_filter :store_location
 
 #Monster functions
+
+  #Generates detailed tooltip with tags and skills
+  #Input: monster id 1, monster id 2
+  #Output: String
+  helper_method :detailed_tooltip
+  def detailed_tooltip(id1, id2, t)
+  active_skill = fetch_active_skill_by_id_json(id2)
+  if active_skill != nil
+	active_skill = active_skill["effect"] + " (" + hash_not_nil(@active_skill,"max_cooldown") + " to " + hash_not_nil(@active_skill,"min_cooldown") + " turns)"
+  end
+	results = (Monster.find(id2).tooltip + "&#13;Active Skill: " + active_skill + "&#13;Leader Skill: " + fetch_leader_skill_by_id_json(id2)["effect"] + "&#13;&#13;Tags: " + Monster.find(id2).tag_delim + "&#13;Pairing Specific Tags: " + Monster.find(id1).tag_delim_pair(id2, t)).html_safe
+  end
   #Populate default tag
   #Input: monster id
   #Output: monster object

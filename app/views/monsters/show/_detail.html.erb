@@ -40,7 +40,21 @@
 			<%= form_tag(monster_tag_pair_path(@leader.id, m2_id: @sub.id, type: @type), method: "get", remote:true ) do %>
 				<div>
 					<p><select id="tags-modale" style="width:100%;" disabled multiple="true" name="tags[]" class="tags select2">
-					<% @leader.tag_list_on(@type + "_" + @sub.id.to_s).each do |t| %>
+					<% if @type == "ll" %>
+						
+						<% if @leader.id <= @sub.id %>
+							<% m1 = @leader %>
+							<% m2 = @sub %>
+						<% else %>
+							
+							<% m1 = @sub %>
+							<% m2 = @leader %>
+						<% end %>
+					<% else %>
+							<% m1 = @leader %>
+							<% m2 = @sub %>
+					<% end %>
+					<% m1.tag_list_on(@type + "_" + m2.id.to_s).each do |t| %>
 						<option selected="selected"><%= t %></option>
 					<% end %>
 					</select></p>

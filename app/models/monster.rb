@@ -200,20 +200,31 @@ class Monster < ActiveRecord::Base
 	def tag_delim
 		results = ""
 		self.tag_list.each do |t|
-			results = results + t + ", "
+			if results != "" then results = results + ", " end
+			results = results + t
 		end
-		return results[0..results.length-3]
+		return results
 	end
-	def tag_delim_pair(sub_id)
+	def tag_delim_pair(sub_id, t)
 		results = ""
-		self.tag_list_on("sub_" + sub_id.to_s).each do |t|
-			results = results + t + ", "
+		if t != "ll"
+			self.tag_list_on(t + "_" + sub_id.to_s).each do |tag|
+				if results != "" then results = results + ", " end
+				results = results + tag
+			end
+		else
+			if self.id <= sub_id
+				id1 = self.id
+				id2 = sub_id
+			else
+				id1 = sub_id
+				id2 = self.id
+			end
+			Monster.find(id1).tag_list_on(t + "_" + id2.to_s).each do |tag|
+				if results != "" then results = results + ", " end
+				results = results + tag
+			end
 		end
-		return results[0..results.length-3]
+		return results
 	end
-	
-	def detailed_tooltip(id)
-		results = (Monster.find(id).tooltip + "&#13;Tags: " + Monster.find(id).tag_delim + "&#13;Pairing Specific Tags: " + tag_delim_pair(id)).html_safe
-	end
-
 end

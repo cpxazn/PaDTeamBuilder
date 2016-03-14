@@ -166,11 +166,26 @@ class MonstersController < ApplicationController
  
   def add_pair_tag
 	new_tags = params[:tags]
-	m1_id = params[:monster_id]
-	m2_id = params[:m2_id]
 	type = params[:type]
-	m2 = fetch_monster_by_id(m2_id)
+	
+	if type != "ll"
+		m1_id = params[:monster_id]
+		m2_id = params[:m2_id]
+	else
+		id1 = params[:monster_id]
+		id2 = params[:m2_id]
+		
+		if id1 <= id2
+			m1_id = id1
+			m2_id = id2
+		else
+			m1_id = id2
+			m2_id = id1
+		end
+	end
+	
 	m1 = fetch_monster_by_id(m1_id)
+	m2 = fetch_monster_by_id(m2_id)
 	context = type + "_" + m2_id.to_s
 	if new_tags == nil then new_tags = [] end
 	if m1 != nil and m2 != nil
