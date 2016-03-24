@@ -309,6 +309,7 @@ class ApplicationController < ActionController::Base
 			"Coins" => "coin", 
 			"Buff from Using Active Skill" => "on the turn a skill is used",
 			"Sub Dependency" => "in the same team",
+			"Enhanced orb" => "enhanced orb"
 		}
 		leader_skill_group.each do |key, value|
 			if leader_skill_effect.include? value.downcase
