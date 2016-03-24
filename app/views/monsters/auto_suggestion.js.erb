@@ -19,7 +19,7 @@ $(document).ready(function(){
 															<strong><%= link_to (m["avg"].to_s + " <span style=""font-weight:normal;"">(" + m["avg_count"].to_s + ")</span>").html_safe, detail_monsters_path(leader_id: @monster.id, sub_id: m["id"], type: "ls"), remote:true %></strong>
 														</div>														
 														<div class="panel-body">
-															<%= link_to image_tag(m["url"], class: "center-image", :border => 0, :title => detailed_tooltip(m["id"], nil, nil), :alt => m["name"]), m %>
+															<%= link_to image_tag(m["url"], class: "center-image", :border => 0, :title => detailed_tooltip(m["id"], nil, nil), :alt => m["name"]), monster_path(m["id"]) %>
 														</div>
 													</div>
 												<% end %>
