@@ -199,7 +199,18 @@ class Monster < ActiveRecord::Base
 	end
 	def tag_delim
 		results = ""
+		tmp = Array.new
 		self.tag_list.sort.each do |t|
+			if not t.include? "attr:"
+				
+				if t.include? "active skill" or t.include? "leader skill" or t.include? "awoken skill"
+						t = t.split(": ")[1]
+				end
+				tmp.push(t)
+			end
+		end
+		tmp.sort!
+		tmp.each do |t|
 			if results != "" then results = results + ", " end
 			results = results + t
 		end

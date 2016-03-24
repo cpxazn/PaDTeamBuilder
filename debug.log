@@ -525,3 +525,45 @@ ArgumentError (comparison of String with 0 failed):
   app/controllers/monsters_controller.rb:279:in `auto_suggestion'
 
 
+F, [2016-03-24T14:59:10.155440 #3888] FATAL -- : 
+NoMethodError (undefined method `id' for nil:NilClass):
+  app/controllers/application_controller.rb:571:in `fetch_user_vote_by_month'
+  app/controllers/application_controller.rb:567:in `fetch_user_vote_by_default_month'
+  app/controllers/monsters_controller.rb:304:in `block (3 levels) in auto_suggestion'
+  app/controllers/monsters_controller.rb:300:in `each'
+  app/controllers/monsters_controller.rb:300:in `block (2 levels) in auto_suggestion'
+  app/controllers/monsters_controller.rb:299:in `each'
+  app/controllers/monsters_controller.rb:299:in `block in auto_suggestion'
+  app/controllers/monsters_controller.rb:279:in `each'
+  app/controllers/monsters_controller.rb:279:in `auto_suggestion'
+
+
+F, [2016-03-24T15:11:50.625440 #3888] FATAL -- : 
+SyntaxError (C:/Sites/PadTeamBuilder/app/models/monster.rb:207: syntax error, unexpected keyword_then
+					t.include? "awoken skill" or then
+					                                 ^
+C:/Sites/PadTeamBuilder/app/models/monster.rb:238: syntax error, unexpected keyword_end, expecting end-of-input):
+  app/models/monster.rb:207: syntax error, unexpected keyword_then
+  app/models/monster.rb:238: syntax error, unexpected keyword_end, expecting end-of-input
+  app/controllers/application_controller.rb:491:in `fetch_monster_by_id'
+  app/controllers/monsters_controller.rb:81:in `show'
+
+
+F, [2016-03-24T15:14:45.418440 #3888] FATAL -- : 
+ActionView::Template::Error (undefined local variable or method `t' for #<Monster:0x9306630>):
+    46: 								<strong><%= link_to (s.avg.to_s + " <span style=""font-weight:normal;"">(" + s.avg_count.to_s + ")</span>").html_safe, detail_monsters_path(leader_id: m1_id, sub_id: m2_id, type: type), remote:true %></strong>
+    47: 							</div>
+    48: 							<div class="panel-body">
+    49: 								<%= link_to image_tag(s.url.to_s, class: "center-image", :border => 0, :title => detailed_tooltip(s.id, @monster.id, type), :alt => monster.name), monster_path(s.id) %>
+    50: 							</div>
+    51: 							<% if user_signed_in? %>
+    52: 								<div class="dropdown">
+  app/models/monster.rb:212:in `tag_delim'
+  app/controllers/application_controller.rb:27:in `detailed_tooltip'
+  app/views/monsters/show/_suggestion.html.erb:49:in `block in _app_views_monsters_show__suggestion_html_erb___149316847_104988792'
+  app/views/monsters/show/_suggestion.html.erb:20:in `each'
+  app/views/monsters/show/_suggestion.html.erb:20:in `_app_views_monsters_show__suggestion_html_erb___149316847_104988792'
+  app/views/monsters/show.html.erb:47:in `_app_views_monsters_show_html_erb___855159852_49318872'
+  app/controllers/monsters_controller.rb:208:in `show'
+
+

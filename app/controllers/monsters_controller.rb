@@ -191,12 +191,12 @@ class MonstersController < ApplicationController
 		end
 		if @elem_main != nil and not @awoken_skills.include? 'awoken skill: enhanced ' + @elem_main + ' att.'
 			@awoken_skills.push('awoken skill: enhanced ' + @elem_main + ' att.')
-		elsif @elem_main != nil
+		elsif @elem_main != nil and @awoken_skills.include? 'awoken skill: enhanced ' + @elem_main + ' att.'
 			@check_awoken_skills.push('awoken skill: enhanced ' + @elem_main + ' att.')
 		end
 		if @elem_sub != nil and not @awoken_skills.include? 'awoken skill: enhanced ' + @elem_sub + ' att.'
 			@awoken_skills.push('awoken skill: enhanced ' + @elem_sub + ' att.')
-		elsif @elem_sub != nil
+		elsif @elem_sub != nil and @awoken_skills.include? 'awoken skill: enhanced ' + @elem_sub + ' att.' and @elem_sub != @elem_main
 			@check_awoken_skills.push('awoken skill: enhanced ' + @elem_sub + ' att.')
 		end
 		@awoken_skills.sort!
@@ -301,7 +301,7 @@ class MonstersController < ApplicationController
 					m["url"] = fetch_monster_url_by_id_json(m["id"]) #Get the image URL
 					m["avg"] = @monster.score(m["id"], "ls") #Get ls score
 					m["avg_count"] = @monster.vote_count(m["id"], "ls") #Get ls count
-					m["user_score"] = fetch_user_vote_by_default_month(@monster.id,m["id"],"ls") #Get user's vote
+					#m["user_score"] = fetch_user_vote_by_default_month(@monster.id,m["id"],"ls") #Get user's vote
 				end
 				@search_list[key][h] = monsters.sort_by{ |v| v["avg"] }.reverse #Sort by avg descending
 			end

@@ -26,7 +26,13 @@ class ApplicationController < ActionController::Base
 	results = results + "&#13;Leader Skill: " + leader_skill
 	results = results + "&#13;&#13;Tags: " + Monster.find(id1).tag_delim
 	if id2 != nil and t != nil then
-		results = results + "&#13;Pairing Specific Tags: " + Monster.find(id2).tag_delim_pair(id1, t)
+		if t == "leader"
+			results = results + "&#13;Pairing Specific Tags: " + Monster.find(id1).tag_delim_pair(id2, "ls")
+		elsif t == "sub"
+			results = results + "&#13;Pairing Specific Tags: " + Monster.find(id2).tag_delim_pair(id1, "ls")
+		else
+			results = results + "&#13;Pairing Specific Tags: " + Monster.find(id2).tag_delim_pair(id1, t)
+		end
 	end
 	results = results.html_safe
   end

@@ -21,18 +21,18 @@
 						<%
 							case option
 								when "sub"
-									leader_id = @monster.id
-									sub_id = s.id
+									m1_id = @monster.id
+									m2_id = s.id
 									controller = "votes"
 									type = "ls"
 								when "leader"
-									leader_id = s.id
-									sub_id = @monster.id
+									m1_id = s.id
+									m2_id = @monster.id
 									controller = "votes"
 									type = "ls"
 								when "ll"
-									leader_id = @monster.id
-									sub_id = s.id
+									m1_id = @monster.id
+									m2_id = s.id
 									controller = "vote_lls"
 									type = "ll"
 							end
@@ -43,10 +43,10 @@
 						%>
 						<div class="panel panel-<%= rating_style(s.avg) %> monster <% if hidden == 1 %>low-score <%= option %><% end %>">
 							<div class="center-text panel-heading monster">
-								<strong><%= link_to (s.avg.to_s + " <span style=""font-weight:normal;"">(" + s.avg_count.to_s + ")</span>").html_safe, detail_monsters_path(leader_id: leader_id, sub_id: sub_id, type: type), remote:true %></strong>
+								<strong><%= link_to (s.avg.to_s + " <span style=""font-weight:normal;"">(" + s.avg_count.to_s + ")</span>").html_safe, detail_monsters_path(leader_id: m1_id, sub_id: m2_id, type: type), remote:true %></strong>
 							</div>
 							<div class="panel-body">
-								<%= link_to image_tag(s.url.to_s, class: "center-image", :border => 0, :title => detailed_tooltip(sub_id, leader_id, type), :alt => monster.name), monster_path(s.id) %>
+								<%= link_to image_tag(s.url.to_s, class: "center-image", :border => 0, :title => detailed_tooltip(s.id, @monster.id, option), :alt => monster.name), monster_path(s.id) %>
 							</div>
 							<% if user_signed_in? %>
 								<div class="dropdown">
