@@ -124,12 +124,12 @@
 		<div class="monster-list">
 			<div class="panel panel-default">
 				<div class="panel-heading">Tags</div>
-				<div class="monster-container panel-body">
+				<div class="panel-body">
 					<div>
 						<%= form_tag(monster_tag_path(@monster.id), method: "get", remote:true ) do %>
 							<div>
 								<p><select disabled multiple="true" name="tags[]" class="tags select2">
-								<% @monster.tag_list.each do |t| %>
+								<% @tags.each do |t| %>
 									<option selected="selected"><%= t %></option>
 								<% end %>
 								</select></p>
@@ -163,6 +163,12 @@
 		</div>
 	</div>
 </div>
+
+<% if @attr_main != nil %>
+		<!-- Auto Suggestion -->
+		<%= render partial: "monsters/show/autosuggestion" %>
+<% end %>
+
 
 <!-- Modale -->
 <div class="modal fade" id="vote_details" tabindex="-1" role="dialog" aria-labelledby="vote_details" aria-hidden="true">

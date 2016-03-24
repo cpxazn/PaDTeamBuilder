@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 		get 'tags', controller: 'monsters', action: 'search', on: :collection
 		get 'tags/update', controller: 'monsters', action: 'tag_update', on: :collection
 		get 'questionable', controller: 'monsters', action: 'questionable', on: :collection
+		get 'autosuggestion', controller: 'monsters', action: 'auto_suggestion'
 	end
 
 	devise_for :users

@@ -2,7 +2,7 @@ class MonstersController < ApplicationController
   require 'open-uri'
   require 'open_uri_redirections'
   before_action :cache_data
-  #before_action :set_monster, only: [:edit, :update, :destroy]
+  #before_action :set_monster, only: [:auto_suggestion]
   before_action :fetch_both, only: [:detail, :graph_since_json, :graph_monthly_json, :graph_count_json, :graph_weight_json, :graph_json ]
   before_action :authenticate_user!, only: [:add_tag, :add_pair_tag, :tag_update]
   respond_to :html
@@ -28,6 +28,7 @@ class MonstersController < ApplicationController
 	@low_rating = Rails.cache.fetch("questionable_low_rating")
 	@low_rarity = Rails.cache.fetch("questionable_low_rarity")
   end
+
   def fetch_low_rarity_json
 	monsters = Rails.cache.fetch("monster")
 	results = Array.new
@@ -50,7 +51,7 @@ class MonstersController < ApplicationController
 	
   def search
 	@title = "Tags"
-	@tags = ActsAsTaggableOn::Tag.order(taggings_count: :desc)
+	@tags = ActsAsTaggableOn::Tag.order(:name)
 	@selected = params[:tags]
 	if @selected != nil and @selected.size > 0
 		monsters = Monster.tagged_with(@selected, :on => :tags)
@@ -141,15 +142,178 @@ class MonstersController < ApplicationController
 		@leader_skill = fetch_leader_skill_by_id_json(@monster.id)
 		@awakenings = fetch_awakenings_by_id_json(@monster.id)
 		@related = append_monster_url(get_all_evo(@monster.id))
+		@tags = @monster.tag_list.sort
+		
+
+		
+		tags = @monster.tag_list.sort
+		
+		#Rarity
+		@rarity = "rarity: over 5"
+		
+		#Elements
+		@attr_main = tags.select {|tag| tag.include? 'attr main:'}[0]
+		if @attr_main != nil then 
+			@elem_main = @attr_main.split('attr main: ')[1]
+			@attr_elem1 = "attr: " + @elem_main
+		end
+		@attr_sub = tags.select {|tag| tag.include? 'attr sub:'}[0]
+		if @attr_sub != nil
+			@elem_sub = @attr_sub.split('attr sub: ')[1] 
+			@attr_elem2 = "attr: " + @elem_sub
+		end
+		
+		if @attr_main != nil then @check_main = "checked" end
+		@check_sub = ""
+		@check_elem1 = ""
+		@check_elem2 = ""
+		@check_rarity = "checked"
+		
+		#Type
+		@type = tags.select {|tag| tag.include? 'type:'}
+		@check_type = Array.new
+		@type.each do |t|
+			type = t.split('type: ')[1]
+			if @leader_skill != nil
+				if @leader_skill["effect"].downcase.include? type then @check_type.push(t) end
+			end
+		end
+				
+		#Awakenings
+		@check_awoken_skills = Array.new
+		@awoken_skills = tags.select {|tag| tag.include? 'awoken skill:'}
+		if not @awoken_skills.include? 'awoken skill: recover bind' then @awoken_skills.push('awoken skill: recover bind') end
+		if not @awoken_skills.include? 'awoken skill: resistance-bind' then @awoken_skills.push('awoken skill: resistance-bind') end
+		if not @awoken_skills.include? 'awoken skill: two-pronged attack'
+			@awoken_skills.push('awoken skill: two-pronged attack')
+		else
+			@check_awoken_skills.push('awoken skill: two-pronged attack')
+		end
+		if @elem_main != nil and not @awoken_skills.include? 'awoken skill: enhanced ' + @elem_main + ' att.'
+			@awoken_skills.push('awoken skill: enhanced ' + @elem_main + ' att.')
+		elsif @elem_main != nil
+			@check_awoken_skills.push('awoken skill: enhanced ' + @elem_main + ' att.')
+		end
+		if @elem_sub != nil and not @awoken_skills.include? 'awoken skill: enhanced ' + @elem_sub + ' att.'
+			@awoken_skills.push('awoken skill: enhanced ' + @elem_sub + ' att.')
+		elsif @elem_sub != nil
+			@check_awoken_skills.push('awoken skill: enhanced ' + @elem_sub + ' att.')
+		end
+		@awoken_skills.sort!
+
 	else
 		render_404; return;
 	end
 	
     respond_with(@monster)
   end
+  
+  def auto_suggestion
+	filter = params["filter"]
+	
+	if filter == nil then return end
+	
+	@monster = Monster.find(params["monster_id"])
+	if @monster != nil
+		#Get tags
+		tags = @monster.tag_list.sort
+		
+		#Get elements
+		attr_main = tags.select {|tag| tag.include? 'attr main:'}[0] #attr main: fire
+		
+		if attr_main == nil then return end
+		
+		if attr_main != nil then elem_main = attr_main.split('attr main: ')[1] end #fire
+		attr_sub = tags.select {|tag| tag.include? 'attr sub:'}[0] #attr sub: water
+		if attr_sub != nil then elem_sub = attr_sub.split('attr sub: ')[1] end #water
+		
+		exclude = ["type: awoken skill material","type: enhance material","type: evo material"] #Exclude all tags in this array
+		
+		#Get Leader Skill
+		leader_number_colors = 0 #Leader requires 0 colors to activate skill
+		
+		color_match = tags.grep(/leader skill: color match - [1-9] colors/) #Find tag which determines number of colors the leader needs
+		if color_match.length == 1 then #If a match was found and an array was returned with exactly 1 result
+			leader_number_colors = color_match[0].split('leader skill: color match - ')[1].split(' colors')[0] #Get the number from the tag
+			if is_number? leader_number_colors then #If it is a number
+				leader_number_colors = leader_number_colors.to_i #Convert from string to int
+				leader_colors = tags.grep(/leader skill: color match - [a-z]/).each do |c| c.gsub!('leader','active').gsub!('color match','change board') end #Get all of the colors this leader requires
+			end
+		end
+		
+		#Filters
+		
+		#Utility
+		utility = [
+			'active skill: damage reduction',
+			'active skill: defense reduction',
+			'active skill: delay',
+			'active skill: avoid damage',
+			'active skill: bind recovery',
+			'active skill: poison damage',
+			'active skill: atk buff'
+		]
+		
+		#Orb Change
+		orb_change = ['active skill: change orbs - ' + elem_main]
+		if attr_sub != nil then orb_change.push('active skill: change orbs - ' + elem_sub) end
+		orb_change.push('active skill: spawn')
+		orb_change.push('active skill: skyfall')
+		
+		#Board Change
+		board_change = Array.new
+		if leader_number_colors == 0
+			board_change.push('active skill: change board - ' + elem_main)
+		else
+			board_change.push('active skill: change board')
+		end
+		
+		#Create search
+		search = Hash.new
+		if orb_change.length > 0 then search["orb change"] = orb_change end
+		if board_change.length > 0 then search["board change"] = board_change end
+		if utility.length > 0 then search["utility"] = utility end
+
+		#Search
+		@search_list = Hash.new #Results that will be used on the page
+		search.each do |key, value| #Go through each hash. key = 'orb change', value = '[active skill: change orbs - fire]'
+			tmp = Hash.new
+			value.each do |v| #value is array of tags as string. active skill: change orbs - fire
+				if filter.length > 0 then tmp[v] = Monster.tagged_with(filter) end #Put in filters selected by check marks
+				if exclude.length > 0 then tmp[v] = tmp[v].tagged_with(exclude, :exclude => true) end #Exclude
+				if v.length > 0 #if the value is longer than 0
+					if key == "board change" and leader_number_colors > 0 # if the current key is board change and the leader is a color leader
+						tmp2 = Array.new #Create new array to merge results
+						leader_colors.combination(leader_number_colors).each do |a| #Go through all combinations of the leader's color, and returns array
+							tmp[v].tagged_with(a).each do |m| #Go through all arrays and find monsters with those tags
+								tmp2.push(m) #Push the monsters found into 
+							end		
+						end
+						tmp[v] = tmp2.uniq #Because the previous push may push duplicates, get uniques only
+					else
+						tmp[v] = tmp[v].tagged_with(v, :any => true)					
+					end
+				end
+			end
+			@search_list[key] = tmp.as_json #Convert results to json
+			@search_list[key].each do |h, monsters| #Go through all hashes
+				monsters.each do |m| #For each monsters
+					m["url"] = fetch_monster_url_by_id_json(m["id"]) #Get the image URL
+					m["avg"] = @monster.score(m["id"], "ls") #Get ls score
+					m["avg_count"] = @monster.vote_count(m["id"], "ls") #Get ls count
+					m["user_score"] = fetch_user_vote_by_default_month(@monster.id,m["id"],"ls") #Get user's vote
+				end
+				@search_list[key][h] = monsters.sort_by{ |v| v["avg"] }.reverse #Sort by avg descending
+			end
+		end
+	end
+	respond_to do |format|
+		format.js
+	end
+  end
+  
   #Gets rating details, passes to modale or actual view
   def detail
-	
 	if @sub != nil and @leader != nil
 		@title = "Details"
 		@score = @leader.score(@sub.id,@type);
@@ -224,6 +388,7 @@ class MonstersController < ApplicationController
 		format.js
 	end
   end
+  
   def add_tag
 	new_tags = params[:tags]
 	monster_id = params[:monster_id]
@@ -289,10 +454,12 @@ class MonstersController < ApplicationController
 	results = search_monster_by_name_json(monster.upcase)
 	render :json => results
   end
+  
   def subs_json
 	subs = Monster.find(params.require(:id)).subs
 	render :json => subs.sort_by { | x | x[:score] }.reverse[0..10]
   end
+  
   #Graphs
   def graph_json
 	if params["graph"] == nil
@@ -353,6 +520,7 @@ class MonstersController < ApplicationController
 		monsters.each do |m|
 			populate_default_monster_tag(m["id"])
 		end
+		populate_default_monster_tag(2076)
 	end
 	redirect_to monsters_path
   end
@@ -365,7 +533,8 @@ class MonstersController < ApplicationController
 			m.save
 		end
 	end
-    def append_monster_url(arrMonsters)
+    
+	def append_monster_url(arrMonsters)
 		if arrMonsters != nil
 			arrMonsters.each do |m|
 				m.url = fetch_monster_url_by_id_json(m.id)
@@ -375,7 +544,8 @@ class MonstersController < ApplicationController
 			return nil
 		end
 	end
-  	def get_base_evo(id)
+  	
+	def get_base_evo(id)
 		evos = Rails.cache.fetch("evolutions")
 		last = id
 		current = id
@@ -399,6 +569,7 @@ class MonstersController < ApplicationController
 		end
 		return last	
 	end
+	
 	def get_next_evo(id)
 		results = Array.new
 		evos = Rails.cache.fetch("evolutions")[id.to_s]
@@ -409,12 +580,13 @@ class MonstersController < ApplicationController
 		end
 		results
 	end
+	
 	def get_all_evo(id)
 		results = Array.new
 		traverse_evo(get_base_evo(id), 0, results)
 	end
+	
 	def traverse_evo(id, level, results)
-		
 		if not results.include?(fetch_monster_by_id(id))
 			results.push(fetch_monster_by_id(id))
 			get_next_evo(id).each do |m|
@@ -423,7 +595,8 @@ class MonstersController < ApplicationController
 		end
 		return results
 	end
-    def fetch_both
+    
+	def fetch_both
 		if params["sub_id"] == nil or params["leader_id"] == nil or params["type"] == nil or (params["type"] != "ll" and params["type"] != "ls") then render_404; return; end
 		@type = params["type"]
 		@sub = fetch_monster_by_id(params["sub_id"])
@@ -434,18 +607,24 @@ class MonstersController < ApplicationController
 		@sub_details = fetch_monster_by_id_json(@sub.id)
 		@leader_details = fetch_monster_by_id_json(@leader.id)
 	end
-    def set_monster
+    
+	def set_monster
 		@monster = Monster.find(params[:id])
     end
+	
 	def monster_id_params
 		params.require(:id)
 	end
+	
 	def monster_name_json_params
 		params.require(:name)
 	end
-    def monster_params
+    
+	def monster_params
 		params.require(:monster).permit(:name,:url)
     end
+	
+
 	#Rails Cache
 	def cache_data
 		request_uri = 'https://www.padherder.com/api/monsters/'

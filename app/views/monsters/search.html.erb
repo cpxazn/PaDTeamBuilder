@@ -3,12 +3,12 @@
 
 <div class="tags-container">
 	<!-- Left Panel -->
-	<div class="panel-left col-md-3">
+	<div class="panel-left col-md-5">
 		<!-- Tags -->
 		<div class="monster-list">
 			<div class="panel panel-default">
 				<div class="panel-heading">Tags</div>
-				<div class="monster-container panel-body">
+				<div class="panel-body">
 					<div class="tag-section">
 						<%= form_tag(tags_monsters_path(), method: "get") do %>
 							<div>
@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<!-- Right Panel -->
-	<div class="panel-right col-md-9">
+	<div class="panel-right col-md-7">
 		<!-- Results -->
 		<div class="monster-list">
 			<div class="panel panel-default">
@@ -46,7 +46,7 @@
 					<div>
 						<% if @monsters != nil %>
 							<% @monsters.each do |m| %>
-								<%= link_to image_tag(fetch_monster_url_by_id_json(m["id"]), :border => 0, :title => fetch_monster_by_id(m["id"]).tooltip), fetch_monster_by_id(m["id"]) %>
+								<%= link_to image_tag(fetch_monster_url_by_id_json(m["id"]), :border => 0, :title => detailed_tooltip(m["id"], nil, nil)), fetch_monster_by_id(m["id"]) %>
 							<% end %>
 						<% end %>
 					</div>

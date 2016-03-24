@@ -1,0 +1,38 @@
+$(document).ready(function(){
+	$("div.content.auto-suggestion").empty();
+	$("div.content.auto-suggestion").append(`
+		<% if @search_list != nil %>
+			<% @search_list.each do |key, value| %>
+				<div class="monster-list">
+					<div class="panel panel-info">
+						<div class="panel-heading"><%= key %></div>
+						<div class="panel-body">
+							<% value.each do |a, hash| %>
+								<% if hash.length > 0 %>
+									<div class="monster-list">
+										<div class="panel panel-default">
+											<div class="panel-heading"><%= a %></div>
+											<div class="panel-body">
+												<% hash.each do |m| %>
+													<div class="panel panel-default monster panel-<%= rating_style(m["avg"]) %>">
+														<div class="center-text panel-heading monster">
+															<strong><%= link_to (m["avg"].to_s + " <span style=""font-weight:normal;"">(" + m["avg_count"].to_s + ")</span>").html_safe, detail_monsters_path(leader_id: @monster.id, sub_id: m["id"], type: "ls"), remote:true %></strong>
+														</div>														
+														<div class="panel-body">
+															<%= link_to image_tag(m["url"], class: "center-image", :border => 0, :title => detailed_tooltip(m["id"], nil, nil), :alt => m["name"]), m %>
+														</div>
+													</div>
+												<% end %>
+											</div>
+										</div>
+									</div>
+								<% end %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	`);
+	$('div.monster-list.auto-suggestion div.panel-body').unblock(); 
+}); 

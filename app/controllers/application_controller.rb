@@ -11,12 +11,26 @@ class ApplicationController < ActionController::Base
   #Output: String
   helper_method :detailed_tooltip
   def detailed_tooltip(id1, id2, t)
-  active_skill = fetch_active_skill_by_id_json(id2)
-  if active_skill != nil
-	active_skill = active_skill["effect"] + " (" + hash_not_nil(@active_skill,"max_cooldown") + " to " + hash_not_nil(@active_skill,"min_cooldown") + " turns)"
+	active_skill = fetch_active_skill_by_id_json(id1)
+	if active_skill != nil
+		active_skill = active_skill["effect"] + " (" + hash_not_nil(@active_skill,"max_cooldown") + " to " + hash_not_nil(@active_skill,"min_cooldown") + " turns)"
+	else
+		active_skill = ""
+	end
+	leader_skill = fetch_leader_skill_by_id_json(id1)
+	if leader_skill != nil then leader_skill = leader_skill["effect"] else leader_skill = "" end
+	
+	results = ""
+	results = results + Monster.find(id1).tooltip
+	results = results + "&#13;Active Skill: " + active_skill
+	results = results + "&#13;Leader Skill: " + leader_skill
+	results = results + "&#13;&#13;Tags: " + Monster.find(id1).tag_delim
+	if id2 != nil and t != nil then
+		results = results + "&#13;Pairing Specific Tags: " + Monster.find(id2).tag_delim_pair(id1, t)
+	end
+	results = results.html_safe
   end
-	results = (Monster.find(id2).tooltip + "&#13;Active Skill: " + active_skill + "&#13;Leader Skill: " + fetch_leader_skill_by_id_json(id2)["effect"] + "&#13;&#13;Tags: " + Monster.find(id2).tag_delim + "&#13;Pairing Specific Tags: " + Monster.find(id1).tag_delim_pair(id2, t)).html_safe
-  end
+  
   #Populate default tag
   #Input: monster id
   #Output: monster object
@@ -25,23 +39,58 @@ class ApplicationController < ActionController::Base
 	monster_json = fetch_monster_by_id_json(id)
 	
 	#Element
-	element = Array.new
-	if monster_json["element"] != nil then element.push(monster_json["element"]) end
-	if monster_json["element2"] != nil then element.push(monster_json["element2"]) end
-		element.each do |e|
+	if monster_json["element"] != nil
+		e = monster_json["element"]
 		case e
 			when 0
-				monster.tag_list.add("fire")
+				monster.tag_list.add("attr main: fire")
+				monster.tag_list.add("attr: fire")
 			when 1
-				monster.tag_list.add("water")
+				monster.tag_list.add("attr main: water")
+				monster.tag_list.add("attr: water")
 			when 2
-				monster.tag_list.add("wood")
+				monster.tag_list.add("attr main: wood")
+				monster.tag_list.add("attr: wood")
 			when 3
-				monster.tag_list.add("light")
+				monster.tag_list.add("attr main: light")
+				monster.tag_list.add("attr: light")
 			when 4
-				monster.tag_list.add("dark")
-		end
+				monster.tag_list.add("attr main: dark")
+				monster.tag_list.add("attr: dark")
+		end	
 	end
+	if monster_json["element2"] != nil
+		e = monster_json["element2"]
+		case e
+			when 0
+				monster.tag_list.add("attr sub: fire")
+				monster.tag_list.add("attr: fire")
+			when 1
+				monster.tag_list.add("attr sub: water")
+				monster.tag_list.add("attr: water")
+			when 2
+				monster.tag_list.add("attr sub: wood")
+				monster.tag_list.add("attr: wood")
+			when 3
+				monster.tag_list.add("attr sub: light")
+				monster.tag_list.add("attr: light")
+			when 4
+				monster.tag_list.add("attr sub: dark")
+				monster.tag_list.add("attr: dark")
+		end	
+	end
+
+	#Rarity
+	if monster_json["rarity"] != nil
+		if monster_json["rarity"] <= 4
+			monster.tag_list.add("rarity: under 5")
+		elsif monster_json["rarity"] > 5
+			monster.tag_list.add("rarity: over 5")
+		end
+		monster.tag_list.add("rarity: " + monster_json["rarity"].to_s)
+	end
+	
+	#Type
 	type = Array.new
 	if monster_json["type"] != nil then type.push(monster_json["type"]) end
 	if monster_json["type2"] != nil then type.push(monster_json["type2"]) end
@@ -49,35 +98,254 @@ class ApplicationController < ActionController::Base
 	type.each do |t|
 		case t
 			when 0
-				monster.tag_list.add("evo material")
+				monster.tag_list.add("type: evo material")
 			when 1
-				monster.tag_list.add("balanced")
+				monster.tag_list.add("type: balanced")
 			when 2
-				monster.tag_list.add("physical")
+				monster.tag_list.add("type: physical")
 			when 3
-				monster.tag_list.add("healer")
+				monster.tag_list.add("type: healer")
 			when 4
-				monster.tag_list.add("dragon")
+				monster.tag_list.add("type: dragon")
 			when 5
-				monster.tag_list.add("god")
+				monster.tag_list.add("type: god")
 			when 6
-				monster.tag_list.add("attacker")
+				monster.tag_list.add("type: attacker")
 			when 7
-				monster.tag_list.add("devil")
+				monster.tag_list.add("type: devil")
 			when 8
-				monster.tag_list.add("machine")
+				monster.tag_list.add("type: machine")
 			when 12
-				monster.tag_list.add("awoken skill material")
+				monster.tag_list.add("type: awoken skill material")
 			when 13
-				monster.tag_list.add("protected")
+				monster.tag_list.add("type: protected")
 			when 14
-				monster.tag_list.add("enhance material")
+				monster.tag_list.add("type: enhance material")
 		end
 	end	
+	
+	#Awakenings
 	awakenings = fetch_awakenings_by_id_json(monster_json["id"])
 	awakenings.each do |a|
-		if a["id"] >= 4
-			monster.tag_list.add(a["name"])
+		#if a["id"] >= 4
+			monster.tag_list.add("awoken skill: " + a["name"])
+		#end
+	end
+	
+	#Active Skills
+	active_skill = fetch_active_skill_by_id_json(monster_json["id"])
+	if active_skill != nil then
+		active_skill_effect = active_skill["effect"].downcase
+		active_skill_group = {
+			"ATK" => "ATK x",
+			"RCV" => "RCV x",
+			"ATK Buff" => "attribute cards ATK x",
+			"ATK Buff" => "attribute ATK x",
+			"ATK Buff" => "type cards ATK x",
+			"Fire" => "Fire",
+			"Water" => "Water",
+			"Wood" => "Wood",
+			"Light" => "Light",
+			"Dark" => "Dark",
+			"Block" => "Block",
+			"Poison" => "Poison orbs",
+			"Dragon" => "Dragon",
+			"Balanced" => "Balanced",
+			"Physical" => "Physical",
+			"Healer" => "Healer", 
+			"Attacker" => "Attacker",
+			"God" => "God",
+			"Devil" => "Devil",
+			"Gravity" => "all enemies' HP",
+			"Change" => "Change",
+			"Change board" => "Change all orbs",
+			"Change attr" => "Change own attribute",
+			"Enhance Orbs" => "Enhance",
+			"Delay" => "Delay",
+			"Recover" => "Recover",
+			"Poison Damage" => "Poison damage",
+			"Skyfall" => "skyfall",
+			"Damage Reduction" => "damage reduction",
+			"Defense Reduction" => "Reduce enemies' defense",
+			"Avoid Damage" => "Avoid all",
+			"Multi-Target" => "become multi-target",
+			"Counter" => "Counter",
+			"Deal" => "Deal", 
+			"1 Enemy" => "1 enemy",
+			"All Enemies" => "all enemies",
+			"Stop Time" => "without triggering matches",
+			"Reduce HP to 1" => "reducing HP to 1",
+			"Grudge" => "based on player's HP",
+			"Reshuffle" => "Reshuffle",
+			"Drain" => "drain",
+			"Switch Leader" => "Switch places with leader",
+			"Random Skill" => "Activate a random skill",
+			"Haste" => "Reduces cooldown",
+			"Spawn" => "Randomly spawn",
+			"Bind Recovery" => "Bind recovery",
+			"Time Extend" => "Increases time limit of orb",
+			"Change Orbs - Locked" => "into locked orbs"
+		}
+		active_skill_group.each do |key, value|
+			if active_skill_effect.include? value.downcase
+				if key.downcase.include? "change" and active_skill_effect.split.include? 'change' and active_skill_effect.include? "orb" #if active is an orb change and current skill lookup is change
+					if active_skill_effect.split.include? "exchange"
+						tmp0 = active_skill_effect.gsub 'exchange', '' 
+					else
+						tmp0 = active_skill_effect
+					end
+					 
+					#Find the position of the word "change"
+					#Ignore change own attribute
+					if active_skill_effect.include? 'change own attr'
+						change_index = tmp0.index('change')
+						change_index2 = tmp0.index('change own attr')
+						if change_index == change_index2 then
+							change_index = tmp0.index('change', change_index2 + 6)
+						end
+					else
+						change_index = tmp0.index('change')
+					end
+
+					#If it is not a board change
+					if key.downcase != "change board" and not active_skill_effect.include? 'change all' and change_index != nil
+						tmp1 = tmp0.last(active_skill_effect.length - (change_index+7)) #Get all characters after the word change
+						tmp2 = tmp1.split(".")[0] #entire orb change string
+						change_count = tmp2.scan(/to/).count
+						if change_count > 1 and tmp2.include? "," #if there are two orb changes
+							tmp3 = tmp2.split(", ")
+						elsif change_count > 1 and tmp2.include? " and the "
+							tmp3 = tmp2.split(" and the ")
+						elsif change_count > 1 and tmp2.include? " and "
+							tmp3 = tmp2.split(" and ")
+						else
+							tmp3 = [tmp2]
+						end
+
+						tmp3.each do |i| #go through all orb changes
+							tmp4 = i.gsub ' orbs', '' #remove the word orbs
+							if tmp4.include? " into "
+								tmp5 = tmp4.split(' into ') #split "into"
+							elsif tmp4.include? " to "
+								tmp5 = tmp4.split(' to ') #split "to"
+							end
+							to = tmp5[1] #will be the words on the right of "to"
+							tmp6 = tmp5[0] #will be the words on the left of "to"
+
+							if tmp6.include? " & " or tmp6.include? "," #if there is a double orb change to a single color
+								if tmp6.include? " &" then 
+									tmp7 = tmp6.gsub ' &', ','
+								else
+									tmp7 = tmp6
+								end
+								from = tmp7.split(", ") #split the values of the "from"
+								monster.tag_list.add("active skill: multi orb change") #add tag for double orb change
+							else
+								from = [tmp6] #otherwise give array with one "from"
+							end
+							from.each do |j|
+								monster.tag_list.add("active skill: change orbs - " + j + " to " + to)
+								monster.tag_list.add("active skill: change orbs - " + to)
+							end
+						end					
+					elsif change_index != nil and key.downcase == "change board"
+						tmp1 = tmp0.last(active_skill_effect.length - (change_index+7)) #Get all characters after the word change
+						tmp2 = tmp1.split("to ")[1]
+						tmp3 = tmp2.split(" orbs")[0]
+						if tmp3.include? "&" then tmp4 = tmp3.gsub! '&', ',' else tmp4 = tmp3 end
+						if tmp4.include? " " then tmp5 = tmp4.gsub! ' ', '' else tmp5 = tmp4 end
+						tmp6 = tmp5.split(",")
+						color_count = tmp6.count
+						if color_count > 0 then monster.tag_list.add("active skill: change board - " + color_count.to_s + " colors") end
+						tmp6.each do |i|
+							monster.tag_list.add("active skill: change board - " + i)
+						end
+					end
+				end
+				monster.tag_list.add("active skill: " + key.downcase)
+			end
+		end
+	end
+	
+	#Leader Skills
+	leader_skill = fetch_leader_skill_by_id_json(monster_json["id"])
+	if leader_skill != nil then
+		leader_skill_effect = leader_skill["effect"].downcase
+		leader_skill_group = { 
+			"HP Multiplier" => "HP x", 
+			"ATK Multiplier" => "ATK x", 
+			"RCV Multiplier" => "RCV x", 
+			"Fire" => "Fire", 
+			"Water" => "Water", 
+			"Wood" => "Wood", 
+			"Light" => "Light", 
+			"Dark" => "Dark", 
+			"All attr" => "all attr", 
+			"HP Conditional" => "when HP is", 
+			"Dragon" => "Dragon", 
+			"Balanced" => "Balanced", 
+			"Physical" => "Physical", 
+			"Healer" => "Healer", 
+			"Attacker" => "Attacker", 
+			"God" => "God", 
+			"Devil" => "Devil", 
+			"Enhance Material" => "Enhance Material", 
+			"Damage Reduction" => "damage reduction", 
+			"Color Match" => "when attacking with", 
+			"Combo" => "combo", 
+			"Scaling Match" => "for each additional", 
+			"Connected" => "connected", 
+			"Auto Heal" => "HP after every orbs elimination", 
+			"Auto Damage" => "enemies after every orbs elimination", 
+			"Perseverance" => "leave you with 1", 
+			"Extend Time" => "orb movement", 
+			"Counter" => "counter", 
+			"Coins" => "coin", 
+			"Buff from Using Active Skill" => "on the turn a skill is used",
+			"Sub Dependency" => "in the same team",
+		}
+		leader_skill_group.each do |key, value|
+			if leader_skill_effect.include? value.downcase
+			
+				#Color Match
+				if key.downcase == "color match"
+					if leader_skill_effect.include? "following orb types:"
+						tmp0 = leader_skill_effect.split(" following orb types: ")[1]
+						
+						temp0 = leader_skill_effect.split(" following orb types: ")[0]
+						color_count = temp0.split("when attacking with ")[1].to_i
+						
+						tmp1 = tmp0.split(".")[0]
+						type = 0 #When attacking with all colors
+					else
+						tmp0 = leader_skill_effect.split("when attacking with ")[1]
+						tmp1 = tmp0.split(" orb")[0]
+						type = 1 #When attacking with some colors
+					end
+						
+					if tmp1.include? " & "
+						tmp2 = tmp1.gsub(' &', ',')
+					else
+						tmp2 = tmp1
+					end
+					
+					if tmp2.include? ", "
+						tmp3 = tmp2.split(", ")
+					else
+						tmp3 = [tmp2]
+					end
+					
+					if type == 1 then color_count = tmp3.count end
+					
+					if color_count > 0 then monster.tag_list.add("leader skill: color match - " + color_count.to_s + " colors") end
+					
+					tmp3.each do |i|
+						monster.tag_list.add("leader skill: color match - " + i)
+					end	
+				end
+				
+				monster.tag_list.add("leader skill: " + key.downcase)
+			end
 		end
 	end
 	
@@ -103,6 +371,7 @@ class ApplicationController < ActionController::Base
 	end
 	return result
   end
+  
   #Awoken Skills from JSON
   #Input: monster id as integer
   #Output: hash of awakenings
@@ -123,6 +392,7 @@ class ApplicationController < ActionController::Base
 	end
 	return results
   end
+  
   #Leader Skill from JSON
   #Input: monster id as integer
   #Output: hash of leader skill
@@ -138,6 +408,7 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
+  
   #Active Skills from JSON
   #Input: monster id as integer
   #Output: hash of active skill
@@ -153,6 +424,7 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
+  
   #Fetch Monster IMG URL from JSON
   #Input: monster id as integer
   #Output: image url as string
@@ -160,6 +432,7 @@ class ApplicationController < ActionController::Base
   def fetch_monster_url_by_id_json(id)
 	return fetch_monster_by_id_json(id)["image60_href"]
   end
+  
   #Monster from JSON by ID
   #Input: monster id as integer
   #Output: hash of monster
@@ -174,6 +447,7 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
+  
   #Monster from JSON by name
   #Input: name as string
   #Output: hash of monster
@@ -188,6 +462,7 @@ class ApplicationController < ActionController::Base
 	end	
 	return nil
   end
+  
   #Create monster from JSON info
   #Input: either ID or name
   #Output: newly created monster
@@ -203,8 +478,11 @@ class ApplicationController < ActionController::Base
 		if id == nil then return nil end
 		id = id["name"]
 	end
-    return Monster.create(id: id, name: name)
+	m = Monster.create(id: id, name: name)
+	tags = populate_default_monster_tag(id)
+    return m
   end
+  
   #Monster from DB by ID
   #Input: id as integer
   #Output: monster
@@ -216,6 +494,7 @@ class ApplicationController < ActionController::Base
 			return create_monster(id, nil)
 		end			
   end
+  
   #Get array from JSON
   #Input: Array of Monster objects
   #Output: Array of Hash of Monsters from JSON
@@ -229,6 +508,7 @@ class ApplicationController < ActionController::Base
 	end
 	return nil
   end
+  
   #Monster from DB by name
   #Input: name as string
   #Output: monster
@@ -241,6 +521,7 @@ class ApplicationController < ActionController::Base
 			return m != nil ? create_monster(hash_not_nil(m,"id"), hash_not_nil(m,"name")) : nil
 		end
   end
+  
   #Monster from DB using either id or name depending on which one has value
   #Input: id or name
   #Output: monster
@@ -257,6 +538,7 @@ class ApplicationController < ActionController::Base
   end
 
 #Vote Functions
+
   #Return true/false if user has voted in the past X months
   #Input: leader id as integer, sub id as integer
   #Output: boolean
@@ -307,8 +589,8 @@ class ApplicationController < ActionController::Base
 	end
   end
   
-
 #Generic functions
+
   #Format time ago in words
   #Input: date
   #Output: string
@@ -317,6 +599,7 @@ class ApplicationController < ActionController::Base
 	result = view_context.time_ago_in_words(d)
 	return result == "less than a minute" ? "< 1 minute" : result
   end
+  
   #Check if string contains only numbers
   #Input: string
   #Output: boolean
@@ -324,6 +607,7 @@ class ApplicationController < ActionController::Base
   def is_number? string
 	true if Float(string) rescue false
   end
+  
   #Only round if needed
   #Input: number
   #Output: integer/float
@@ -331,6 +615,7 @@ class ApplicationController < ActionController::Base
   def round? i
 	return i.to_i == i ? i.to_i : i
   end
+  
   #Checks if a hash is nil or not. If it is, then return an empty string.
   #Input: hash, key as string
   #Output: string
@@ -338,6 +623,7 @@ class ApplicationController < ActionController::Base
   def hash_not_nil(hash, key)
 	return hash != nil ? hash[key].to_s : ""
   end
+  
   #Checks if object is nil or not. If it is, then return an empty string.
   #Input: string from object
   #Output: string
@@ -345,6 +631,7 @@ class ApplicationController < ActionController::Base
   def not_nil(obj)
 	return if obj == nil ? "" : obj
   end
+  
   #Returns formatted local date to be used in the view
   #Input: date
   #Output: string
@@ -352,7 +639,8 @@ class ApplicationController < ActionController::Base
   def format_date(date)
 	return date.localtime.strftime("%-m/%-d/%Y %l:%M %p EST")
   end
-    #Censors all but the first letter of the username
+  
+  #Censors all but the first letter of the username
   #Input: string
   #Output: string
   def censor_username(username)
@@ -362,6 +650,7 @@ class ApplicationController < ActionController::Base
 	end
 	return u
   end
+  
   #Censors all but the first letter of the email address and domain
   #Input: string
   #Output: string
@@ -375,6 +664,7 @@ class ApplicationController < ActionController::Base
 	end
 	return e
   end
+  
   #Renders 404 page
   helper_method :render_404
   def render_404
@@ -387,17 +677,21 @@ class ApplicationController < ActionController::Base
   end
   
 #Devise
+
   #Devise redirect back to last age
   def store_location
     # store last url as long as it isn't a /users path
 	session[:previous_url] = request.fullpath unless request.fullpath =~ /\/users/ or request.fullpath =~ /\/json/ or request.fullpath =~ /\/static/
 	
   end
+  
+  #Remember last location for devise redirect
   def after_sign_in_path_for(resource)
 	  session[:previous_url] || root_path
   end
 
   protected
+  #Devise parameters
   def configure_permitted_parameters
 	devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me, :padherder) }
 	devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }

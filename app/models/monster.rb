@@ -199,7 +199,7 @@ class Monster < ActiveRecord::Base
 	end
 	def tag_delim
 		results = ""
-		self.tag_list.each do |t|
+		self.tag_list.sort.each do |t|
 			if results != "" then results = results + ", " end
 			results = results + t
 		end
@@ -208,7 +208,7 @@ class Monster < ActiveRecord::Base
 	def tag_delim_pair(sub_id, t)
 		results = ""
 		if t != "ll"
-			self.tag_list_on(t + "_" + sub_id.to_s).each do |tag|
+			self.tag_list_on(t + "_" + sub_id.to_s).sort.each do |tag|
 				if results != "" then results = results + ", " end
 				results = results + tag
 			end
@@ -220,7 +220,7 @@ class Monster < ActiveRecord::Base
 				id1 = sub_id
 				id2 = self.id
 			end
-			Monster.find(id1).tag_list_on(t + "_" + id2.to_s).each do |tag|
+			Monster.find(id1).tag_list_on(t + "_" + id2.to_s).sort.each do |tag|
 				if results != "" then results = results + ", " end
 				results = results + tag
 			end

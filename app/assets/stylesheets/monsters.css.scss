@@ -8,11 +8,9 @@ div.tags.button-container  {padding-left: 0px;}
 div#update.tags {display: none;}
 div#update-modale.tags {display: none;}
 select.tags {width:100% !important;}
-select#tag_list {width:99%; height:100%;}
+select#tag_list {width:99%; height:340px;}
 div.tags-container{ overflow: hidden;}
-
-
-.monster-container .tag-section { margin-top: 10px; }
+.tag-section { margin-top: 10px; }
 div.tags-container > div {	overflow: hidden; }
 
 /*Hide buttons on default for javascript disabled users*/
@@ -78,16 +76,6 @@ div.jumbotron.monster { overflow: hidden; }
 
 }
 
-/*Remove padding from select div under suggestions*/
-div.vote.select { 
-	padding-left: 0px;
-}
-
-/*Change main vote select dropdown height to 34 to match the buttons*/
-select.vote {
-	height: 33.5px;
-}
-
 /*Smaller heading on the individual monster scores*/
 .monster.panel-heading {
 	padding: 4px 4px;
@@ -113,8 +101,12 @@ div.panel-body.tags { overflow: auto;}
 /*Width of the main vote dropdown*/
 select.vote {
 	width: 20%;
+	height: 33.5px;
 }
-
+/*Remove padding from select div under suggestions*/
+div.vote.select { 
+	padding-left: 0px;
+}
 
 /*Container that has the suggest sub and leaders, and make a suggestions*/
 div.monster-container {

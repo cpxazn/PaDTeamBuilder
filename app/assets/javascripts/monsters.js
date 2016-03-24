@@ -58,4 +58,12 @@ $(document).ready(function(){
 		$("select.tags").empty();
 		$("select.tags").trigger("change");
 	});
+	
+	$('button.auto-suggestion').click(
+		function() {
+			$('div.content.auto-suggestion').empty();
+			$('div.monster-list.auto-suggestion div.panel-body').block({ message: 'Loading' }); 
+		}
+			
+	);
 }); 

@@ -1,0 +1,36 @@
+	<div class="monster-container">
+		<div class="monster-list col-md-12 auto-suggestion">
+			<div class="panel panel-default">
+				<div class="panel-heading">Auto-Suggestions</div>
+				<div class="panel-body">
+					<%= form_tag(monster_autosuggestion_path(@monster.id), method: "get", remote: true) do %>
+						<table class="table">
+							<tr>
+								<td>
+									<% if @attr_main != nil %><input type="checkbox" aria-label="..." name="filter[]" value="<%= @attr_main %>" <%= @check_main %>><%= @attr_main %><br><% end %>
+									<% if @attr_sub != nil %><input type="checkbox" aria-label="..." name="filter[]" value="<%= @attr_sub %>" <%= @check_sub %>><%= @attr_sub %><br><% end %>
+									<% if @attr_elem1 != nil %><input type="checkbox" aria-label="..." name="filter[]" value="<%= @attr_elem1 %>" <%= @check_elem1 %>><%= @attr_elem1 %><br><% end %>
+									<% if @attr_elem2 != nil %><input type="checkbox" aria-label="..." name="filter[]" value="<%= @attr_elem2 %>" <%= @check_elem2 %>><%= @attr_elem2 %><br><% end %>
+									<input type="checkbox" aria-label="..." name="filter[]" value="<%= @rarity %>" <%= @check_rarity %>><%= @rarity %><br>
+									<% @type.each do |t| %>
+										<% if @check_type.include? t then checked="checked" else checked="" end %>
+										<input type="checkbox" aria-label="..." name="filter[]" value="<%= t %>" <%= checked %>><%= t %><br>
+									<% end %>
+								</td>
+								<td>
+									<% @awoken_skills.each do |a| %>
+										<% if @check_awoken_skills.include? a then checked = "checked" else checked = "" end %>
+										<input type="checkbox" aria-label="..." name="filter[]" value="<%= a %>" <%= checked %>><%= a %><br>
+									<% end %>
+								</td>
+							</tr>
+						</table>	
+						<%= button_tag "Refresh", class: "btn btn-default auto-suggestion" %>
+					<% end %>
+					<br>
+					<div class="content auto-suggestion">
+					</div>				
+				</div>
+			</div>
+		</div>
+	</div>
