@@ -530,7 +530,7 @@ class MonstersController < ApplicationController
 	if current_user.username == 'cpxazn'
 		monsters = Rails.cache.fetch("monster")
 		monsters.each do |m|
-			if limit == true and m["id"] >= min and m["id"] <= max
+			if limit == true and m["id"] >= min.to_i and m["id"] <= max.to_i
 				populate_default_monster_tag(m["id"])
 			end
 		end
