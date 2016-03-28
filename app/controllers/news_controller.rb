@@ -24,7 +24,7 @@ class NewsController < ApplicationController
 
   # GET /news/new
   def new
-    @title = "News " + @news.id.to_s
+    @title = "Create News"
   end
 
   # GET /news/1/edit
