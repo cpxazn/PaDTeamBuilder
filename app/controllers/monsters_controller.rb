@@ -420,8 +420,8 @@ class MonstersController < ApplicationController
 				if (new.length <= Rails.application.config.tag_max_length and 
 					not new.include? 'type:' and 
 					not new.include? 'attr:' and 
-					not new.include? 'main attr:' and 
-					not new.include? 'sub attr:' and 
+					not new.include? 'attr main:' and 
+					not new.include? 'attr sub:' and 
 					not new.include? 'active skill:' and 
 					not new.include? 'awoken skill:' and 
 					not new.include? 'leader skill:' and 
