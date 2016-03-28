@@ -19,7 +19,7 @@ class NewsController < ApplicationController
   # GET /news/1
   # GET /news/1.json
   def show
-	@title = @news
+	@title = @news.id.to_s
   end
 
   # GET /news/new
