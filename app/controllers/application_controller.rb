@@ -5,12 +5,6 @@ class ApplicationController < ActionController::Base
 	after_filter :store_location
 
 #Monster functions
-  def tag_update2
-	monsters = Rails.cache.fetch("monster")
-	monsters.each do |m|
-		populate_default_monster_tag(m["id"])
-	end
-  end
   #Generates detailed tooltip with tags and skills
   #Input: monster id 1, monster id 2
   #Output: String

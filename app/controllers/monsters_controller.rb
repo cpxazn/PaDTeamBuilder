@@ -523,12 +523,18 @@ class MonstersController < ApplicationController
 #Others
   #Initial tag population of all monsters
   def tag_update
+	min = params[:min]
+	max = params[:max]
+	(min == nil or max == nil)? limit = true : limit = false
+
 	if current_user.username == 'cpxazn'
 		monsters = Rails.cache.fetch("monster")
 		monsters.each do |m|
-			populate_default_monster_tag(m["id"])
+			if limit == true and m["id"] >= min and m["id"] <= max
+				populate_default_monster_tag(m["id"])
+			end
 		end
-		populate_default_monster_tag(2076)
+		#populate_default_monster_tag(2076)
 	end
 	redirect_to monsters_path
   end
