@@ -6,14 +6,10 @@ class ApplicationController < ActionController::Base
 
 #Monster functions
   def tag_update2
-	if current_user.username == 'cpxazn'
-		monsters = Rails.cache.fetch("monster")
-		monsters.each do |m|
-			populate_default_monster_tag(m["id"])
-		end
-		populate_default_monster_tag(2076)
+	monsters = Rails.cache.fetch("monster")
+	monsters.each do |m|
+		populate_default_monster_tag(m["id"])
 	end
-	redirect_to monsters_path
   end
   #Generates detailed tooltip with tags and skills
   #Input: monster id 1, monster id 2
