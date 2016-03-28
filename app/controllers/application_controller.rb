@@ -142,57 +142,64 @@ class ApplicationController < ActionController::Base
 	if active_skill != nil then
 		active_skill_effect = active_skill["effect"].downcase
 		active_skill_group = {
-			"ATK" => "ATK x",
-			"RCV" => "RCV x",
-			"ATK Buff" => "attribute cards ATK x",
-			"ATK Buff" => "attribute ATK x",
-			"ATK Buff" => "type cards ATK x",
-			"Fire" => "Fire",
-			"Water" => "Water",
-			"Wood" => "Wood",
-			"Light" => "Light",
-			"Dark" => "Dark",
-			"Block" => "Block",
-			"Poison" => "Poison orbs",
-			"Dragon" => "Dragon",
-			"Balanced" => "Balanced",
-			"Physical" => "Physical",
-			"Healer" => "Healer", 
-			"Attacker" => "Attacker",
-			"God" => "God",
-			"Devil" => "Devil",
-			"Gravity" => "all enemies' HP",
-			"Change" => "Change",
-			"Change board" => "Change all orbs",
-			"Change attr" => "Change own attribute",
-			"Enhance Orbs" => "Enhance",
-			"Delay" => "Delay",
-			"Recover" => "Recover",
-			"Poison Damage" => "Poison damage",
-			"Skyfall" => "skyfall",
-			"Damage Reduction" => "damage reduction",
-			"Defense Reduction" => "Reduce enemies' defense",
-			"Avoid Damage" => "Avoid all",
-			"Multi-Target" => "become multi-target",
-			"Counter" => "Counter",
-			"Deal" => "Deal", 
-			"1 Enemy" => "1 enemy",
-			"All Enemies" => "all enemies",
-			"Stop Time" => "without triggering matches",
-			"Reduce HP to 1" => "reducing HP to 1",
-			"Grudge" => "based on player's HP",
-			"Reshuffle" => "Reshuffle",
-			"Drain" => "drain",
-			"Switch Leader" => "Switch places with leader",
-			"Random Skill" => "Activate a random skill",
-			"Haste" => "Reduces cooldown",
-			"Spawn" => "Randomly spawn",
-			"Bind Recovery" => "Bind recovery",
-			"Time Extend" => "Increases time limit of orb",
-			"Change Orbs - Locked" => "into locked orbs"
+			"ATK" => ["ATK x"],
+			"RCV" => ["RCV x"],
+			"ATK Buff" => ["attribute cards ATK x","attribute ATK x","type cards ATK x"],
+			"Fire" => ["Fire"],
+			"Water" => ["Water"],
+			"Wood" => ["Wood"],
+			"Light" => ["Light"],
+			"Dark" => ["Dark"],
+			"Block" => ["Block"],
+			"Poison" => ["Poison orbs"],
+			"Dragon" => ["Dragon"],
+			"Balanced" => ["Balanced"],
+			"Physical" => ["Physical"],
+			"Healer" => ["Healer"], 
+			"Attacker" => ["Attacker"],
+			"God" => ["God"],
+			"Devil" => ["Devil"],
+			"Gravity" => ["all enemies' HP"],
+			"Change" => ["Change"],
+			"Change board" => ["Change all orbs"],
+			"Change attr" => ["Change own attribute"],
+			"Enhance Orbs" => ["Enhance"],
+			"Delay" => ["Delay"],
+			"Recover" => ["Recover"],
+			"Poison Damage" => ["Poison damage"],
+			"Skyfall" => ["skyfall"],
+			"Damage Reduction" => ["damage reduction"],
+			"Defense Reduction" => ["Reduce enemies' defense"],
+			"Avoid Damage" => ["Avoid all"],
+			"Multi-Target" => ["become multi-target"],
+			"Counter" => ["Counter"],
+			"Deal" => ["Deal"], 
+			"1 Enemy" => ["1 enemy"],
+			"All Enemies" => ["all enemies"],
+			"Stop Time" => ["without triggering matches"],
+			"Reduce HP to 1" => ["reducing HP to 1"],
+			"Grudge" => ["based on player's HP"],
+			"Reshuffle" => ["Reshuffle"],
+			"Drain" => ["drain"],
+			"Switch Leader" => ["Switch places with leader"],
+			"Random Skill" => ["Activate a random skill"],
+			"Haste" => ["Reduces cooldown"],
+			"Spawn" => ["Randomly spawn"],
+			"Bind Recovery" => ["Bind recovery"],
+			"Time Extend" => ["Increases time limit of orb"],
+			"Change Orbs - Locked" => ["into locked orbs"]
 		}
 		active_skill_group.each do |key, value|
-			if active_skill_effect.include? value.downcase
+			match = false
+			value.each do |v|
+				if active_skill_effect.include? v.downcase
+					match = true
+					break
+				else 
+					match = false 
+				end
+			end
+			if match == true
 				if key.downcase.include? "change" and active_skill_effect.split.include? 'change' and active_skill_effect.include? "orb" #if active is an orb change and current skill lookup is change
 					if active_skill_effect.split.include? "exchange"
 						tmp0 = active_skill_effect.gsub 'exchange', '' 
@@ -277,42 +284,50 @@ class ApplicationController < ActionController::Base
 	if leader_skill != nil then
 		leader_skill_effect = leader_skill["effect"].downcase
 		leader_skill_group = { 
-			"HP Multiplier" => "HP x", 
-			"ATK Multiplier" => "ATK x", 
-			"RCV Multiplier" => "RCV x", 
-			"Fire" => "Fire", 
-			"Water" => "Water", 
-			"Wood" => "Wood", 
-			"Light" => "Light", 
-			"Dark" => "Dark", 
-			"All attr" => "all attr", 
-			"HP Conditional" => "when HP is", 
-			"Dragon" => "Dragon", 
-			"Balanced" => "Balanced", 
-			"Physical" => "Physical", 
-			"Healer" => "Healer", 
-			"Attacker" => "Attacker", 
-			"God" => "God", 
-			"Devil" => "Devil", 
-			"Enhance Material" => "Enhance Material", 
-			"Damage Reduction" => "damage reduction", 
-			"Color Match" => "when attacking with", 
-			"Combo" => "combo", 
-			"Scaling Match" => "for each additional", 
-			"Connected" => "connected", 
-			"Auto Heal" => "HP after every orbs elimination", 
-			"Auto Damage" => "enemies after every orbs elimination", 
-			"Perseverance" => "leave you with 1", 
-			"Extend Time" => "orb movement", 
-			"Counter" => "counter", 
-			"Coins" => "coin", 
-			"Buff from Using Active Skill" => "on the turn a skill is used",
-			"Sub Dependency" => "in the same team",
-			"Enhanced orb" => "enhanced orb"
+			"HP Multiplier" => ["HP x"], 
+			"ATK Multiplier" => ["ATK x"], 
+			"RCV Multiplier" => ["RCV x"], 
+			"Fire" => ["Fire"], 
+			"Water" => ["Water"], 
+			"Wood" => ["Wood"], 
+			"Light" => ["Light"], 
+			"Dark" => ["Dark"], 
+			"All attr" => ["all attr"], 
+			"HP Conditional" => ["when HP is"], 
+			"Dragon" => ["Dragon"], 
+			"Balanced" => ["Balanced"], 
+			"Physical" => ["Physical"], 
+			"Healer" => ["Healer"], 
+			"Attacker" => ["Attacker"], 
+			"God" => ["God"], 
+			"Devil" => ["Devil"], 
+			"Enhance Material" => ["Enhance Material"], 
+			"Damage Reduction" => ["damage reduction"], 
+			"Color Match" => ["when attacking with"], 
+			"Combo" => ["combo"], 
+			"Scaling Match" => ["for each additional"], 
+			"Connected" => ["connected"], 
+			"Auto Heal" => ["HP after every orbs elimination"], 
+			"Auto Damage" => ["enemies after every orbs elimination"], 
+			"Perseverance" => ["leave you with 1"], 
+			"Extend Time" => ["orb movement"], 
+			"Counter" => ["counter"], 
+			"Coins" => ["coin"], 
+			"Buff from Using Active Skill" => ["on the turn a skill is used"],
+			"Sub Dependency" => ["in the same team"],
+			"Enhanced orb" => ["enhanced orb"]
 		}
 		leader_skill_group.each do |key, value|
-			if leader_skill_effect.include? value.downcase
-			
+			match = false
+			value.each do |v|
+				if leader_skill_effect.include? v.downcase
+					match = true
+					break
+				else 
+					match = false 
+				end
+			end
+			if match == true
 				#Color Match
 				if key.downcase == "color match"
 					if leader_skill_effect.include? "following orb types:"

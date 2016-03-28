@@ -1030,3 +1030,98 @@ C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:432: syntax error
   app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
 
 
+F, [2016-03-28T18:25:11.468695 #4560] FATAL -- : 
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+	bin/rake db:migrate RAILS_ENV=development
+
+):
+  activerecord (4.2.5.1) lib/active_record/migration.rb:392:in `check_pending!'
+  activerecord (4.2.5.1) lib/active_record/migration.rb:373:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:88:in `__run_callbacks__'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:778:in `_run_call_callbacks'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/reloader.rb:73:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/remote_ip.rb:78:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:22:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.5.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/static.rb:116:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.5.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.5.1) lib/rails/application.rb:165:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+F, [2016-03-28T18:33:30.831881 #4476] FATAL -- : 
+NameError (undefined local variable or method `match' for #<MonstersController:0xcaed380>):
+  app/controllers/application_controller.rb:196:in `block in populate_default_monster_tag'
+  app/controllers/application_controller.rb:192:in `each'
+  app/controllers/application_controller.rb:192:in `populate_default_monster_tag'
+  app/controllers/monsters_controller.rb:534:in `block in tag_update'
+  app/controllers/monsters_controller.rb:532:in `each'
+  app/controllers/monsters_controller.rb:532:in `tag_update'
+
+
+F, [2016-03-28T18:34:52.490686 #4476] FATAL -- : 
+ActionController::RoutingError (No route matches [GET] "/monsters/tag/update"):
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/debug_exceptions.rb:21:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:22:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.5.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/static.rb:116:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.5.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.5.1) lib/rails/application.rb:165:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+F, [2016-03-28T18:36:39.618768 #4476] FATAL -- : 
+NoMethodError (undefined method `include?' for nil:NilClass):
+  app/controllers/application_controller.rb:323:in `block (2 levels) in populate_default_monster_tag'
+  app/controllers/application_controller.rb:322:in `each'
+  app/controllers/application_controller.rb:322:in `block in populate_default_monster_tag'
+  app/controllers/application_controller.rb:320:in `each'
+  app/controllers/application_controller.rb:320:in `populate_default_monster_tag'
+  app/controllers/monsters_controller.rb:534:in `block in tag_update'
+  app/controllers/monsters_controller.rb:532:in `each'
+  app/controllers/monsters_controller.rb:532:in `tag_update'
+
+
+F, [2016-03-28T18:37:18.688670 #4476] FATAL -- : 
+NoMethodError (undefined method `include?' for nil:NilClass):
+  app/controllers/application_controller.rb:323:in `block (2 levels) in populate_default_monster_tag'
+  app/controllers/application_controller.rb:322:in `each'
+  app/controllers/application_controller.rb:322:in `block in populate_default_monster_tag'
+  app/controllers/application_controller.rb:320:in `each'
+  app/controllers/application_controller.rb:320:in `populate_default_monster_tag'
+  app/controllers/monsters_controller.rb:534:in `block in tag_update'
+  app/controllers/monsters_controller.rb:532:in `each'
+  app/controllers/monsters_controller.rb:532:in `tag_update'
+
+
