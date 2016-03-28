@@ -1125,3 +1125,19 @@ NoMethodError (undefined method `include?' for nil:NilClass):
   app/controllers/monsters_controller.rb:532:in `tag_update'
 
 
+F, [2016-03-28T19:32:52.111406 #5512] FATAL -- : 
+ActionView::Template::Error (wrong number of arguments (1 for 3)):
+    13: 	<tbody>
+    14: 		<% monsters.each do |m| %>
+    15: 			<tr class="center">
+    16: 				<td><%= link_to image_tag(fetch_monster_url_by_id_json(m[0].id), :border => 0, title: detailed_tooltip(m[0].id), alt: m[0].name, size: '60') , m[0] %></td>
+    17: 				<td class="valign center"><%= m[1] %></td>
+    18: 			</tr>
+    19: 		<% end %>
+  app/controllers/application_controller.rb:12:in `detailed_tooltip'
+  app/views/monsters/index/_fp3.html.erb:16:in `block in _app_views_monsters_index__fp__html_erb__805722143_79956120'
+  app/views/monsters/index/_fp3.html.erb:14:in `each'
+  app/views/monsters/index/_fp3.html.erb:14:in `_app_views_monsters_index__fp__html_erb__805722143_79956120'
+  app/views/monsters/index.html.erb:18:in `_app_views_monsters_index_html_erb__953917280_80540424'
+
+
