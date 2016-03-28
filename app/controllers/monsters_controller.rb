@@ -525,7 +525,7 @@ class MonstersController < ApplicationController
   def tag_update
 	min = params[:min]
 	max = params[:max]
-	(min == nil or max == nil)? limit = true : limit = false
+	(min == nil or max == nil)? limit = false : limit = true
 
 	if current_user.username == 'cpxazn'
 		monsters = Rails.cache.fetch("monster")
