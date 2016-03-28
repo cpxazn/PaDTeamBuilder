@@ -46,7 +46,7 @@
 								<strong><%= link_to (s.avg.to_s + " <span style=""font-weight:normal;"">(" + s.avg_count.to_s + ")</span>").html_safe, detail_monsters_path(leader_id: m1_id, sub_id: m2_id, type: type), remote:true %></strong>
 							</div>
 							<div class="panel-body">
-								<%= link_to image_tag(s.url.to_s, class: "center-image", :border => 0, :title => detailed_tooltip(s.id, @monster.id, option), :alt => monster.name), monster_path(s.id) %>
+								<%= link_to image_tag(s.url.to_s, class: "center-image", :border => 0, :title => detailed_tooltip(s.id, @monster.id, option), size: '60'), monster_path(s.id) %>
 							</div>
 							<% if user_signed_in? %>
 								<div class="dropdown">

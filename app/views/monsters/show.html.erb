@@ -10,7 +10,7 @@
 
 <div class="jumbotron monster">
 	<div class="header header-name">
-		<h2><%= link_to image_tag(@monster.url	, :border => 0, :title => @monster.tooltip), Rails.application.config.pad_db_monster_path + @monster.id.to_s %><%= " " + @monster.name %></h2>
+		<h2><%= link_to image_tag(@monster.url	, :border => 0, :title => @monster.tooltip, size: '60'), Rails.application.config.pad_db_monster_path + @monster.id.to_s %><%= " " + @monster.name %></h2>
 	</div>
 	<div class="header header-details col-md-12">
 		<div class="col-md-6">

@@ -15,8 +15,8 @@
 	<tbody>
 		<% comments.each do |c| %>
 			<tr class="center">
-				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.leader.id), :border => 0, title: c.leader.tooltip, alt: c.leader.name) , c.leader %></td>
-				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.sub.id), :border => 0, title: c.sub.tooltip, alt: c.sub.name) , c.sub	 %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.leader.id), :border => 0, title: c.leader.tooltip, alt: c.leader.name, size: '60') , c.leader %></td>
+				<td><%= link_to image_tag(fetch_monster_url_by_id_json(c.sub.id), :border => 0, title: c.sub.tooltip, alt: c.sub.name, size: '60') , c.sub	 %></td>
 				<td><%= link_to c.user.username, detail_monsters_path(leader_id: c.leader.id, sub_id: c.sub.id, tab: 2, type: "ls") + "#" + c.id.to_s %></td>
 				<td><%= time_ago(c.created_at) %></td>
 			</tr>

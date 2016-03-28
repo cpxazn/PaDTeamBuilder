@@ -21,8 +21,8 @@
 				<% count = v[1] %>
 				<% avg = v[2] %>
 				<tr class="center">
-					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader_id), :border => 0, title: leader.tooltip, alt: leader.name) , leader %></td>
-					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub_id), :border => 0, title: sub.tooltip, alt: sub.name) , sub %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader_id), :border => 0, title: leader.tooltip, alt: leader.name, size: '60') , leader %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub_id), :border => 0, title: sub.tooltip, alt: sub.name, size: '60') , sub %></td>
 					<td><%= count %></td>
 					<td><%= avg %></td>
 				</tr>

@@ -19,8 +19,8 @@
 				<% leader = h[:leader] %>
 				<% sub = h[:sub] %>
 				<tr class="center">
-					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader.id), :border => 0, title: leader.tooltip, alt: leader.name) , leader %></td>
-					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub.id), :border => 0, title: sub.tooltip, alt: sub.name) , sub	 %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(leader.id), :border => 0, title: leader.tooltip, alt: leader.name, size: '60') , leader %></td>
+					<td><%= link_to image_tag(fetch_monster_url_by_id_json(sub.id), :border => 0, title: sub.tooltip, alt: sub.name, size: '60') , sub	 %></td>
 					<td><%= avg %></td>
 					<td><%= count %></td>
 				</tr>
