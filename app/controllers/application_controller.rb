@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   def detailed_tooltip(id1, id2, t)
 	active_skill = fetch_active_skill_by_id_json(id1)
 	if active_skill != nil
-		active_skill = active_skill["effect"] + " (" + hash_not_nil(@active_skill,"max_cooldown") + " to " + hash_not_nil(@active_skill,"min_cooldown") + " turns)"
+		active_skill = active_skill["effect"] + " (" + hash_not_nil(active_skill,"max_cooldown") + " to " + hash_not_nil(active_skill,"min_cooldown") + " turns)"
 	else
 		active_skill = ""
 	end
