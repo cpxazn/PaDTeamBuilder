@@ -567,3 +567,466 @@ ActionView::Template::Error (undefined local variable or method `t' for #<Monste
   app/controllers/monsters_controller.rb:208:in `show'
 
 
+F, [2016-03-24T16:33:09.248097 #3888] FATAL -- : 
+ActionView::MissingTemplate (Missing template monsters/auto_suggestion, application/auto_suggestion with {:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:erb, :builder, :raw, :ruby, :coffee, :jbuilder]}. Searched in:
+  * "C:/Sites/PadTeamBuilder/app/views"
+  * "C:/RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/devise-3.5.6/app/views"
+):
+  actionview (4.2.5.1) lib/action_view/path_set.rb:46:in `find'
+  actionview (4.2.5.1) lib/action_view/lookup_context.rb:121:in `find'
+  C:in `find_template'
+  actionview (4.2.5.1) lib/action_view/renderer/template_renderer.rb:40:in `determine_template'
+  actionview (4.2.5.1) lib/action_view/renderer/template_renderer.rb:8:in `render'
+  actionview (4.2.5.1) lib/action_view/renderer/renderer.rb:42:in `render_template'
+  actionview (4.2.5.1) lib/action_view/renderer/renderer.rb:23:in `render'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:100:in `_render_template'
+  actionpack (4.2.5.1) lib/action_controller/metal/streaming.rb:217:in `_render_template'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:83:in `render_to_body'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:32:in `render_to_body'
+  actionpack (4.2.5.1) lib/action_controller/metal/renderers.rb:37:in `render_to_body'
+  actionpack (4.2.5.1) lib/abstract_controller/rendering.rb:25:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:16:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:44:in `block (2 levels) in render'
+  activesupport (4.2.5.1) lib/active_support/core_ext/benchmark.rb:12:in `block in ms'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/benchmark.rb:294:in `realtime'
+  activesupport (4.2.5.1) lib/active_support/core_ext/benchmark.rb:12:in `ms'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:44:in `block in render'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:87:in `cleanup_view_runtime'
+  activerecord (4.2.5.1) lib/active_record/railties/controller_runtime.rb:25:in `cleanup_view_runtime'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:43:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/implicit_render.rb:10:in `default_render'
+  actionpack (4.2.5.1) lib/action_controller/metal/implicit_render.rb:5:in `send_action'
+  actionpack (4.2.5.1) lib/abstract_controller/base.rb:198:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:10:in `process_action'
+  actionpack (4.2.5.1) lib/abstract_controller/callbacks.rb:20:in `block in process_action'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:117:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:117:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:555:in `block (2 levels) in compile'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:505:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:505:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:92:in `__run_callbacks__'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:778:in `_run_process_action_callbacks'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.5.1) lib/abstract_controller/callbacks.rb:19:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/rescue.rb:29:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:32:in `block in process_action'
+  activesupport (4.2.5.1) lib/active_support/notifications.rb:164:in `block in instrument'
+  activesupport (4.2.5.1) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (4.2.5.1) lib/active_support/notifications.rb:164:in `instrument'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:30:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/params_wrapper.rb:250:in `process_action'
+  activerecord (4.2.5.1) lib/active_record/railties/controller_runtime.rb:18:in `process_action'
+  actionpack (4.2.5.1) lib/abstract_controller/base.rb:137:in `process'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:30:in `process'
+  actionpack (4.2.5.1) lib/action_controller/metal.rb:196:in `dispatch'
+  actionpack (4.2.5.1) lib/action_controller/metal/rack_delegation.rb:13:in `dispatch'
+  actionpack (4.2.5.1) lib/action_controller/metal.rb:237:in `block in action'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:74:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:74:in `dispatch'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:43:in `serve'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:43:in `block in serve'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:30:in `each'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:30:in `serve'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:815:in `call'
+  turnout (2.2.1) lib/rack/turnout.rb:25:in `call'
+  warden (1.2.6) lib/warden/manager.rb:35:in `block in call'
+  warden (1.2.6) lib/warden/manager.rb:34:in `catch'
+  warden (1.2.6) lib/warden/manager.rb:34:in `call'
+  rack (1.6.4) lib/rack/etag.rb:24:in `call'
+  rack (1.6.4) lib/rack/conditionalget.rb:25:in `call'
+  rack (1.6.4) lib/rack/head.rb:13:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/params_parser.rb:27:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/flash.rb:260:in `call'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:225:in `context'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:220:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/cookies.rb:560:in `call'
+  activerecord (4.2.5.1) lib/active_record/query_cache.rb:36:in `call'
+  activerecord (4.2.5.1) lib/active_record/connection_adapters/abstract/connection_pool.rb:653:in `call'
+  activerecord (4.2.5.1) lib/active_record/migration.rb:377:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:88:in `__run_callbacks__'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:778:in `_run_call_callbacks'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/reloader.rb:73:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/remote_ip.rb:78:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:22:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.5.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/static.rb:116:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.5.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.5.1) lib/rails/application.rb:165:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+F, [2016-03-24T16:33:26.923864 #3888] FATAL -- : 
+ActionView::MissingTemplate (Missing template monsters/auto_suggestion, application/auto_suggestion with {:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:erb, :builder, :raw, :ruby, :coffee, :jbuilder]}. Searched in:
+  * "C:/Sites/PadTeamBuilder/app/views"
+  * "C:/RailsInstaller/Ruby2.1.0/lib/ruby/gems/2.1.0/gems/devise-3.5.6/app/views"
+):
+  actionview (4.2.5.1) lib/action_view/path_set.rb:46:in `find'
+  actionview (4.2.5.1) lib/action_view/lookup_context.rb:121:in `find'
+  C:in `find_template'
+  actionview (4.2.5.1) lib/action_view/renderer/template_renderer.rb:40:in `determine_template'
+  actionview (4.2.5.1) lib/action_view/renderer/template_renderer.rb:8:in `render'
+  actionview (4.2.5.1) lib/action_view/renderer/renderer.rb:42:in `render_template'
+  actionview (4.2.5.1) lib/action_view/renderer/renderer.rb:23:in `render'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:100:in `_render_template'
+  actionpack (4.2.5.1) lib/action_controller/metal/streaming.rb:217:in `_render_template'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:83:in `render_to_body'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:32:in `render_to_body'
+  actionpack (4.2.5.1) lib/action_controller/metal/renderers.rb:37:in `render_to_body'
+  actionpack (4.2.5.1) lib/abstract_controller/rendering.rb:25:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:16:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:44:in `block (2 levels) in render'
+  activesupport (4.2.5.1) lib/active_support/core_ext/benchmark.rb:12:in `block in ms'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/benchmark.rb:294:in `realtime'
+  activesupport (4.2.5.1) lib/active_support/core_ext/benchmark.rb:12:in `ms'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:44:in `block in render'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:87:in `cleanup_view_runtime'
+  activerecord (4.2.5.1) lib/active_record/railties/controller_runtime.rb:25:in `cleanup_view_runtime'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:43:in `render'
+  actionpack (4.2.5.1) lib/action_controller/metal/implicit_render.rb:10:in `default_render'
+  actionpack (4.2.5.1) lib/action_controller/metal/implicit_render.rb:5:in `send_action'
+  actionpack (4.2.5.1) lib/abstract_controller/base.rb:198:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/rendering.rb:10:in `process_action'
+  actionpack (4.2.5.1) lib/abstract_controller/callbacks.rb:20:in `block in process_action'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:117:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:117:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:555:in `block (2 levels) in compile'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:505:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:505:in `call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:92:in `__run_callbacks__'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:778:in `_run_process_action_callbacks'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.5.1) lib/abstract_controller/callbacks.rb:19:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/rescue.rb:29:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:32:in `block in process_action'
+  activesupport (4.2.5.1) lib/active_support/notifications.rb:164:in `block in instrument'
+  activesupport (4.2.5.1) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (4.2.5.1) lib/active_support/notifications.rb:164:in `instrument'
+  actionpack (4.2.5.1) lib/action_controller/metal/instrumentation.rb:30:in `process_action'
+  actionpack (4.2.5.1) lib/action_controller/metal/params_wrapper.rb:250:in `process_action'
+  activerecord (4.2.5.1) lib/active_record/railties/controller_runtime.rb:18:in `process_action'
+  actionpack (4.2.5.1) lib/abstract_controller/base.rb:137:in `process'
+  actionview (4.2.5.1) lib/action_view/rendering.rb:30:in `process'
+  actionpack (4.2.5.1) lib/action_controller/metal.rb:196:in `dispatch'
+  actionpack (4.2.5.1) lib/action_controller/metal/rack_delegation.rb:13:in `dispatch'
+  actionpack (4.2.5.1) lib/action_controller/metal.rb:237:in `block in action'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:74:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:74:in `dispatch'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:43:in `serve'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:43:in `block in serve'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:30:in `each'
+  actionpack (4.2.5.1) lib/action_dispatch/journey/router.rb:30:in `serve'
+  actionpack (4.2.5.1) lib/action_dispatch/routing/route_set.rb:815:in `call'
+  turnout (2.2.1) lib/rack/turnout.rb:25:in `call'
+  warden (1.2.6) lib/warden/manager.rb:35:in `block in call'
+  warden (1.2.6) lib/warden/manager.rb:34:in `catch'
+  warden (1.2.6) lib/warden/manager.rb:34:in `call'
+  rack (1.6.4) lib/rack/etag.rb:24:in `call'
+  rack (1.6.4) lib/rack/conditionalget.rb:25:in `call'
+  rack (1.6.4) lib/rack/head.rb:13:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/params_parser.rb:27:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/flash.rb:260:in `call'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:225:in `context'
+  rack (1.6.4) lib/rack/session/abstract/id.rb:220:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/cookies.rb:560:in `call'
+  activerecord (4.2.5.1) lib/active_record/query_cache.rb:36:in `call'
+  activerecord (4.2.5.1) lib/active_record/connection_adapters/abstract/connection_pool.rb:653:in `call'
+  activerecord (4.2.5.1) lib/active_record/migration.rb:377:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:88:in `__run_callbacks__'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:778:in `_run_call_callbacks'
+  activesupport (4.2.5.1) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/reloader.rb:73:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/remote_ip.rb:78:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.2.5.1) lib/rails/rack/logger.rb:22:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.6.4) lib/rack/methodoverride.rb:22:in `call'
+  rack (1.6.4) lib/rack/runtime.rb:18:in `call'
+  activesupport (4.2.5.1) lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  actionpack (4.2.5.1) lib/action_dispatch/middleware/static.rb:116:in `call'
+  rack (1.6.4) lib/rack/sendfile.rb:113:in `call'
+  railties (4.2.5.1) lib/rails/engine.rb:518:in `call'
+  railties (4.2.5.1) lib/rails/application.rb:165:in `call'
+  rack (1.6.4) lib/rack/lock.rb:17:in `call'
+  rack (1.6.4) lib/rack/content_length.rb:15:in `call'
+  rack (1.6.4) lib/rack/handler/webrick.rb:88:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:138:in `service'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/httpserver.rb:94:in `run'
+  C:/RailsInstaller/Ruby2.1.0/lib/ruby/2.1.0/webrick/server.rb:295:in `block in start_thread'
+
+
+F, [2016-03-24T16:35:22.294400 #3888] FATAL -- : 
+ActionView::Template::Error (No route matches {:action=>"show", "avg"=>10.0, "avg_count"=>3, :controller=>"monsters", "created_at"=>Thu, 18 Feb 2016 00:41:11 UTC +00:00, "id"=>2279, :monster_id=>"2279", "name"=>"Vigorous Hunt Gods, Umisachi & Yamasachi", "updated_at"=>Thu, 18 Feb 2016 00:41:11 UTC +00:00, "url"=>"/static/img/monsters/60x60/2279.bc894242f80b.png", "votes_count"=>39} missing required keys: [:id]):
+    19: 															<strong><%= link_to (m["avg"].to_s + " <span style=""font-weight:normal;"">(" + m["avg_count"].to_s + ")</span>").html_safe, detail_monsters_path(leader_id: @monster.id, sub_id: m["id"], type: "ls"), remote:true %></strong>
+    20: 														</div>														
+    21: 														<div class="panel-body">
+    22: 															<%= link_to image_tag(m["url"], class: "center-image", :border => 0, :title => detailed_tooltip(m["id"], nil, nil), :alt => m["name"]), monster_path(m) %>
+    23: 														</div>
+    24: 													</div>
+    25: 												<% end %>
+  app/views/monsters/auto_suggestion.js.erb:22:in `block (3 levels) in _app_views_monsters_auto_suggestion_js_erb__800129247_151965408'
+  app/views/monsters/auto_suggestion.js.erb:16:in `each'
+  app/views/monsters/auto_suggestion.js.erb:16:in `block (2 levels) in _app_views_monsters_auto_suggestion_js_erb__800129247_151965408'
+  app/views/monsters/auto_suggestion.js.erb:10:in `each'
+  app/views/monsters/auto_suggestion.js.erb:10:in `block in _app_views_monsters_auto_suggestion_js_erb__800129247_151965408'
+  app/views/monsters/auto_suggestion.js.erb:5:in `each'
+  app/views/monsters/auto_suggestion.js.erb:5:in `_app_views_monsters_auto_suggestion_js_erb__800129247_151965408'
+  app/controllers/monsters_controller.rb:310:in `auto_suggestion'
+
+
+F, [2016-03-28T14:40:06.720268 #29632] FATAL -- : 
+SyntaxError (C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^):
+  app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+
+
+F, [2016-03-28T14:40:41.686847 #29632] FATAL -- : 
+SyntaxError (C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^):
+  app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+
+
+F, [2016-03-28T14:41:02.249903 #29632] FATAL -- : 
+SyntaxError (C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting ')'
+					and not new.include? 'rarity:')
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^):
+  app/controllers/monsters_controller.rb:377: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:378: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:379: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:380: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:381: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:382: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:383: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:384: syntax error, unexpected keyword_and, expecting ')'
+  app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+
+
+F, [2016-03-28T14:41:34.604000 #29632] FATAL -- : 
+SyntaxError (C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+					and not new.include? 'type:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'main attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'sub attr:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'active skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'awoken skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'leader skill:'
+					   ^
+C:/Sites/PadTeamBuilder/app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+					and not new.include? 'rarity:'
+					   ^):
+  app/controllers/monsters_controller.rb:425: syntax error, unexpected keyword_and
+  app/controllers/monsters_controller.rb:426: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:427: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:428: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:429: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:430: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:431: syntax error, unexpected keyword_and, expecting keyword_end
+  app/controllers/monsters_controller.rb:432: syntax error, unexpected keyword_and, expecting keyword_end
+
+
