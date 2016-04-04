@@ -21,3 +21,7 @@
 #/public/static/img/monsters/40x40/*.png
 #/public/static/img/monsters/60x60/*.png
 /debug.log
+<<<<<<< HEAD
+=======
+/db/data.yml
+>>>>>>> bf6e51a7cb275f823044bd21812d812917b380d1

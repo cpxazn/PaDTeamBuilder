@@ -46,7 +46,7 @@
 					<div>
 						<% if @monsters != nil %>
 							<% @monsters.each do |m| %>
-								<%= link_to image_tag(fetch_monster_url_by_id_json(m["id"]), :border => 0, :title => detailed_tooltip(m["id"], nil, nil)), fetch_monster_by_id(m["id"]) %>
+								<%= link_to image_tag(fetch_monster_url_by_id_json(m["id"]), :border => 0, :title => detailed_tooltip(m["id"], nil, nil), size: '60'), fetch_monster_by_id(m["id"]) %>
 							<% end %>
 						<% end %>
 					</div>

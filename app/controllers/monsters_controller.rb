@@ -55,6 +55,10 @@ class MonstersController < ApplicationController
 	@selected = params[:tags]
 	if @selected != nil and @selected.size > 0
 		monsters = Monster.tagged_with(@selected, :on => :tags)
+		if monsters != nil and monsters.length > 500
+			monsters = monsters[0..499]
+			flash.now[:alert] = 'Showing first 500 results. Add more tags to narrow search.'
+		end
 		@monsters = fetch_monster_json_by_array(monsters)
 		if @monsters != nil then @monsters = @monsters.sort_by { |hash| hash['element'].to_i } end 
 	end
@@ -415,8 +419,8 @@ class MonstersController < ApplicationController
 				if (new.length <= Rails.application.config.tag_max_length and 
 					not new.include? 'type:' and 
 					not new.include? 'attr:' and 
-					not new.include? 'main attr:' and 
-					not new.include? 'sub attr:' and 
+					not new.include? 'attr main:' and 
+					not new.include? 'attr sub:' and 
 					not new.include? 'active skill:' and 
 					not new.include? 'awoken skill:' and 
 					not new.include? 'leader skill:' and 
