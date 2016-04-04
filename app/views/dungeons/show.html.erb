@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Dungeon group:</strong>
+  <%= @dungeon.dungeon_group_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @dungeon.name %>
+</p>
+
+<p>
+  <strong>Stamina:</strong>
+  <%= @dungeon.stamina %>
+</p>
+
+<p>
+  <strong>Floors:</strong>
+  <%= @dungeon.floors %>
+</p>
+
+<p>
+  <strong>Coin:</strong>
+  <%= @dungeon.coins %>
+</p>
+
+<p>
+  <strong>Exp:</strong>
+  <%= @dungeon.exp %>
+</p>
+
+<p>
+  <strong>Img:</strong>
+  <%= @dungeon.img %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @dungeon.order %>
+</p>
+
+<%= link_to 'Edit', edit_dungeon_path(@dungeon) %> |
+<%= link_to 'Back', dungeons_path %>

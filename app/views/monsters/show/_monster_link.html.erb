@@ -1,0 +1,47 @@
+<!-- Links -->
+<div class="monster-list col-md-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">Links</div>
+		<div class="panel-body">
+			<% #if @links.length > 0 %>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Link</th>
+							<th>Type</th>
+							<th>Date</th>
+							<th>Version</th>
+							<th>Submitter</th>
+							<th>Like</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @links.each do |l| %>
+							<tr>
+								<td><%= link_to l.title, l.url %></td>
+								<td><%= l.link_type.capitalize %></td>
+								<td><%= l.updated_at.strftime("%m-%d-%Y") %></td>
+								<td><%= l.version.number %></td>
+								<td><%= l.user.username %></td>
+								<td id="ml_<%= l.id %>">
+									<% if user_signed_in? and l.user == current_user %>
+										<%= link_to "Edit", edit_monster_link_path(l.id) %>
+									<% else %>
+										<% if user_signed_in? and current_user.ml_ratings.where(monster_link_id: l.id).count >= 1 %>
+											<b><%= l.ml_ratings.sum(:score)%></b>
+										<% else %>
+											<%= link_to l.ml_ratings.sum(:score), ml_ratings_path(monster_link_id: l.id), method: :post %>
+										<% end %>
+									<% end %>
+								</td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			<% #end %>
+			<div class="col-sm-3">
+				<%= link_to "Submit New Link", new_monster_link_path(monster_id: @monster.id) %>
+			</div>
+		</div>
+	</div>
+</div>

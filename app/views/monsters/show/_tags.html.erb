@@ -1,0 +1,27 @@
+<!-- Tags -->
+<div class="monster-list">
+	<div class="panel panel-default">
+		<div class="panel-heading">Tags</div>
+		<div class="panel-body">
+			<div>
+				<%= form_tag(monster_tag_path(@monster.id), method: "get", remote:true ) do %>
+					<div>
+						<p><select disabled multiple="true" name="tags[]" class="tags select2">
+						<% @tags.each do |t| %>
+							<option selected="selected"><%= t %></option>
+						<% end %>
+						</select></p>
+					</div>
+					<% if user_signed_in? %>
+						<div id="edit" class="tags button-container col-xs-3">
+							<button type="button" id="edit-tags" class="btn btn-default tags" aria-label="Left Align">Edit</button>
+						</div>
+						<div id="update" class="tags button-container  col-xs-3">
+							<%= submit_tag "Update", id:"update-tags", class: "tags btn btn-default" %>
+						</div>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
