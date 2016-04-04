@@ -25,6 +25,7 @@
 								<td><%= l.user.username %></td>
 								<td id="ml_<%= l.id %>">
 									<% if user_signed_in? and l.user == current_user %>
+										<b><%= l.ml_ratings.sum(:score)%></b>
 										<%= link_to "Edit", edit_monster_link_path(l.id) %>
 									<% else %>
 										<% if user_signed_in? and current_user.ml_ratings.where(monster_link_id: l.id).count >= 1 %>
