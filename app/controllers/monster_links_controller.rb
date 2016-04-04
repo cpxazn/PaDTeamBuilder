@@ -5,12 +5,14 @@ class MonsterLinksController < ApplicationController
 	require 'open_uri_redirections'
 	
 	def new
+		@title = "Create Link"
 		@monster_link = MonsterLink.new
 		@monster_id = params[:monster_id]
 		if @monster_id == nil then redirect_to root_path end
 		@url_readonly = false
 	end
 	def edit
+		@title = "Edit Link"
 		if current_user != @monster_link.user
 			redirect_to @monster_link.monster, alert: 'Error: This link does not belong to you'
 		end
