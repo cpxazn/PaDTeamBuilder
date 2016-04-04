@@ -1,10 +1,18 @@
 class ApplicationController < ActionController::Base
-
+	require 'open-uri'
+	require 'open_uri_redirections'
 	before_filter :configure_permitted_parameters, if: :devise_controller?
 	protect_from_forgery with: :exception
 	after_filter :store_location
 
 #Monster functions
+  #Gets current PAD version from google play
+  #Input: None
+  #Output: String
+  helper_method :get_version
+  def get_version
+	version = Nokogiri::HTML(open('https://play.google.com/store/apps/details?id=jp.gungho.padEN&hl=en', {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})).at_xpath("//div[@itemprop='softwareVersion']").content
+  end
   #Generates detailed tooltip with tags and skills
   #Input: monster id 1, monster id 2
   #Output: String

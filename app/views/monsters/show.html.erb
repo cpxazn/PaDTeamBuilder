@@ -8,38 +8,8 @@
 <% #@leaders: array of hash of leaders from json %>
 <% #@related: array of monster objects for evolutions %>
 
-<div class="jumbotron monster">
-	<div class="header header-name">
-		<h2><%= link_to image_tag(@monster.url	, :border => 0, :title => @monster.tooltip, size: '60'), Rails.application.config.pad_db_monster_path + @monster.id.to_s %><%= " " + @monster.name %></h2>
-	</div>
-	<div class="header header-details col-md-12">
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">AS: <%= hash_not_nil(@active_skill,"name") %> <% if @active_skill != nil %>(<%= hash_not_nil(@active_skill,"max_cooldown") %> to <%= hash_not_nil(@active_skill,"min_cooldown") %> turns)<% end %></div>
-				<div class="panel-body"><%= hash_not_nil(@active_skill,"effect") %></div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">Awoken Skills</div>
-				<div class="panel-body">
-					<% @awakenings.each do |a| %>
-						<%= image_tag(hash_not_nil(a,"url"), :border => 0, title: (hash_not_nil(a,"name") + "&#13;" + hash_not_nil(a,"desc")).html_safe) %>
-					<% end %>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">LS: <%= hash_not_nil(@leader_skill,"name") %></div>
-				<div class="panel-body"><%= hash_not_nil(@leader_skill,"effect") %></div>
-			</div>
-		</div>
-	</div>
-	<div class="right btn-group btn-group-sm" role="group" aria-label="...">
-		<button type="button" class="btn btn-default monster-hide" aria-label="Left Align">
-			Hide
-		</button>
-	</div>
-</div>
+<!-- Make a Suggestion -->
+<%= render partial: "monsters/show/jumbotron" %>
 
 <div class="monster-container">
 	<div class="panel-left section col-md-7">
@@ -51,122 +21,29 @@
 		
 		<!-- Suggested Leader -->
 		<%= render partial: "monsters/show/suggestion", :locals => {sugg: @leaders, monster: @monster, option: "leader"} %>
-		
 
 	</div>
 	
 	<div class="panel-right section col-md-5">
 		<!-- Make a Suggestion -->
-		<div class="monster-list">
-			<div class="panel panel-default section">
-				<div class="panel-heading">Make a Suggestion</div>
-				<div class="panel-body">
-					<% if user_signed_in? %>
-						<p><img id="lookup" src=""/></p>
-						<%= form_for :vote, html: {class: "form-horizontal"},url:{controller: "votes", action: "create", params: {current_id: @monster.id}} do |f| %>
-							<div>
-								<p><input name="monster_name" id="monster-field" class="monster vote lookup typeahead form-control" type="text" placeholder="Monster Name"></p>
-							</div>
-							<div class="vote select col-xs-3">
-								<select name="rating" class="vote btn btn-default">
-									<option>Rate</option>
-									<% for i in Rails.application.config.vote_rating_max.downto(1) %>
-										<option><%= i %></option>
-									<% end %>
-								</select>
-							</div>
-							<div class="vote col-md-3">
-									<%= f.submit "Sub", id:"Sub", class: "btn btn-default" %>
-							</div>
-							<!-- <div class="vote col-md-3">
-									<% #f.submit "Leader", id:"Leader", class: "btn btn-default"  %>
-							</div> -->
-							<div class="vote col-md-5">
-									<%= f.submit "Leader/Leader", id:"Leader", class: "btn btn-default" %>
-							</div>
-						<% end %>
-						
-					<% else %>
-						<p>You must be <%= link_to "logged in", new_user_session_path() %> to make a suggestion</p>
-					<% end %>
-				</div>
-			</div>
-		</div>
+		<%= render partial: "monsters/show/make_suggestion" %>
 
 		<!-- Voting Guidelines -->
-		<div class="monster-list">
-			<div class="panel panel-default">
-				<div class="panel-heading">Voting Guidelines</div>
-				<div class="panel-body">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-							  <th colspan="2">You may submit a new vote once a month</th>
-							</tr>
-						</thead>
-						<thead>
-							<tr>
-							  <th>Rating</th>
-							  <th>Description</th>
-							</tr>
-						</thead>
-						<tr><td>9</td><td>Great Sub</td></tr>
-						<tr><td>7</td><td>Good Sub</td></tr>
-						<tr><td>5</td><td>Viable Sub</td></tr>
-						<tr><td>3</td><td>Not Recommended</td></tr>
-						<tr><td>1</td><td>No Synergy</td></tr>
-					</table>
-				</div>
-			</div>
-		</div>
+		<%= render partial: "monsters/show/guidelines" %>
 		
 		<!-- Tags -->
-		<div class="monster-list">
-			<div class="panel panel-default">
-				<div class="panel-heading">Tags</div>
-				<div class="panel-body">
-					<div>
-						<%= form_tag(monster_tag_path(@monster.id), method: "get", remote:true ) do %>
-							<div>
-								<p><select disabled multiple="true" name="tags[]" class="tags select2">
-								<% @tags.each do |t| %>
-									<option selected="selected"><%= t %></option>
-								<% end %>
-								</select></p>
-							</div>
-							<% if user_signed_in? %>
-								<div id="edit" class="tags button-container col-xs-3">
-									<button type="button" id="edit-tags" class="btn btn-default tags" aria-label="Left Align">Edit</button>
-								</div>
-								<div id="update" class="tags button-container  col-xs-3">
-									<%= submit_tag "Update", id:"update-tags", class: "tags btn btn-default" %>
-								</div>
-							<% end %>
-						<% end %>
-					</div>
-				</div>
-			</div>
-		</div>
+		<%= render partial: "monsters/show/tags" %>
 			
 		<!-- Related Evolutions -->
-		<div class="monster-list">
-			<div class="panel panel-default">
-				<div class="panel-heading">Related Evolutions</div>
-				<div class="monster-container panel-body">
-					<% @related.each do |m| %>
-						<% if m != @monster %>
-							<%= link_to image_tag(m.url, :border => 0, :title => m.tooltip), m %>
-						<% end %>
-					<% end %>
-				</div>
-			</div>
-		</div>
+		<%= render partial: "monsters/show/evolutions" %>
 	</div>
 </div>
 
-<% if @attr_main != nil %>
-		<!-- Auto Suggestion -->
-		<%= render partial: "monsters/show/autosuggestion" %>
+<%= render partial: "monsters/show/monster_link" %>
+
+<% if @attr_main != nil and  %>
+	<!-- Auto Suggestion -->
+	<%= render partial: "monsters/show/autosuggestion" %>
 <% end %>
 
 

@@ -4,6 +4,7 @@ class Monster < ActiveRecord::Base
 	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
 	has_many :leader_comments, class_name: "Comment", foreign_key: "leader_id", dependent: :destroy
 	has_many :sub_comments, class_name: "Comment", foreign_key: "sub_id", dependent: :destroy
+	has_many :monster_links, dependent: :destroy
 	attr_accessor :url, :avg, :avg_count, :user_score
 	acts_as_taggable
 	validates :name, presence: true

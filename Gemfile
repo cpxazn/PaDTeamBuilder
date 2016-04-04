@@ -54,6 +54,9 @@ gem 'figaro'
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'open_uri_redirections'
 gem 'turnout'
+gem 'nokogiri'
+gem "lol_dba"
 platforms :ruby do 
   gem 'unicorn'
 end
+gem 'whenever', :require => false

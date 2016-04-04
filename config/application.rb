@@ -37,6 +37,8 @@ module PadTeamBuilder
 	config.questionable_display_max = 40 #Number of records to show in questionable page
 	config.fp_display_max_monsters = 10
 	config.fp_display_max_users = 20
+	config.play_store_jp = "https://play.google.com/store/apps/details?id=jp.gungho.pad&hl=en"
+	config.play_store_en = "https://play.google.com/store/apps/details?id=jp.gungho.padEN&hl=en"
 	ActsAsTaggableOn.remove_unused_tags = true
 	ActsAsTaggableOn.force_lowercase = true
   end

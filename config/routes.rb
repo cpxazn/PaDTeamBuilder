@@ -1,7 +1,20 @@
 Rails.application.routes.draw do
-    resources :news
 	get '/about', controller: 'news', action: 'about'
 	get '/privacy', controller: 'news', action: 'privacy'
+	
+	resources :dungeons do
+		get 'json/normal' => "dungeons#get_normal_dungeons", on: :collection
+		get 'json/special' => "dungeons#get_special_dungeons", on: :collection 
+		get 'json/technical' => "dungeons#get_technical_dungeons", on: :collection 
+		get 'json/multiplayer' => "dungeons#get_multiplayer_dungeons", on: :collection
+	end
+	
+	resources :ml_ratings, only: [:create]
+	
+	resources :monster_links
+	
+    resources :news
+
 	resources :c_ratings, except: [:edit, :update, :destroy, :new, :show]
 	resources :c_ll_ratings, except: [:edit, :update, :destroy, :new, :show]
 		
@@ -29,6 +42,7 @@ Rails.application.routes.draw do
 	end
 
 	devise_for :users
+	
 	
 	match '/static/img/monsters/:size/:id.:basename.png' => "monsters#image_proxy", via: [:get]
 	

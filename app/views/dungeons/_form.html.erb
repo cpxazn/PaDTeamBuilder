@@ -1,0 +1,45 @@
+<%= form_for(@dungeon) do |f| %>
+  <% if @dungeon.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dungeon.errors.count, "error") %> prohibited this dungeon from being saved:</h2>
+
+      <ul>
+      <% @dungeon.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :dungeon_group_id %><br>
+    <%= f.number_field :dungeon_group_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :stamina %><br>
+    <%= f.number_field :stamina %>
+  </div>
+  <div class="field">
+    <%= f.label :floors %><br>
+    <%= f.number_field :floors %>
+  </div>
+  <div class="field">
+    <%= f.label :coin %><br>
+    <%= f.number_field :coin %>
+  </div>
+  <div class="field">
+    <%= f.label :exp %><br>
+    <%= f.number_field :exp %>
+  </div>
+  <div class="field">
+    <%= f.label :img %><br>
+    <%= f.text_field :img %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

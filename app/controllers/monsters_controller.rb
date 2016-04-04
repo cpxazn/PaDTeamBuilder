@@ -143,8 +143,7 @@ class MonstersController < ApplicationController
 		@awakenings = fetch_awakenings_by_id_json(@monster.id)
 		@related = append_monster_url(get_all_evo(@monster.id))
 		@tags = @monster.tag_list.sort
-		
-
+		@links = @monster.monster_links.order(updated_at: :desc)
 		
 		tags = @monster.tag_list.sort
 		
@@ -680,6 +679,8 @@ class MonstersController < ApplicationController
 		Rails.cache.fetch("evolutions", expires_in: 12.hours) do
 			JSON.parse(open(url).read)
 		end
+		
+		
 	end
 
 	

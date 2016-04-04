@@ -1,0 +1,13 @@
+<!-- Related Evolutions -->
+<div class="monster-list">
+	<div class="panel panel-default">
+		<div class="panel-heading">Related Evolutions</div>
+		<div class="monster-container panel-body">
+			<% @related.each do |m| %>
+				<% if m != @monster %>
+					<%= link_to image_tag(m.url, :border => 0, :title => m.tooltip), m %>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+</div>

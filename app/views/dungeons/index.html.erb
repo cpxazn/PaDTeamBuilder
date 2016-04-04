@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Dungeons</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Dungeon Group</th>
+      <th>Dungeon Name</th>
+      <th>Stamina</th>
+      <th>Floors</th>
+      <th>Coin</th>
+      <th>Exp</th>
+	  <th>Dungeon Type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dungeons.each do |dungeon| %>
+      <tr>
+        <td><%= dungeon.dungeon_group.name %></td>
+        <td><%= dungeon.name %></td>
+        <td><%= dungeon.stamina %></td>
+        <td><%= dungeon.floors %></td>
+        <td><%= dungeon.coins %></td>
+        <td><%= dungeon.exp %></td>
+		<td><%= dungeon.dungeon_type %></td>
+        <td><%= link_to 'Show', dungeon %></td>
+        <td><%= link_to 'Edit', edit_dungeon_path(dungeon) %></td>
+        <td><%= link_to 'Destroy', dungeon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Dungeon', new_dungeon_path %>
