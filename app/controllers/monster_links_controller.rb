@@ -18,27 +18,27 @@ class MonsterLinksController < ApplicationController
 		@url_readonly = true
 	end
 	def update
-		begin
-			title = Nokogiri::HTML(open(@monster_link.url, :allow_redirections => :all)).at_css('title').content.strip
-		  
-			rescue Errno::ENOENT
-				if not @monster_link.url.include? "http"
-					@monster_link.url = "http://" + @monster_link.url
-					retry
-				else
-					flash.now[:alert] = "Error: Could not process URL"
-					render :new
-					return
-				end
-			rescue
-				flash.now[:alert] = "Error: Could not process URL"
-				render :new
-				return
-
-		end
-		if title.include? "| Puzzle" then title = title.split("| Puzzle")[0] end
-		if title.include? ": PuzzleAndDragons" then title = title.split(": PuzzleAndDragons")[0] end
-		@monster_link.title = title
+		#begin
+		#	title = Nokogiri::HTML(open(@monster_link.url, :allow_redirections => :all)).at_css('title').content.strip
+		#  
+		#	rescue Errno::ENOENT
+		#		if not @monster_link.url.include? "http"
+		#			@monster_link.url = "http://" + @monster_link.url
+		#			retry
+		#		else
+		#			flash.now[:alert] = "Error: Could not process URL"
+		#			render :new
+		#			return
+		#		end
+		#	rescue
+		#		flash.now[:alert] = "Error: Could not process URL"
+		#		render :new
+		#		return
+		#
+		#end
+		#if title.include? "| Puzzle" then title = title.split("| Puzzle")[0] end
+		#if title.include? ": PuzzleAndDragons" then title = title.split(": PuzzleAndDragons")[0] end
+		#@monster_link.title = title
 		
 		if @monster_link.update(monster_link_params)
 			redirect_to @monster_link.monster, notice: 'Link was successfully updated.'
