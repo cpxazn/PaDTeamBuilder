@@ -1,2 +1,0 @@
-class CLlRatingsController < ApplicationController
-end

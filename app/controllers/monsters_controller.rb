@@ -535,6 +535,8 @@ class MonstersController < ApplicationController
 		monsters.each do |m|
 			if limit == true and m["id"] >= min.to_i and m["id"] <= max.to_i
 				populate_default_monster_tag(m["id"])
+			elsif limit == false
+				populate_default_monster_tag(m["id"])
 			end
 		end
 		#populate_default_monster_tag(2076)

@@ -1,7 +1,5 @@
 class Monster < ActiveRecord::Base
 	has_many :votes, class_name: "Vote", foreign_key: "leader_id", dependent: :destroy
-	#has_many :leaders, class_name: "Monster", foreign_key: "id", through: :votes
-	#has_many :subs, class_name: "Monster",  foreign_key: "id", through: :votes
 	has_many :leader_comments, class_name: "Comment", foreign_key: "leader_id", dependent: :destroy
 	has_many :sub_comments, class_name: "Comment", foreign_key: "sub_id", dependent: :destroy
 	has_many :monster_links, dependent: :destroy
@@ -31,7 +29,6 @@ class Monster < ActiveRecord::Base
 	end
 	def self.ll_check(l, s, p)
 		 p = p.sort
-			
 	end
 	
 	def self.top

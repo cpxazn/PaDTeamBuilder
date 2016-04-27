@@ -5,7 +5,7 @@ class VotesController < ApplicationController
   respond_to :html
 
 
-  
+
   def index
 	@title = "Votes"
   	@page = params[:page].to_i

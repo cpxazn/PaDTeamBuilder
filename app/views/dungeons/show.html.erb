@@ -2,7 +2,7 @@
 
 <p>
   <strong>Dungeon group:</strong>
-  <%= @dungeon.dungeon_group_id %>
+  <%= @dungeon.dungeon_group.name %>
 </p>
 
 <p>
@@ -29,16 +29,114 @@
   <strong>Exp:</strong>
   <%= @dungeon.exp %>
 </p>
-
+<% if @dungeon_restrictions != "" %>
 <p>
-  <strong>Img:</strong>
-  <%= @dungeon.img %>
+  <strong>Restrictions:</strong>
+  <%= @dungeon_restrictions %>
 </p>
+<% end %>
 
-<p>
-  <strong>Order:</strong>
-  <%= @dungeon.order %>
-</p>
+<% if @dungeon_threats["passive"] != nil or @dungeon_threats["preemp"] != nil or @dungeon_threats["skill"] != nil or 
+	@dungeon_threats["passive"].size > 0 or @dungeon_threats["preemp"].size > 0 or @dungeon_threats["skill"].size > 0
+%>
+	<div class="page-header news"><h1>Threats</h1></div>
+	<%= form_tag(dungeon_path(@dungeon.id), method: "get") do %>	
+		<p><select multiple="true" name="filter[]" class="filter select2">
+				<% @threats.each do |t| %>
+					<% if @filter != nil and @filter.include? t then selected = "selected" else selected = "" end %>
+					<% if @filter == nil then selected = "selected" end %>
+					<option <%= selected %> value="<%= t %>"><%= t %></option>
+				<% end %>
+		</select></p>
+		<div class="col-xs-6">
+			<%= button_tag "Refresh", class: "btn btn-default auto-suggestion" %>
+		</div>
+	<% end %>
+	<br>
+	<br>
+	
+	<% if @dungeon_threats["passive"] != nil and @dungeon_threats["passive"].size > 0 %>
+		<div class="page-header news">
+			<h1><small>Passive Skills</small></h1>
+		</div>
+		<table class="table table-striped">
+		  <thead>
+			<tr>
+			  <th>Floor</th>
+			  <th>Monster</th>
+			  <th>Condition</th>
+			  <th>Skill</th>
+			  <th>Effect</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<% @dungeon_threats["passive"].each do |p| %>
+			<tr>
+				<td><%= p["floor"] %></td>
+				<td><%= image_tag(fetch_monster_url_by_id_json(p["id"]), :border => 0, title: detailed_tooltip(p["id"], nil, nil), alt: p["name"], size: '60') %></td>
+				<td><%= p["condition"] %></td>
+				<td><%= p["label"] %></td>
+				<td><%= p["effect"] %></td>
+			</tr>
+			<% end %>
+		  </tbody>
+		</table>
+	<% end %>
 
-<%= link_to 'Edit', edit_dungeon_path(@dungeon) %> |
-<%= link_to 'Back', dungeons_path %>
+	<% if @dungeon_threats["preemp"] != nil and @dungeon_threats["preemp"].size > 0 %>
+		<div class="page-header news">
+			<h1><small>Pre-emptive Skills</small></h1>
+		</div>  
+		<table class="table table-striped">
+		  <thead>
+			<tr>
+			  <th>Floor</th>
+			  <th>Monster</th>
+			  <th>Condition</th>
+			  <th>Skill</th>
+			  <th>Effect</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<% @dungeon_threats["preemp"].each do |p| %>
+			<tr>
+				<td><%= p["floor"] %></td>
+				<td><%= image_tag(fetch_monster_url_by_id_json(p["id"]), :border => 0, title: detailed_tooltip(p["id"], nil, nil), alt: p["name"], size: '60') %></td>
+				<td><%= p["condition"] %></td>
+				<td><%= p["label"] %></td>
+				<td><%= p["effect"] %></td>
+			</tr>
+			<% end %>
+		  </tbody>
+		</table>
+	<% end %>
+
+	<% if @dungeon_threats["skill"] != nil and @dungeon_threats["skill"].size > 0 %>
+		<div class="page-header news">
+			<h1><small>Skills</small></h1>
+		</div>  
+		<table class="table table-striped">
+		  <thead>
+			<tr>
+			  <th>Floor</th>
+			  <th>Monster</th>
+			  <th>Condition</th>
+			  <th>Skill</th>
+			  <th>Effect</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<% @dungeon_threats["skill"].each do |p| %>
+			<tr>
+				<td><%= p["floor"] %></td>
+				<td><%= image_tag(fetch_monster_url_by_id_json(p["id"]), :border => 0, title: detailed_tooltip(p["id"], nil, nil), alt: p["name"], size: '60') %></td>
+				<td><%= p["condition"] %></td>
+				<td><%= p["label"] %></td>
+				<td><%= p["effect"] %></td>
+			</tr>
+			<% end %>
+		  </tbody>
+		</table>
+	<% end %>
+
+<% end %>

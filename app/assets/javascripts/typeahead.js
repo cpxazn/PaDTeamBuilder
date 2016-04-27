@@ -65,6 +65,6 @@ $(document).ready(function(){
 			}
 		}
     });
-
+	$('select.filter').select2();
 
 }); 

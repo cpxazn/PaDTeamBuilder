@@ -48,6 +48,7 @@ class ApplicationController < ActionController::Base
   #Input: monster id
   #Output: monster object
   def populate_default_monster_tag(id)
+	puts "Updating Tag: " + id.to_s
 	monster = fetch_monster_by_id(id)
 	monster_json = fetch_monster_by_id_json(id)
 	
@@ -208,7 +209,7 @@ class ApplicationController < ActionController::Base
 				end
 			end
 			if match == true
-				if key.downcase.include? "change" and active_skill_effect.split.include? 'change' and active_skill_effect.include? "orb" #if active is an orb change and current skill lookup is change
+				if key.downcase.include? "change" and active_skill_effect.split.include? 'change' and active_skill_effect.include? "orb" and not active_skill_effect.include? "random skill" #if active is an orb change and current skill lookup is change
 					if active_skill_effect.split.include? "exchange"
 						tmp0 = active_skill_effect.gsub 'exchange', '' 
 					else
@@ -667,31 +668,6 @@ class ApplicationController < ActionController::Base
   helper_method :format_date
   def format_date(date)
 	return date.localtime.strftime("%-m/%-d/%Y %l:%M %p EST")
-  end
-  
-  #Censors all but the first letter of the username
-  #Input: string
-  #Output: string
-  def censor_username(username)
-	u = username[0..0]
-	for i in 1..username.length
-		u = u + "*"
-	end
-	return u
-  end
-  
-  #Censors all but the first letter of the email address and domain
-  #Input: string
-  #Output: string
-  def censor_email(email)
-	e = email[0..0]
-	for i in 1..email.index("@")-1
-		e = e + "*"
-	end
-	for i in email.index("@")..email.length
-		e = e + email[i..i]
-	end
-	return e
   end
   
   #Renders 404 page

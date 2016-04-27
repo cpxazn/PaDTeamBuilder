@@ -1,7 +1,15 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Dungeons</h1>
-
+<select class="dungeon-index select2">
+	<% @dungeon_groups.each do |dg| %>
+		<option value="-<%= dg.id %>" class="optionGroup"><%= dg.name %></option>
+		<% dg.dungeons.each do |d| %>
+			<option value="<%= d.id %>"  class="optionChild"><%= d.name %></option>
+		<% end %>
+		</optgroup>
+	<% end %>
+</select>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -20,7 +28,7 @@
     <% @dungeons.each do |dungeon| %>
       <tr>
         <td><%= dungeon.dungeon_group.name %></td>
-        <td><%= dungeon.name %></td>
+        <td><%= link_to dungeon.name, dungeon %></td>
         <td><%= dungeon.stamina %></td>
         <td><%= dungeon.floors %></td>
         <td><%= dungeon.coins %></td>

@@ -1,14 +1,14 @@
 class DungeonsController < ApplicationController
   before_action :set_dungeon, only: [:show, :edit, :update, :destroy]
-  before_action :cache_data
   before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
   
   # GET /dungeons
   # GET /dungeons.json
   def index
-	dungeon_groups = DungeonGroup.order(:dungeon_type, :order)
+	@title = "Dungeons"
+	@dungeon_groups = DungeonGroup.order(:dungeon_type, :order)
 	@dungeons = Array.new
-	dungeon_groups.each do |dg|
+	@dungeon_groups.each do |dg|
 		dg.dungeons.order(:dungeon_type, :order).each do |d|
 			@dungeons.push(d)
 		end
@@ -18,8 +18,176 @@ class DungeonsController < ApplicationController
   # GET /dungeons/1
   # GET /dungeons/1.json
   def show
-  end
+	@filter = params[:filter]
+  
+	@title = @dungeon.id.to_s + " | Dungeon"
+    @dungeon_html = cache_dungeon_html(@dungeon)
+	@dungeon_threats = cache_dungeon_threats(@dungeon_html, @dungeon)
+	@dungeon_restrictions = cache_dungeon_restrictions(@dungeon_html, @dungeon)
+	
+	@threats = Array.new
+	
+	@dungeon_threats.each do |key, value|
+		filter_out = Array.new
+		value.each_with_index do |val, index|
+			@threats.push val["label"]
+			if @filter != nil and not @filter.include? val["label"] then filter_out.push(val["label"]) end
+		end
+		value.delete_if { |a| filter_out.include? a["label"] }
+	end
+	@threats.uniq!
+	
 
+	
+  end
+  def cache_dungeon_restrictions(dungeon_html, dungeon)
+  	#Rails.cache.clear
+	restrictions = Rails.cache.fetch("dungeon_restrictions_" + dungeon.id.to_s, expires_in: 10.minutes) do
+		dungeon_html = Nokogiri::HTML(dungeon_html)
+		restrictions = dungeon_html.at_css('div.restriction-container span')
+		#puts restrictions
+		if restrictions != nil
+			restrictions = restrictions.content
+			if restrictions.include? "ATTENTION:" then restrictions = restrictions.split('ATTENTION:')[1].strip end
+		else
+			restrictions = ""
+		end
+		restrictions
+	end
+	return restrictions
+  end
+  def cache_dungeon_html(dungeon)
+	#Rails.cache.clear
+	dungeon_info = Rails.cache.fetch("dungeon_info_" + dungeon.id.to_s, expires_in: 10.minutes) do
+		dungeon_html = open('http://www.puzzledragonx.com/en/mission.asp?m=' + dungeon.id.to_s).read
+		restriction  = dungeon_html[/<div.*?restriction-container.*?<\/div><\/div>/]
+		dungeon_html = dungeon_html.split('<table id="tabledrop">')[1]
+		dungeon_html = dungeon_html.split('<div style="padding-left: 48px; float: right;">Loot</div></th></tr>')[1]
+		dungeon_html = dungeon_html.split('</table>')[0]
+		dungeon_html = dungeon_html.gsub(/(?:\n\r?|\r\n?)/, '')
+		dungeon_html = dungeon_html.gsub(/(?!<tr><td>\d.*?<td class="enemy">)<tr>.*?floor.*?<\/tr>/,'')
+		dungeon_html = dungeon_html.gsub('<tr><td>','<tr><monster><td>')
+		dungeon_html = dungeon_html.gsub('</td></tr>','</td></monster></tr>')
+		dungeon_html = dungeon_html.gsub('<br>','|')
+		dungeon_html = dungeon_html.gsub(/(<span class="skillexpand">.*?trigger.*?info.*?<\/div>)/,'<skills>\1</skills>')
+		dungeon_html = dungeon_html.gsub('Passive.', 'Passive|')
+		dungeon_html = dungeon_html.gsub('Pre-emptive Strike.', 'Pre-emptive|')
+		if restriction != nil then dungeon_html = restriction + dungeon_html end
+		dungeon_html
+	end
+	return dungeon_info
+  end
+  def cache_dungeon_threats(dungeon_html, dungeon)
+	#Rails.cache.clear
+	passive = Array.new
+	preemp = Array.new
+	skill = Array.new
+		
+	dungeon_threats = Rails.cache.fetch("dungeon_threats_" + dungeon.id.to_s, expires_in: 1.seconds) do
+		dungeon_html = Nokogiri::HTML(dungeon_html)
+		monsters = dungeon_html.css('monster')
+		dungeon_info = Array.new
+		monsters.each do |m|
+			id = m.at_css('td.enemy a').attr('href').split('=')[1].to_i
+			name = m.at_css('td.enemy > a > img').attr('title').gsub(/No.\d+ /,'')
+			floor =  m.css('td')[0].content.to_i
+			stats = m.css('span.nc')
+			attack = stats[0].content
+			defense = stats[1].content
+			hp = stats[2].content
+			skills = Array.new
+			mskills = m.css('skills')
+			mskills.each do |s|
+				#puts s
+				#puts "------"
+				details = s.at_css('span.bossAtk')
+				if details != nil then details = "(" + details.content + ")" else details = "" end
+				
+				content = s.at_css('div[id$=info]').content
+				if (content[0..10] == "Pre-emptive" or content[0..6] == "Passive") and content.split('|').size == 2
+					content = "|" + content
+				elsif content.split('|').size == 2
+					content.gsub!('|','|Skill|')
+				elsif content.split('|').size == 1
+					content = '|Skill|' + content
+				end
+				
+				condition = content.split('|')[0].strip
+				type = content.split('|')[1].strip
+				effect = content.split('|')[2].strip + details
+				skills.push({"condition" => condition, "type" => type, "effect" => effect})
+			end
+
+			monster = {"floor" => floor, "id" => id, "name" => name, "skills" => skills, "attack" => attack, "defense" => defense, "hp" => hp}
+			dungeon_info.push(monster)
+		end
+
+		threats = {
+			"Absorb Damage Over" => "absorbs single hit damage over",
+			"Absorb Combo Less" => "damage you cause for combos",
+			"Absorbs Dark damage" => "absorbs 100% dark damage",
+			"Absorbs Light damage" => "absorbs 100% light damage",
+			"Absorbs Water damage" => "absorbs 100% water damage",
+			"Absorbs Fire damage" => "absorbs 100% fire damage",
+			"Absorbs Wood damage" => "absorbs 100% wood damage",
+			"Bind" => "bind",
+			"Skill Bind" => "disable active skills",
+			"Increase Cooldown" => "increases cooldown of active skills",
+			#"Jammer Orb" => "to jammer orb",
+			"Poison Board" => "spawn 42 Poison orbs",
+			"Skyfall" => "increases skyfall chance",
+			"Resolve" => "leave it with 1 hp",
+			#"Hide Orbs" => "hide all orbs on the board",
+			"Recover Player HP" => "recovers player 100%",
+			"Immunity" => "immunity",
+			"Reduce Orb Movement" => "orb movement timer",
+			"Temporary Damage Reduction" => "damage reduction for",
+			"Passive Damage Reduction" => "damage reduction.",
+			"Leader Swap" => "random sub as player's leader",
+			"99% Gravity" => "player -99%",
+			"Instant KO" => "player -100%",
+			"Locked Orbs" => "into locked orbs"
+		}
+
+		dungeon_info.each do |m|
+			m["skills"].each do |s|
+				threats.each do |key, value|
+					if s["effect"].downcase.include?(value.downcase)
+						case s["type"].downcase
+							when "passive"
+								passive.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => s["condition"], "effect" => s["effect"], "label" => key})
+							when "pre-emptive"
+								preemp.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => s["condition"], "effect" => s["effect"], "label" => key})
+							when "skill"
+								#if s["effect"].downcase.include?("deal")
+								#	damage = "(" + ((s["effect"][/[\d]+?%/].gsub('%','').to_i / 100.0) * m["attack"].to_i).to_i.to_s + ")"
+								#else
+								#	damage = ""
+								#end
+								skill.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => s["condition"], "effect" => s["effect"], "label" => key})
+						end
+					end
+				end
+				if s["type"].downcase == "pre-emptive" and s["effect"].downcase.include?("deal")
+					#damage = "(" + ((s["effect"][/[\d]+?%/].gsub('%','').to_i / 100.0) * m["attack"].to_i).to_i.to_s + ")"
+					preemp.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => s["condition"], "effect" => s["effect"], "label" => "Deal Damage"})
+				end
+			end
+			if is_number?(m["defense"]) and m["defense"].to_i > 200000
+				passive.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => "", "effect" => m["defense"].to_s + " DEF", "label" => "High Defense (200k+)"})
+			end
+			if is_number?(m["hp"]) and m["hp"].to_i > 8000000
+				passive.push({"floor" => m["floor"], "id"=> m["id"], "name" => m["name"], "condition" => "", "effect" => m["hp"].to_s + " HP", "label" => "High HP (8 Mill+)"})
+			end
+		end
+		passive.sort_by! { |key, value| key["floor"]}
+		preemp.sort_by! { |key, value| key["floor"]}
+		skill.sort_by! { |key, value| key["floor"]}
+		{"passive" => passive, "preemp" => preemp, "skill" => skill}
+	end
+	return dungeon_threats
+  end
+  
   # GET /dungeons/new
   def new
     @dungeon = Dungeon.new
@@ -45,7 +213,7 @@ class DungeonsController < ApplicationController
     end
   end
   
-  def cache_data
+  def cache_dungeon_data
 	update = 0
 	Rails.cache.fetch("normal_dungeon", expires_in: 24.hours) do
 		update = 1
@@ -81,9 +249,9 @@ class DungeonsController < ApplicationController
 	dungeon_id_list = Array.new
   	dungeons.each do |k,v|
 		if DungeonGroup.where(name: k, dungeon_type: t).count == 0
-			dg = DungeonGroup.create(name: k, dungeon_type: t.to_s, order: v["order"]) 
+			dg = DungeonGroup.create(name: k, dungeon_type: t.to_s) 
 		else
-			dg = DungeonGroup.where(name: k, dungeon_type: t).first
+			dg = DungeonGroup.where(name: k, dungeon_type: t.to_s).first
 			if dg.order != v["order"] then dg.update(order: v["order"]) end
 			#if dg.dungeon_type != t then dg.update(dungeon_type: t) end
 		end
@@ -117,6 +285,9 @@ class DungeonsController < ApplicationController
 			end
 		end
 	end
+  end
+  def get_dungeon_details
+  
   end
   def get_normal_dungeons
 	dungeons_hash = Rails.cache.fetch("normal_dungeon")
