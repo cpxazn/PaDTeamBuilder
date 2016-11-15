@@ -1,18 +1,24 @@
 class DungeonsController < ApplicationController
   before_action :set_dungeon, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
+  before_action :cache_dungeon_data
   
   # GET /dungeons
   # GET /dungeons.json
   def index
 	@title = "Dungeons"
-	@dungeon_groups = DungeonGroup.order(:dungeon_type, :order)
-	@dungeons = Array.new
-	@dungeon_groups.each do |dg|
-		dg.dungeons.order(:dungeon_type, :order).each do |d|
-			@dungeons.push(d)
-		end
-	end
+	
+	@normal = DungeonGroup.where(dungeon_type: "normal_dungeon").order(:id)
+	@technical = DungeonGroup.where(dungeon_type: "technical_dungeon").order(:id)
+	@special = DungeonGroup.where(dungeon_type: "special_dungeon").order(:id)
+	@multiplayer = DungeonGroup.where(dungeon_type: "multiplayer_dungeon").order(:id)
+	@all_dungeons = {"normal" => @normal, "technical" => @technical, "special" => @special, "multiplayer" => @multiplayer}
+	#@dungeons = Array.new
+	#@dungeon_groups.each do |dg|
+	#	dg.dungeons.order(:dungeon_type, :order).each do |d|
+	#		@dungeons.push(d)
+	#	end
+	#end
   end
 
   # GET /dungeons/1
@@ -214,6 +220,7 @@ class DungeonsController < ApplicationController
   end
   
   def cache_dungeon_data
+    #Rails.cache.clear
 	update = 0
 	Rails.cache.fetch("normal_dungeon", expires_in: 24.hours) do
 		update = 1

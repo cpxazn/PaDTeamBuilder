@@ -1,9 +1,5 @@
 $(document).ready(function(){
-	$('select.dungeon-index').select2();
-	$('select.dungeon-index').on("change", function(e) {
-		window.location.href = "/dungeons/" + $('select.dungeon-index').val();  
-	}); 
-	
+
 	//Form validation
 	$('#Sub.btn, #Leader.btn').click(
 		function() {

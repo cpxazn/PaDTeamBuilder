@@ -36,9 +36,9 @@
 </p>
 <% end %>
 
-<% if @dungeon_threats["passive"] != nil or @dungeon_threats["preemp"] != nil or @dungeon_threats["skill"] != nil or 
-	@dungeon_threats["passive"].size > 0 or @dungeon_threats["preemp"].size > 0 or @dungeon_threats["skill"].size > 0
-%>
+<% if (@dungeon_threats["passive"] != nil and @dungeon_threats["passive"].size > 0) or 
+	(@dungeon_threats["preemp"] != nil and @dungeon_threats["preemp"].size > 0) or 
+	(@dungeon_threats["skill"] != nil and @dungeon_threats["skill"].size > 0) %>
 	<div class="page-header news"><h1>Threats</h1></div>
 	<%= form_tag(dungeon_path(@dungeon.id), method: "get") do %>	
 		<p><select multiple="true" name="filter[]" class="filter select2">

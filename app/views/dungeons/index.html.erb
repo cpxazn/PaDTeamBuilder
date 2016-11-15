@@ -1,46 +1,54 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Dungeons</h1>
-<select class="dungeon-index select2">
-	<% @dungeon_groups.each do |dg| %>
-		<option value="-<%= dg.id %>" class="optionGroup"><%= dg.name %></option>
-		<% dg.dungeons.each do |d| %>
-			<option value="<%= d.id %>"  class="optionChild"><%= d.name %></option>
-		<% end %>
-		</optgroup>
-	<% end %>
-</select>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Dungeon Group</th>
-      <th>Dungeon Name</th>
-      <th>Stamina</th>
-      <th>Floors</th>
-      <th>Coin</th>
-      <th>Exp</th>
-	  <th>Dungeon Type</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @dungeons.each do |dungeon| %>
-      <tr>
-        <td><%= dungeon.dungeon_group.name %></td>
-        <td><%= link_to dungeon.name, dungeon %></td>
-        <td><%= dungeon.stamina %></td>
-        <td><%= dungeon.floors %></td>
-        <td><%= dungeon.coins %></td>
-        <td><%= dungeon.exp %></td>
-		<td><%= dungeon.dungeon_type %></td>
-        <td><%= link_to 'Show', dungeon %></td>
-        <td><%= link_to 'Edit', edit_dungeon_path(dungeon) %></td>
-        <td><%= link_to 'Destroy', dungeon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+
+<ul class="dungeon nav nav-tabs">
+  <li role="presentation" id="normal" class="active"><a href="#">Normal</a></li>
+  <li role="presentation" id="technical"><a href="#">Technical</a></li>
+  <li role="presentation" id="special"><a href="#">Special</a></li>
+  <li role="presentation" id="multiplayer"><a href="#">Multiplayer</a></li>
+</ul>
+
+<% @all_dungeons.each do |key, value| %>
+	<% value.each do |dg| %>
+		<div class="dungeon" id="<%= key %>">
+			<% if dg.dungeons.count > 0 %>
+				<div class="page-header news">
+					<h1><small><%= dg.name %></small></h1>
+				</div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+						  <th>Dungeon Name</th>
+						  <th>Stamina</th>
+						  <th>Floors</th>
+						  <th>Coin</th>
+						  <th>Exp</th>
+						  <th colspan="3"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<% dg.dungeons.order(id: :desc).each do |dungeon| %>
+							<tr>
+								<td><%= link_to dungeon.name, dungeon %></td>
+								<td><%= dungeon.stamina %></td>
+								<td><%= dungeon.floors %></td>
+								<td><%= dungeon.coins %></td>
+								<td><%= dungeon.exp %></td>
+								<td><%= link_to 'Show', dungeon %></td>
+								<td><%= link_to 'Edit', edit_dungeon_path(dungeon) %></td>
+								<td><%= link_to 'Destroy', dungeon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			<% end %>
+		</div>
+	<% end %>
+<% end %>
+
+
 
 <br>
 
